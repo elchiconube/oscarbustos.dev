@@ -1,0 +1,81 @@
+@media only screen and (max-width: 1000px) {
+  #news .posts {
+    justify-content: space-between;
+    .post {
+      width: 49%;
+      margin: 0 0 2% 0;
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #about>.container .animation{
+    width: 100%;
+  }
+  .presentation,
+  .info,
+  .container-text,
+  .container,
+  #book .book__text {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 15px;
+    text-align: center;
+    max-width: 100%;
+  }
+  #main__content>section {
+    padding: 1rem 0;
+  }
+  #book .book__cover {
+    margin: 0px 0.5rem 2rem;
+    height: 550px;
+    h4 {
+      font-size: 62px;
+      line-height: 47px;
+    }
+  }
+  .title {
+    font-size: 2rem;
+    line-height: 2.2rem;
+  }
+  .mockcup {
+    box-sizing: border-box;
+    padding: 0 15px;
+    margin: 1rem 0;
+  }
+  .video {
+    display: none;
+  }
+  #main__header .presentation {
+    padding: 3rem 0 0 0;
+    max-width: 100%;
+  }
+  .navigation {
+    transform: translate(-100%, 0);
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    ul {
+      flex-direction: column;
+      li {
+        text-align: center;
+      }
+    }
+    &.show {
+      transform: translate(0, 0);
+    }
+  }
+  #news .posts {
+    width: 100%;
+    .post {
+      width: 100%;
+      margin: 0 0 1.5rem 0;
+      .post__description {
+        padding: 1.5rem 1rem 1rem;
+      }
+    }
+  }
+}

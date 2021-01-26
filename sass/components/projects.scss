@@ -1,0 +1,16 @@
+/**
+* Projects
+**/
+
+#main__content > #projects{
+  text-align: center;
+  padding: 3rem 0 0 0;
+
+  .container figure{
+    margin-bottom: 3rem;
+
+    img{
+      max-width: 100%;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+/**
+* Header
+**/
+
+#main__header{
+  background: url('http://res.cloudinary.com/elchiconube/image/upload/v1528744905/hero_xcghpd.jpg') no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: $color-white;
+  height: 60vh;
+
+  .presentation{
+    max-width: 450px;
+    padding: 3rem 0 0 0;
+
+    .title,.title-top,p {
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    }  
+  }
+}
+
+

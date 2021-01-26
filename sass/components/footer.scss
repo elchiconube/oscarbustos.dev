@@ -1,0 +1,19 @@
+/**
+* Footer
+**/
+
+#main__footer {
+  padding: 23px 15px 15px 15px;
+  background-color: #191919;
+  .credit {
+    font-family: $font-secondary;
+    color: $color-white;
+    margin: 0;
+    font-size: 12px;
+    svg {
+      margin: 0 3px;
+      position: relative;
+      top: 1px;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+/**
+ * Here we add all the SASS files that will be
+ * compiled at: /css/style.css.
+ */
+
+/**
+* Utilities
+**/
+@import "utilities/reset.scss";
+@import "utilities/fonts.scss";
+@import "utilities/global.scss";
+
+
+/**
+* Components
+**/
+@import "components/header.scss";
+@import "components/footer.scss";
+@import "components/navigation.scss";
+@import "components/main.scss";
+@import "components/about.scss";
+@import "components/projects.scss";
+@import "components/bts.scss";
+@import "components/clinpify.scss";
+@import "components/utad.scss";
+@import "components/axel.scss";
+@import "components/book.scss";
+@import "components/news.scss";
+@import "components/contact.scss";
+@import "components/video.scss";
+@import "components/icon-list.scss";
+@import "components/animation.scss";
+
+/**
+* Responsive
+**/
+@import "components/responsive.scss";
+
+

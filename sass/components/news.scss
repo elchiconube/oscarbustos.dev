@@ -1,0 +1,127 @@
+/**
+* NEWS
+**/
+
+#news {
+  background: $color-news;
+  text-align: center;
+  color: $color-white;
+  .container-text {
+    .title,
+    .title-top,
+    p {
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    }
+  }
+  .posts {
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    margin: 0 auto;
+    .post {
+      width: 31%;
+      margin: 0 2% 2% 0;
+      background-color: $color-white;
+      border-radius: 5px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.24), 0 0 4px rgba(0, 0, 0, 0.05);
+
+      &:hover {
+        box-shadow: 0 13px 26px rgba(0, 0, 0, 0.1538592751), 0 9px 26px rgba(0, 0, 0, 0.2357142857), 0 0 4px rgba(0, 0, 0, 0.05)
+      }
+
+      &__description {
+        text-align: left;
+        position: relative;
+        z-index: 4;
+        padding: 1.5rem 3rem 1rem;
+        color: $color-black;
+        .lang {
+          margin: 0 5px 5px 0;
+          display: inline-block;
+          position: relative;
+          top: 4px;
+        }
+        .tag {
+          color: $color-white;
+          display: inline-block;
+          background: $color-black;
+          padding: 5px 14px;
+          border-radius: 13px;
+          font-family: $font-secondary;
+          font-size: 11px;
+          text-transform: uppercase;
+          margin: 0 0 5px 0;
+        }
+      }
+      &__title {
+        margin-bottom: 1rem;
+        a {
+          font-family: $font-secondary;
+          color: $color-black;
+          font-size: 1.5rem;
+          margin-bottom: 15px;
+        }
+      }
+      &__image {
+        position: relative;
+        padding-bottom: 54%;
+        margin: 0;
+        overflow: hidden;
+        border-radius: 5px 5px 0 0;
+        cursor: pointer;
+        &:hover {
+          .icon,
+          &::before {
+            opacity: 1;
+          }
+        }
+        .icon {
+          position: absolute;
+          left: 0;
+          right: 0;
+          height: 100%;
+          opacity: 0;
+          z-index: 2;
+          transition: opacity 300ms ease-in-out;
+          i {
+            display: flex;
+            align-items: stretch;
+            height: 100%;
+            svg {
+              width: 50px;
+              display: block;
+              margin: 0 auto;
+              fill: $color-white;
+            }
+          }
+        }
+        &::before {
+          content: '';
+          top: 0;
+          width: 100%;
+          background-color: rgba(253, 187, 7, .7);
+          display: block;
+          position: absolute;
+          left: 0;
+          height: 100%;
+          opacity: 0;
+          z-index: 2;
+          transition: opacity 300ms ease-in-out;
+        }
+        img {
+          position: absolute;
+          top: -20px;
+          left: 0;
+          width: 100%;
+          min-height: 230px;
+          height: auto;
+          display: block;
+          backface-visibility: hidden;
+        }
+      }
+    }
+  }
+}
