@@ -1,32 +1,32 @@
 {
   "short_name": "Oscar Bustos",
   "name": "Oscar Bustos",
-  "start_url": "https://oscarbustos.me",
+  "start_url": "https://oscarbustos.dev",
   "description": "Frontend Developer & UI/UX Designer",
   "icons": [
-  {
-  "src": "http://res.cloudinary.com/elchiconube/image/upload/v1528743439/apple-touch-icon_qhrgi1.png",
-  "type": "image/png",
-  "sizes": "152x152"
-  },
-  {
-  "src": "http://res.cloudinary.com/elchiconube/image/upload/v1528743737/icon-512x512_hjqaop.png",
-  "type": "image/png",
-  "sizes": "512x512"
-  },
-  {
-  "src": "http://res.cloudinary.com/elchiconube/image/upload/v1528743738/ms-touch-icon-144x144-precomposed_mqdzxg.png",
-  "type": "image/png",
-  "sizes": "144x144"
-  },
-  {
-  "src": "http://res.cloudinary.com/elchiconube/image/upload/v1528743802/chrome-touch-icon-192x192_qgw90l.png",
-  "type": "image/png",
-  "sizes": "192x192"
-  }
+    {
+      "src": "http://res.cloudinary.com/elchiconube/image/upload/v1528743439/apple-touch-icon_qhrgi1.png",
+      "type": "image/png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "http://res.cloudinary.com/elchiconube/image/upload/v1528743737/icon-512x512_hjqaop.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "http://res.cloudinary.com/elchiconube/image/upload/v1528743738/ms-touch-icon-144x144-precomposed_mqdzxg.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "http://res.cloudinary.com/elchiconube/image/upload/v1528743802/chrome-touch-icon-192x192_qgw90l.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
   ],
   "theme_color": "#FDBB07",
   "background_color": "#FFFFFF",
   "display": "minimal-ui",
   "orientation": "portrait"
-  }
+}
