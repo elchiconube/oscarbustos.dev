@@ -1,4 +1,9 @@
+# README
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/d55a3575-3438-4370-b9c3-8383d98fbc89/deploy-status)](https://app.netlify.com/sites/dreamy-shirley-63fa03/deploys)
+
 # Astro Starter Kit: Basics
+
 
 ```sh
 npm create astro@latest -- --template basics

@@ -10,6 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/netlify": "^3.0.1",
     "@fontsource-variable/montserrat": "^5.0.9",
     "@fontsource/merriweather": "^5.0.8",
     "astro": "^3.1.2"
