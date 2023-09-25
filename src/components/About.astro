@@ -1,0 +1,45 @@
+---
+import Astronaut from './Astronaut.astro';
+---
+
+<section id='about'>
+  <div class='container'>
+    <div class='info'>
+      <h2 class='title-top'>Sobre mi</h2>
+      <h3 class='title'>
+        Desarrollo experiencias digitales que ponen al usuario en el centro
+      </h3>
+      <p>
+        Durante mi trayectoria profesional he ayudado a a crear productos
+        digitales que destacan por su experiencia de usuario y su diseño.
+        Construir productos desde el inicio, trabajar mano a mano con mentalidad
+        de equipo, lanzar nuevas funciones, analizar las interacciones de los
+        usuarios, ver cómo las personas usan los productos y mejorarlos
+        continuamente es lo que más me gusta de mi trabajo.
+      </p>
+      <p>
+        Mi filosofía es el kaizen, también conocido como mejora continua,
+        centrándome en las últimas tecnologías web y aplicando siempre
+        metodologías ágiles. Me gusta compartir lo que aprendo. He sido profesor
+        en la Universidad U-Tad, durante más de 5 años pude inspirar y compartir
+        todos mis conocimientos con futuros diseñadores y desarrolladores en
+        diferentes grados. Además tengo experiencia mentorizando perfiles junior
+        y ayudando a equipos a mejorar sus procesos de trabajo.
+      </p>
+    </div>
+    <Astronaut />
+  </div>
+</section>
+<style>
+  section {
+    padding: 48px 0;
+  }
+  section > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .info {
+    max-width: 600px;
+  }
+</style>

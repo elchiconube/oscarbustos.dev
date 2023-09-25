@@ -1,0 +1,36 @@
+---
+import Navigation from './Navigation.astro';
+---
+
+<header>
+  <div class='container'>
+    <Navigation />
+    <div class='presentation'>
+      <h2 class='title-top'>Hola, me llamo</h2>
+      <h1 class='title'>Óscar Bustos</h1>
+      <p>
+        Desarrollador Frontend desde 2011 con experiencia en diseño y
+        experiencia de usuario. Disfruto de cada proyecto tanto si son grandes o
+        pequeños.
+      </p>
+    </div>
+  </div>
+</header>
+
+<style>
+  header {
+    background: url(http://res.cloudinary.com/elchiconube/image/upload/v1528744905/hero_xcghpd.jpg)
+      no-repeat;
+    background-position: 50%;
+    background-size: cover;
+    color: #fff;
+    height: 40vh;
+    padding-top: 80px;
+  }
+
+  .presentation {
+    max-width: 450px;
+    padding: 48px 0 0;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  }
+</style>
