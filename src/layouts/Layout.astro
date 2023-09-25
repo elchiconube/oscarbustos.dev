@@ -1,0 +1,279 @@
+---
+import '@fontsource/merriweather/300-italic.css';
+import '@fontsource-variable/montserrat';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang='es'>
+  <head>
+    <meta charset='utf-8' />
+    <meta
+      name='viewport'
+      content='width=device-width,minimum-scale=1,initial-scale=1'
+    />
+    <title>
+      Oscar Bustos 👨‍💻 | Frontend, JavaScript, React, CSS, Performance
+    </title>
+    <meta
+      name='description'
+      content='Página personal, artículos, recursos y tutoriales sobre Desarrollo Web, Frontend, JavaScript ☕️, React ⚛️, CSS 🎨 y Performance Web ⚡️'
+    />
+
+    <link rel='canonical' href='https://oscarbustos.dev/' />
+    <link rel='icon' href='/favicon/favicon.ico' type='image/x-icon' />
+    <link
+      rel='apple-touch-icon'
+      sizes='180x180'
+      href='/favicon/apple-touch-icon.png'
+    />
+    <link
+      rel='icon'
+      type='image/png'
+      sizes='32x32'
+      href='/favicon/favicon-32x32.png'
+    />
+    <link
+      rel='icon'
+      type='image/png'
+      sizes='16x16'
+      href='/favicon/favicon-16x16.png'
+    />
+
+    <meta name='apple-mobile-web-app-title' content='oscarbustos.dev' />
+    <meta name='application-name' content='oscarbustos.dev' />
+    <meta name='theme-color' content='#0099ff' />
+    <link
+      rel='alternate'
+      type='application/rss+xml'
+      href='https://oscarbustos.dev/index.xml'
+      title='Oscar Bustos 👨‍💻 | Frontend, JavaScript, React, CSS, Performance'
+    />
+    <meta property='og:url' content='https://oscarbustos.dev/' />
+    <meta property='og:type' content='website' />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:creator' content='@elchiconube' />
+    <meta name='twitter:domain' content='oscarbustos.dev' />
+    <meta name='twitter:image' content='/favicon/apple-touch-icon.png' />
+    <meta name='twitter:site' content='@elchiconube' />
+    <link rel='manifest' href='/manifest.json' />
+    <meta property='og:locale' content='es_ES' />
+    <meta
+      property='og:title'
+      content='Oscar Bustos 👨‍💻 | Frontend, JavaScript, React, CSS, Performance'
+    />
+    <meta property='og:image' content='/favicon/apple-touch-icon.png' />
+    <meta
+      property='og:description'
+      content='Página personal, artículos, recursos y tutoriales sobre Desarrollo Web, Frontend, JavaScript ☕️, React ⚛️, CSS 🎨 y Performance Web ⚡️'
+    />
+    <meta property='og:site_name' content='oscarbustos.dev' />
+    <meta name='generator' content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+<style is:global>
+  :root {
+    --golden: #fdbb07;
+    --dark: #38414b;
+  }
+
+  html,
+  body,
+  div,
+  span,
+  object,
+  iframe,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  blockquote,
+  pre,
+  abbr,
+  address,
+  cite,
+  code,
+  del,
+  dfn,
+  em,
+  img,
+  ins,
+  kbd,
+  q,
+  samp,
+  small,
+  strong,
+  sub,
+  sup,
+  var,
+  b,
+  i,
+  dl,
+  dt,
+  dd,
+  ol,
+  ul,
+  li,
+  fieldset,
+  form,
+  label,
+  legend,
+  table,
+  caption,
+  tbody,
+  tfoot,
+  thead,
+  tr,
+  th,
+  td,
+  article,
+  aside,
+  canvas,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  hgroup,
+  menu,
+  nav,
+  section,
+  summary,
+  time,
+  mark,
+  audio,
+  video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+  }
+
+  body {
+    line-height: 1.5;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  article,
+  aside,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  hgroup,
+  menu,
+  nav,
+  section {
+    display: block;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  nav ul {
+    list-style: none;
+  }
+
+  html {
+    font-family: 'Merriweather', sans-serif;
+    background: white;
+    font-weight: 300;
+    color: var(--dark);
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: 'Montserrat Variable', Verdana, sans-serif;
+  }
+
+  p {
+    margin-bottom: 16px;
+		text-wrap: balance;
+	}
+  }
+  figure {
+    margin: 0;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+	hr {
+    height: 1px;
+    border: 0;
+    background-color: white;
+    width: 180px;
+    margin: 24px auto;
+    display: block;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .text-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .full__image {
+    display: block;
+    width: 100vw;
+  }
+
+  .title-top {
+    color: var(--golden);
+    text-transform: uppercase;
+  }
+
+  .title {
+    font-size: 48px;
+    line-height: 51px;
+    margin-bottom: 16px;
+  }
+
+  .button {
+    display: inline-block;
+    padding: 16px 40px;
+    padding: 1rem 2.5rem;
+    font-family: 'Montserrat Variable', Verdana, sans-serif;
+    line-height: 16px;
+    line-height: 1rem;
+    color: var(--golden);
+    border: 2px solid var(--golden);
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    background-color: transparent;
+  }
+</style>
