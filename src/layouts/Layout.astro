@@ -18,11 +18,11 @@ const { title } = Astro.props;
       content='width=device-width,minimum-scale=1,initial-scale=1'
     />
     <title>
-      Oscar Bustos 👨‍💻 | Frontend, JavaScript, React, CSS, Performance
+      {title}
     </title>
     <meta
       name='description'
-      content='Página personal, artículos, recursos y tutoriales sobre Desarrollo Web, Frontend, JavaScript ☕️, React ⚛️, CSS 🎨 y Performance Web ⚡️'
+      content='Página personal de Óscar Bustos donde podrás encontrar recursos sobre desarrollo web. Artículos, Frontend, Javascript, React, y CSS'
     />
 
     <link rel='canonical' href='https://oscarbustos.dev/' />
@@ -52,7 +52,7 @@ const { title } = Astro.props;
       rel='alternate'
       type='application/rss+xml'
       href='https://oscarbustos.dev/index.xml'
-      title='Oscar Bustos 👨‍💻 | Frontend, JavaScript, React, CSS, Performance'
+      title='Oscar Bustos | Frontend Developer'
     />
     <meta property='og:url' content='https://oscarbustos.dev/' />
     <meta property='og:type' content='website' />
@@ -65,12 +65,12 @@ const { title } = Astro.props;
     <meta property='og:locale' content='es_ES' />
     <meta
       property='og:title'
-      content='Oscar Bustos 👨‍💻 | Frontend, JavaScript, React, CSS, Performance'
+      content='Oscar Bustos | Frontend Developer'
     />
     <meta property='og:image' content='/favicon/apple-touch-icon.png' />
     <meta
       property='og:description'
-      content='Página personal, artículos, recursos y tutoriales sobre Desarrollo Web, Frontend, JavaScript ☕️, React ⚛️, CSS 🎨 y Performance Web ⚡️'
+      content='Página personal de Óscar Bustos donde podrás encontrar recursos sobre desarrollo web. Artículos, Frontend, Javascript, React, y CSS'
     />
     <meta property='og:site_name' content='oscarbustos.dev' />
     <meta name='generator' content={Astro.generator} />
