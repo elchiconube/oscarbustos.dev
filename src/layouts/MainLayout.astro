@@ -18,6 +18,17 @@ const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image
   <head>
     <ClientRouter fallback='swap' />
     <BaseHead title={title} description={description} image={image} />
+  </head>
+  <body>
+
+    <CustomCursor />
+    <main>
+      <Header client:load />
+      <slot />
+      <Video />
+      <Footer />
+    </main>
+
     <script is:inline>
       const theme = (() => {
         if (
@@ -36,12 +47,9 @@ const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image
         document.documentElement.classList.add('dark');
       }
 
-      // Esta línea es importante: establece el color de fondo inmediatamente
       document.body.style.backgroundColor =
         theme === 'dark' ? '#1a1a1a' : '#ffffff';
     </script>
-  </head>
-  <body>
     <!-- Previene el flash durante las transiciones -->
     <script is:inline>
       document.addEventListener('astro:before-preparation', (ev) => {
@@ -60,12 +68,5 @@ const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image
         }
       });
     </script>
-    <CustomCursor />
-    <main>
-      <Header client:load />
-      <slot />
-      <Video />
-      <Footer />
-    </main>
   </body>
 </html>
