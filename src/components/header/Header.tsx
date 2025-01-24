@@ -7,6 +7,8 @@ import { NavItem } from './NavItem';
 import { menuItems } from './menuItems';
 import ThemeToggle from '@/components/ThemeToggle';
 
+import './Header.css';
+
 export default function Header() {
   const [activeItem, setActiveItem] = useState<number | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
