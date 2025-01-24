@@ -14,9 +14,13 @@ export default function Header() {
   const [currentPath, setCurrentPath] = useState<string>('');
   
   const navContainerRef = useRef<HTMLDivElement>(null);
+
+  function normalizePath(pathname: string): string {
+    return pathname.replace(/\/+$/, '') || '/';
+  }
   
   useEffect(() => {
-    setCurrentPath(window.location.pathname);
+    setCurrentPath(normalizePath(window.location.pathname));
   }, []);
 
   const updateIndicator = useCallback((index: number | null) => {
