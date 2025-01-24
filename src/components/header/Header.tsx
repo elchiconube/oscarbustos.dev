@@ -18,16 +18,10 @@ export default function Header() {
   const navContainerRef = useRef<HTMLDivElement>(null);
   
   const updatePath = useCallback(() => {
-    setCurrentPath(window.location.pathname);
+    const path = window.location.pathname;
+    setCurrentPath(path);
     setIsMenuOpen(false);
   }, []);
-  
-  useEffect(() => {
-    updatePath();
-    
-    document.addEventListener('astro:page-load', updatePath);
-    return () => document.removeEventListener('astro:page-load', updatePath);
-  }, [updatePath]);
 
   const updateIndicator = useCallback((index: number | null) => {
     if (index === null) {
@@ -75,6 +69,25 @@ export default function Header() {
   }, [currentPath]);
 
   useEffect(() => {
+    updatePath();
+    const activeIndex = findActiveMenuIndex();
+    if (activeIndex !== null) {
+      updateIndicatorPosition(activeIndex);
+    }
+
+    const handlePageLoad = () => {
+      updatePath();
+      const activeIndex = findActiveMenuIndex();
+      if (activeIndex !== null) {
+        updateIndicatorPosition(activeIndex);
+      }
+    };
+
+    document.addEventListener('astro:page-load', handlePageLoad);
+    return () => document.removeEventListener('astro:page-load', handlePageLoad);
+  }, [updatePath, findActiveMenuIndex, updateIndicatorPosition]);
+
+  useEffect(() => {
     const handleResize = () => {
       const activeIndex = activeItem ?? findActiveMenuIndex();
       if (activeIndex !== null) {
@@ -101,7 +114,6 @@ export default function Header() {
           <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
             <div className="nav-items" ref={navContainerRef}>
               <NavIndicator style={indicatorStyle} />
-
               {menuItems.map((item, index) => (
                 <NavItem
                   key={item.name}
@@ -121,7 +133,6 @@ export default function Header() {
               ))}
             </div>
           </nav>
-
           <ThemeToggle />
         </div>
       </div>
