@@ -1,0 +1,44 @@
+---
+import { Butterfly, GithubLogo, InstagramLogo, DribbbleLogo, CodepenLogo, XLogo} from "@phosphor-icons/react";
+
+const { center } = Astro.props
+---
+
+<div class={center ? "center" : ""}>
+  <a href="https://github.com/elchiconube" target="_blank" title="Github Profile">
+    <GithubLogo size={28} weight="light" alt="Github" />
+  </a>
+  <a href="https://dribbble.com/elchiconube" target="_blank" title="Dribble Profile">
+    <DribbbleLogo size={28} weight="light" alt="Dribble" />
+  </a>
+  <a href="http://codepen.io/elchiconube" target="_blank" title="Cdepen Profile">
+    <CodepenLogo size={28} weight="light" alt="Codepen" />
+  </a>
+  <a href="https://bsky.app/profile/elchiconube.bsky.social" target="_blank" title="Bluesky Profile">
+    <Butterfly size={28} weight="light" alt="Bluesky"/>
+  </a>
+  <a href="https://x.com/elchiconube" target="_blank" title="X Profile">
+    <XLogo size={28} weight="light" alt="X" />
+  </a>
+  <a href="https://instagram.com/elchiconube" target="_blank" title="Instagram Profile">
+    <InstagramLogo size={28} weight="light" alt="Instagram" />
+  </a>
+  
+</div>
+<style>
+	div {
+		display: flex;
+    align-items: center;
+		gap: 24px;
+
+    &.center {
+      justify-content: center;
+    }
+    
+    a {
+      height: 20px;
+      color: var(--light-gray);
+      display: inline-block;
+	  }
+	}
+</style>

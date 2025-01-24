@@ -1,0 +1,203 @@
+---
+import Container from '@/components/Container.astro';
+import Heading from '@/components/Heading.astro';
+import Companies from './Companies.astro';
+---
+
+<Container>
+  <section class='section'>
+    <Heading title='Experience' description='Some lines about me' />
+    <p>
+      I am a Frontend Developer with over 12 years of experience creating
+      user-centered solutions that combine functionality and elegance. My work
+      is driven by a commitment to crafting seamless digital experiences that
+      meet the needs of users and businesses alike.
+    </p>
+    <p>
+      I excel at problem-solving, turning complex challenges into efficient,
+      scalable solutions. Collaboration is at the heart of my approach—I thrive
+      in team environments, working closely with designers, product managers,
+      and other developers to bring ideas to life. My attention to detail
+      ensures that every project is delivered with precision and care.
+    </p>
+    <p>
+      Beyond my technical expertise, I value adaptability, clear communication,
+      and continuous improvement. Whether mentoring others, contributing to team
+      growth, or exploring new ways to improve workflows, I'm dedicated to
+      making a positive impact in every project I take on.
+    </p>
+    <p>
+      If you're looking for a developer who combines creativity, reliability,
+      and a user-first mindset, I'd love to help bring your project to life.
+    </p>
+  </section>
+  <section class='section'>
+    <Heading
+      title='Technologies'
+      description='Always happy to learn new things'
+    />
+    <ul>
+      <li><p>HTML5</p></li>
+      <li><p>CSS3</p></li>
+      <li><p>JavaScript</p></li>
+      <li><p>TypeScript</p></li>
+      <li><p>SQL</p></li>
+      <li><p class='lib'>React</p></li>
+      <li><p class='lib'>Next.js</p></li>
+      <li><p class='lib'>Astro</p></li>
+      <li><p class='lib'>Chart.js</p></li>
+      <li><p class='lib'>AG Grid</p></li>
+      <li><p class='lib'>Styled Components</p></li>
+      <li><p class='lib'>SWR</p></li>
+      <li><p class='lib'>Cypress</p></li>
+      <li><p class='back'>Node.js</p></li>
+      <li><p class='back'>Strapi</p></li>
+      <li><p class='back'>Stripe</p></li>
+      <li><p class='back'>REST APIs</p></li>
+      <li><p class='back'>OAuth</p></li>
+      <li><p class='tools'>Git</p></li>
+      <li><p class='tools'>GitHub</p></li>
+      <li><p class='tools'>Mapbox</p></li>
+      <li><p class='tools'>Stripe</p></li>
+      <li><p class='tools'>AWS</p></li>
+      <li><p class='tools'>Railway</p></li>
+      <li><p class='tools'>Cloudflare</p></li>
+    </ul>
+  </section>
+
+  <section class='section'>
+    <Heading title='How I work' description='Remontly but close with teams' />
+    <p>
+      I have extensive experience working in agile environments, collaborating
+      effectively within squads to deliver high-quality results. I’m accustomed
+      to both synchronous and asynchronous workflows, which allows me to adapt
+      seamlessly to distributed teams and varying time zones.
+    </p>
+    <p>
+      Clear and effective communication is one of my strengths, enabling smooth
+      coordination with designers, developers, and stakeholders. I value
+      structured workflows and take pride in fostering a collaborative
+      atmosphere that drives projects forward efficiently while maintaining a
+      focus on delivering value to users.
+    </p>
+  </section>
+</Container>
+<Companies />
+<Container>
+  <section class='section'>
+    <Heading title='As a team lead' description='Creating cohesive teams' />
+    <p>
+      As a Frontend Development Lead, I bring a unique combination of technical
+      expertise and leadership skills to the table. My years of experience in
+      the field, combined with my background as a university professor, have
+      equipped me with the ability to mentor and guide team members effectively.
+      I take pride in fostering the growth of individuals within my team,
+      helping them enhance their technical skills and unlock their full
+      potential.
+    </p>
+
+    <p>
+      I'm committed to creating a collaborative and supportive work environment
+      where every team member feels valued and motivated. By implementing
+      team-building dynamics and promoting open communication, I ensure that the
+      team operates cohesively, even in fast-paced or high-pressure scenarios. I
+      also excel at identifying and leveraging the unique strengths of each
+      person, aligning their talents with the team's objectives to maximize
+      productivity and innovation.
+    </p>
+
+    <p>
+      My leadership style emphasizes trust, adaptability, and a strong focus on
+      shared goals, enabling the team to deliver high-quality results while
+      maintaining a positive and engaging workplace culture.
+    </p>
+  </section>
+</Container>
+
+<section class='section'>
+  <Heading
+    title='As a teacher'
+    description='Shaping the Next Generation of Developers'
+  />
+
+  <figure>
+    <img class='full' src='/utad-banner.webp' alt='UTAD banner' />
+  </figure>
+  <Container>
+    <p>
+      As an associate professor at U-tad, I had the privilege of teaching Web
+      Development and Programming to design students, helping them build a
+      strong foundation in coding and digital technologies. My role involved
+      guiding students through the fundamentals of web technologies while
+      encouraging creativity and innovation in their projects. I also supported
+      students in the development of their final projects, ensuring they applied
+      their technical knowledge to real-world challenges with confidence.
+    </p>
+
+    <p>
+      Beyond teaching technical skills, I focused on mentoring students to
+      enhance their problem-solving abilities and critical thinking. Through
+      personalized tutorials and feedback, I helped them refine their ideas and
+      achieve their academic and professional goals. My time at U-tad reinforced
+      my passion for education and my ability to foster a collaborative and
+      inspiring learning environment, empowering future professionals to thrive
+      in the ever-evolving digital landscape.
+    </p>
+  </Container>
+</section>
+
+<style>
+  figure {
+    margin-bottom: 48px;
+  }
+  ul {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+
+    li {
+      p {
+        font-size: 12px;
+        letter-spacing: 1px;
+        border-radius: 18px;
+        display: block;
+        padding: 2px 12px;
+        margin: 0;
+        background: linear-gradient(
+          90deg,
+          rgb(255, 196, 196) 0%,
+          rgb(255, 231, 231) 100%
+        );
+        color: rgba(211, 0, 0, 0.7);
+        font-weight: 700;
+
+        &.lib {
+          background: linear-gradient(
+            270deg,
+            rgb(229, 228, 255) 0%,
+            rgb(220, 232, 255) 100%
+          );
+          color: rgba(7, 4, 138, 0.7);
+        }
+        &.back {
+          background: linear-gradient(
+            90deg,
+            rgb(255, 213, 227) 0%,
+            rgb(255, 240, 248) 100%
+          );
+          color: rgba(216, 44, 106, 0.8);
+        }
+
+        &.tools {
+          background: linear-gradient(
+            90deg,
+            rgb(216, 249, 187) 0%,
+            rgb(253, 248, 204) 100%
+          );
+          color: rgba(60, 132, 0, 0.8);
+        }
+      }
+    }
+  }
+</style>

@@ -1,0 +1,103 @@
+---
+interface Props {
+  height?: number;
+  numberOfSnowflakes?: number;
+  opacity?: number;
+}
+
+const {
+  height = 150,
+  numberOfSnowflakes = 50,
+  opacity = 0.5
+} = Astro.props;
+---
+
+<canvas
+  id="snowfallCanvas"
+  class="snowfall-canvas"
+  data-testid="SnowfallCanvas"
+>
+</canvas>
+
+<style define:vars={{ height, opacity }}>
+  .snowfall-canvas {
+    pointer-events: none;
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: var(--height)px;
+    opacity: var(--opacity);
+    z-index: 100;
+  }
+</style>
+
+<script define:vars={{ numberOfSnowflakes, height }}>
+  class Snowflake {
+    constructor(canvasWidth) {
+      this.reset(canvasWidth);
+    }
+
+    reset(canvasWidth) {
+      this.x = Math.random() * canvasWidth;
+      this.y = 0;
+      this.size = Math.random() * 3 + 2;
+      this.speed = Math.random() * 1 + 0.5;
+      this.wind = Math.random() * 0.5 - 0.25;
+    }
+
+    update(canvasWidth, canvasHeight) {
+      this.y += this.speed;
+      this.x += this.wind;
+
+      if (this.y > canvasHeight || this.x < 0 || this.x > canvasWidth) {
+        this.reset(canvasWidth);
+      }
+    }
+
+    draw(ctx) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+    }
+  }
+
+  const initSnowfall = () => {
+    const canvas = document.getElementById('snowfallCanvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = height;
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const snowflakes = Array.from(
+      { length: numberOfSnowflakes },
+      () => new Snowflake(canvas.width)
+    );
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      snowflakes.forEach(snowflake => {
+        snowflake.update(canvas.width, canvas.height);
+        snowflake.draw(ctx);
+      });
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+  };
+
+  // Iniciamos la animación inmediatamente
+  initSnowfall();
+</script>

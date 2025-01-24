@@ -1,0 +1,238 @@
+---
+title: 'React Portals: When and Why to Use Them'
+description: 'A practical guide to implementing React Portals and solving common UI challenges'
+pubDate: 'Dec 03 2024'
+heroImage: ''
+slug: react-portals-guide
+---
+
+## Creating a Basic Portal
+
+The simplest implementation of a portal:
+
+```jsx
+import { createPortal } from 'react-dom';
+
+const Modal = ({ children, onClose }) => {
+  return createPortal(
+    <div className="modal-overlay">
+      <div className="modal-content">
+        {children}
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>,
+    document.getElementById('portal-root')
+  );
+};
+
+// Usage
+const App = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <div>
+      <button onClick={() => setIsOpen(true)}>Open Modal</button>
+      {isOpen && (
+        <Modal onClose={() => setIsOpen(false)}>
+          <h2>Modal Content</h2>
+        </Modal>
+      )}
+    </div>
+  );
+};
+```
+
+## Implementing a Tooltip Portal
+
+Tooltips often need to escape stacking contexts:
+
+```jsx
+const Tooltip = ({ text, targetRef }) => {
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  
+  useLayoutEffect(() => {
+    if (targetRef.current) {
+      const rect = targetRef.current.getBoundingClientRect();
+      setPosition({
+        top: rect.bottom + 10,
+        left: rect.left + (rect.width / 2)
+      });
+    }
+  }, [targetRef]);
+
+  return createPortal(
+    <div 
+      className="tooltip"
+      style={{
+        position: 'fixed',
+        top: position.top,
+        left: position.left,
+        transform: 'translateX(-50%)'
+      }}
+    >
+      {text}
+    </div>,
+    document.body
+  );
+};
+
+// Usage
+const Button = () => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const buttonRef = useRef();
+
+  return (
+    <>
+      <button 
+        ref={buttonRef}
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      >
+        Hover me
+      </button>
+      {showTooltip && (
+        <Tooltip 
+          text="I'm a tooltip!" 
+          targetRef={buttonRef} 
+        />
+      )}
+    </>
+  );
+};
+```
+
+## Context-Aware Portals
+
+Portals that preserve React Context:
+
+```jsx
+const ThemePortal = ({ children }) => {
+  const theme = useContext(ThemeContext);
+  
+  return createPortal(
+    <ThemeContext.Provider value={theme}>
+      {children}
+    </ThemeContext.Provider>,
+    document.body
+  );
+};
+
+const ThemedModal = ({ onClose }) => {
+  const theme = useContext(ThemeContext);
+  
+  return (
+    <ThemePortal>
+      <div className={`modal-${theme}`}>
+        Modal content with theme
+        <button onClick={onClose}>Close</button>
+      </div>
+    </ThemePortal>
+  );
+};
+```
+
+## Select Dropdown with Portal
+
+Handling dropdowns that need to escape overflow:hidden:
+
+```jsx
+const Select = ({ options, value, onChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const buttonRef = useRef();
+  
+  const handleSelect = (option) => {
+    onChange(option);
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      <button 
+        ref={buttonRef}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {value || 'Select...'}
+      </button>
+      
+      {isOpen && (
+        <DropdownPortal targetRef={buttonRef}>
+          <ul className="options-list">
+            {options.map(option => (
+              <li 
+                key={option.value}
+                onClick={() => handleSelect(option)}
+              >
+                {option.label}
+              </li>
+            ))}
+          </ul>
+        </DropdownPortal>
+      )}
+    </>
+  );
+};
+
+const DropdownPortal = ({ children, targetRef }) => {
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  
+  useLayoutEffect(() => {
+    if (targetRef.current) {
+      const rect = targetRef.current.getBoundingClientRect();
+      setPosition({
+        top: rect.bottom + 5,
+        left: rect.left,
+        width: rect.width
+      });
+    }
+  }, [targetRef]);
+
+  return createPortal(
+    <div 
+      style={{
+        position: 'fixed',
+        ...position
+      }}
+    >
+      {children}
+    </div>,
+    document.body
+  );
+};
+```
+
+## Event Delegation with Portals
+
+Handling events in portaled components:
+
+```jsx
+const ModalWithEvents = ({ onClose }) => {
+  const handleClick = (e) => {
+    // Stop event from reaching document click handler
+    e.stopPropagation();
+  };
+
+  useEffect(() => {
+    const handleDocumentClick = () => {
+      onClose();
+    };
+
+    document.addEventListener('click', handleDocumentClick);
+    return () => document.removeEventListener('click', handleDocumentClick);
+  }, [onClose]);
+
+  return createPortal(
+    <div onClick={handleClick} className="modal">
+      Content that won't close when clicked
+    </div>,
+    document.body
+  );
+};
+```
+
+## Key Takeaways
+
+1. Use portals for modals, tooltips, and dropdowns
+2. Preserve React context when needed
+3. Handle event propagation carefully
+4. Use useLayoutEffect for positioning calculations
+5. Consider portal cleanup in useEffect

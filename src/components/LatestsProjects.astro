@@ -1,0 +1,103 @@
+---
+import Card from '@/components/Card.astro';
+import Heading from '@/components/Heading.astro';
+
+const { full = false } = Astro.props
+---
+
+<section class='section'>
+  <Heading title='Projects' description="Latests projects I've made" />
+  <ul class='card-list'>
+    <li>
+      <a href='/projects/fcm' title='FCM project' target='_blank'>
+        <Card image='/fcm.webp' alt='FCM logo' title='FCM' year='2025' />
+      </a>
+    </li>
+    <li>
+      <a href='/projects/robotstxt' title='Robots.txt project' target='_blank'>
+        <Card
+          image='/robotstxt.webp'
+          alt='Robots.txt logo'
+          title='Robots.txt'
+          year='2024'
+          personal
+        />
+      </a>
+    </li>
+    <li>
+      <a href='/projects/topdelmes' title='Topdelmes project' target='_blank'>
+        <Card
+          image='/topdelmes.webp'
+          alt='Topdelmes'
+          title='Topdelmes'
+          year='2023'
+          personal
+        />
+      </a>
+    </li>
+    <li>
+      <a href='/projects/faedodigital' title='Faedo Digital' target='_blank'>
+        <Card
+          image='/faedodigital.webp'
+          alt='Faedo Digital logo'
+          title='Faedo Digital'
+          year='2023'
+          personal
+        />
+      </a>
+    </li>
+    <li>
+      <a href='/projects/mdi' title='mDI project' target='_blank'>
+        <Card image='/mDI.webp' alt='mDI logo' title='mDI' year='2023' />
+      </a>
+    </li>
+    <li>
+      <a href='/projects/badger' title='Badger project' target='_blank'>
+        <Card
+          image='/badger.webp'
+          alt='Badger logo'
+          title='Badger'
+          year='2022'
+        />
+      </a>
+    </li>
+    <li>
+      <a href='/projects/pulse' title='Pulse' target='_blank'>
+        <Card image='/pulse.webp' alt='Pulse logo' title='Pulse' year='2021' />
+      </a>
+    </li>
+    {full ? ( <li>
+      <a href='/projects/bento' title='Bento components' target='_blank'>
+        <Card image='/bento.webp' alt='Bento logo' title='Bento' year='2021' />
+      </a>
+    </li>
+    <li>
+      <a href='/projects/bts' title='BTS' target='_blank'>
+        <Card image='/bts.webp' alt='BTS logo' title='BTS' year='2019' />
+      </a>
+    </li>
+    <li>
+      <a href='/projects/abc' title='ABC' target='_blank'>
+        <Card image='/abc.webp' alt='ABC logo' title='ABC' year='2011' />
+      </a>
+    </li>) :  <li class='double'>
+      <a href='/projects' title='More projects'>
+        <Card
+          title='Want to see more?'
+          year='Check projects section'
+        />
+      </a>
+    </li>}
+  </ul>
+</section>
+
+
+<style>
+    @media screen and (max-width: 768px){
+    .card-list {
+      grid-template-columns: 1fr 1fr;
+    }
+    
+  }
+
+</style>

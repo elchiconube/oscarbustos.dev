@@ -1,0 +1,77 @@
+---
+import Container from '@/components/Container.astro';
+import Heading from '@/components/Heading.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import Button from '@/components/Button.astro';
+---
+
+<MainLayout>
+  <Container>
+    <Heading title='FCM' description='2025' />
+    <section>
+      <header>
+        <figure class='icon'>
+          <a href='https://www.fcmtravel.com/' target='_blank' rel='noopener'
+            ><img src='/fcm.webp' alt='FCM logo' /></a
+          >
+        </figure>
+      </header>
+      <p>
+        FCM Travel is a leading corporate travel management platform trusted by
+        global brands such as P&G and Toyota. The platform is designed to
+        streamline business travel with cutting-edge technology, offering a
+        seamless experience for users while providing valuable insights and
+        strategic solutions. Known for its collaborative approach, FCM combines
+        a talented international team with agile methodologies to deliver a
+        product that meets the evolving needs of modern businesses.
+      </p>
+      <p>
+        As a Senior Frontend Developer at FCM Travel, I play a key role in
+        enhancing the platform's user experience. I've worked closely with
+        design and product teams to lead a complete restyling of the platform,
+        creating a custom component library with ReactJS and implementing it
+        across the entire project. The platform is built with Next.js, SASS, and
+        GraphQL, employing strategies like Server-Side Rendering to ensure
+        performance and scalability. Additionally, I help maintain high-quality
+        standards by integrating Cypress for robust testing. My work is driven
+        by collaboration within agile squads, fostering innovation and
+        adaptability to deliver impactful solutions.
+      </p>
+
+      <aside>
+        <ul>
+          <li>
+            <Button
+              href='https://https://www.fcmtravel.com/'
+              target='_blank'
+              rel='noopener'
+              text='Website'
+            />
+          </li>
+        </ul>
+      </aside>
+    </section>
+
+    <style>
+      header {
+        text-align: center;
+        margin-bottom: 24px;
+        gap: 24px;
+      }
+
+      .icon {
+        margin: 0 auto;
+        box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.5);
+        border-radius: 12px;
+        width: 100px;
+
+        img {
+          width: 100%;
+          display: block;
+          border-radius: 12px;
+          height: auto;
+        }
+      }
+    </style>
+  </Container>
+</MainLayout>

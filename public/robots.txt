@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-
-# Host
-Host: https://oscarbustos.dev
-
-# Sitemaps
-Sitemap: https://oscarbustos.dev/sitemap.xml

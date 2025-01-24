@@ -1,0 +1,35 @@
+---
+
+const { classes } = Astro.props
+---
+
+<div class={classes}></div>
+
+<style>
+  .cross {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+  }
+
+  .cross::before,
+  .cross::after {
+    content: '';
+    position: absolute;
+    background-color: var(--cross-color);
+  }
+
+  .cross::before {
+    width: 1px;
+    height: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .cross::after {
+    width: 20px;
+    height: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+</style>

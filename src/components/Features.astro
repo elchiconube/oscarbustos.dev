@@ -1,0 +1,36 @@
+---
+import { Star } from "@phosphor-icons/react";
+
+const { features } = Astro.props
+---
+<ul class="features">
+  {features.map((feature: string) => (
+    <li>
+      <i><Star size={21} weight="fill" /></i>
+      <p>{feature}</p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .features {
+    margin-bottom: 24px;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      margin-left: 28px;
+
+		p {
+			margin: 0;
+		}
+
+		i {
+			color: #fdbb07;
+			display: inline-flex;
+		}
+	}
+  }
+</style>

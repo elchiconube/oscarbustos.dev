@@ -1,0 +1,102 @@
+---
+import Container from '@/components/Container.astro';
+import Heading from '@/components/Heading.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import Button from '@/components/Button.astro';
+---
+
+<MainLayout>
+  <Container>
+    <Heading title='mDI' description='2024' />
+    <section>
+      <header>
+        <figure class='icon'>
+          <a href='https://mdi.marketgoo.com/' target='_blank' rel='noopener'
+            ><img src='/mDI.webp' alt='mDI logo' /></a
+          >
+        </figure>
+      </header>
+      <p>
+        marketgoo Domain Intelligence (mDI) is a powerful platform designed to
+        extract, enrich, and analyze domain data at scale. It empowers
+        businesses to gain a deeper understanding of their customers, uncover
+        hidden issues, and identify upselling opportunities. By bridging the gap
+        between what customers need and what companies can provide, mDI helps
+        businesses deliver personalized, relevant experiences that drive
+        customer retention and revenue growth. With a focus on staying relevant
+        and building trust, mDI ensures that every interaction strengthens
+        relationships and aligns with the brand's promise.
+      </p>
+
+      <figure class='screenshot'>
+        <img src='/mdi1.gif' alt='mDI screenshot' />
+      </figure>
+
+      <p>
+        As a Senior Frontend Developer for the mDI project, I played a critical
+        role in building the platform from the ground up. Collaborating within a
+        small, focused team, I utilized ReactJS, CSS Modules, Cypress, and
+        Chart.js to create an intuitive and efficient user experience. My
+        responsibilities included developing robust interfaces, implementing
+        data visualization tools, and ensuring the application met high
+        standards of quality through thorough testing. This project showcased my
+        ability to work in an agile environment, crafting a product that meets
+        both technical and user needs, while aligning with marketgoo's vision
+        for innovation and customer-centric solutions.
+      </p>
+      <aside>
+        <ul>
+          <li>
+            <Button
+              href='https://mdi.marketgoo.com/'
+              target='_blank'
+              rel='noopener'
+              text='Website'
+            />
+          </li>
+        </ul>
+      </aside>
+    </section>
+
+    <style>
+      header {
+        text-align: center;
+        margin-bottom: 24px;
+        gap: 24px;
+      }
+
+      .icon {
+        margin: 0 auto;
+        box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.5);
+        border-radius: 12px;
+        width: 100px;
+
+        img {
+          width: 100%;
+          display: block;
+          border-radius: 12px;
+          height: auto;
+        }
+      }
+
+      .screenshot {
+        text-align: center;
+        margin: 24px 0;
+
+        img {
+          max-width: 100%;
+          display: inline-block;
+        }
+      }
+
+      aside {
+        margin-top: 38px;
+
+        ul {
+          display: flex;
+          gap: 12px;
+        }
+      }
+    </style>
+  </Container>
+</MainLayout>

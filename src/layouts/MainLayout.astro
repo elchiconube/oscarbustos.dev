@@ -1,0 +1,73 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '@fontsource-variable/nunito';
+import '@fontsource-variable/fraunces';
+
+import BaseHead from '@/components/BaseHead.astro';
+import Footer from '@/components/Footer.astro';
+import Header from '@/components/header/Header.tsx';
+import Snowfall from '@/components/Snowfall.astro';
+import Video from '@/components/Video.astro';
+import CustomCursor from '@/components/CustomCursor.astro';
+
+const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image } =
+  Astro.props;
+---
+
+<!doctype html>
+<html lang='en'>
+  <head>
+    <ClientRouter fallback='swap' />
+    <BaseHead title={title} description={description} image={image} />
+    <script is:inline>
+      const theme = (() => {
+        if (
+          typeof localStorage !== 'undefined' &&
+          localStorage.getItem('theme')
+        ) {
+          return localStorage.getItem('theme');
+        }
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      })();
+
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+
+      // Esta línea es importante: establece el color de fondo inmediatamente
+      document.body.style.backgroundColor =
+        theme === 'dark' ? '#1a1a1a' : '#ffffff';
+    </script>
+  </head>
+  <body>
+    <!-- Previene el flash durante las transiciones -->
+    <script is:inline>
+      document.addEventListener('astro:before-preparation', (ev) => {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          ev.newDocument.documentElement.classList.add('dark');
+          ev.newDocument.documentElement.style.backgroundColor = '#1a1a1a';
+        }
+      });
+
+      document.addEventListener('astro:after-swap', () => {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.style.backgroundColor = '#1a1a1a';
+        }
+      });
+    </script>
+    <CustomCursor />
+    <main>
+      <Snowfall height={200} numberOfSnowflakes={100} opacity={0.3} />
+      <Header client:load />
+      <slot />
+      <Video />
+      <Footer />
+    </main>
+  </body>
+</html>

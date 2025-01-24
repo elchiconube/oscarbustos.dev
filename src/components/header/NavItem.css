@@ -1,0 +1,46 @@
+.nav-item {
+  position: relative;
+}
+
+.nav-button, 
+.nav-link {
+  font-family: var(--fraunces-font);
+  padding: 0.5rem 1rem;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color 0.2s;
+  white-space: nowrap;
+  text-decoration: none;
+  font-weight: 300;
+}
+
+.nav-chevron {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+  transition: transform 0.2s;
+}
+
+.nav-item:hover .nav-chevron {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+  .nav-item {
+    width: 100%;
+  }
+
+  .nav-button, 
+  .nav-link {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+}
