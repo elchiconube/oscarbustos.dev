@@ -23,7 +23,7 @@ const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image
 
     <CustomCursor />
     <main>
-      <Header client:load />
+      <Header client:only="react" />
       <slot />
       <Video />
       <Footer />

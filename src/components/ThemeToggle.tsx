@@ -1,15 +1,14 @@
+'use client';
+
 import { Sun, Moon } from "@phosphor-icons/react";
 import { useEffect, useState } from 'react';
 
 type Theme = 'light' | 'dark';
 
 export default function ThemeToggle() {
-  // Inicializar con un valor por defecto simple
   const [theme, setTheme] = useState<Theme>('light');
-  // Estado para controlar si estamos en el cliente
   const [mounted, setMounted] = useState(false);
 
-  // Efecto para inicializar el tema cuando el componente se monta en el cliente
   useEffect(() => {
     setMounted(true);
     const savedTheme = localStorage.getItem('theme') as Theme;
@@ -49,7 +48,7 @@ export default function ThemeToggle() {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
 
-  // Si no está montado, renderizar un placeholder para evitar hidratación incorrecta
+  
   if (!mounted) {
     return (
       <button className="theme-toggle" aria-label="Theme toggle placeholder">

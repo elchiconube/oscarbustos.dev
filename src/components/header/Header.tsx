@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { MobileMenuButton } from './MobileMenuButton';
 import { NavIndicator } from './NavIndicator';
@@ -18,7 +20,7 @@ export default function Header() {
   function normalizePath(pathname: string): string {
     return pathname.replace(/\/+$/, '') || '/';
   }
-  
+
   useEffect(() => {
     setCurrentPath(normalizePath(window.location.pathname));
   }, []);
