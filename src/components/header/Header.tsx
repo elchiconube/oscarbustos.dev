@@ -10,33 +10,33 @@ import ThemeToggle from '@/components/ThemeToggle';
 import './Header.css';
 
 export default function Header() {
+  const [activeItem, setActiveItem] = useState<number | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({});
-  const [currentPath, setCurrentPath] = useState('/');
+  const [currentPath, setCurrentPath] = useState<string>('');
+  
   const navContainerRef = useRef<HTMLDivElement>(null);
-
-  const isItemActive = (item: typeof menuItems[0]) => {
-    if (item.href === currentPath) return true;
-    if (item.dropdownItems?.some(dropItem => dropItem.href === currentPath)) return true;
-    return false;
-  };
-
+  
   useEffect(() => {
     setCurrentPath(window.location.pathname);
   }, []);
 
-  useEffect(() => {
-    const handleNavigation = () => {
-      const newPath = window.location.pathname;
-      setCurrentPath(newPath);
-    };
-
-    document.addEventListener('astro:page-load', handleNavigation);
-    return () => document.removeEventListener('astro:page-load', handleNavigation);
+  const updateIndicator = useCallback((index: number | null) => {
+    if (index === null) {
+      const activeIndex = findActiveMenuIndex();
+      if (activeIndex === null) {
+        setIndicatorStyle({ opacity: 0 });
+      } else {
+        updateIndicatorPosition(activeIndex);
+      }
+      return;
+    }
+    updateIndicatorPosition(index);
   }, []);
 
   const updateIndicatorPosition = useCallback((index: number) => {
     if (!navContainerRef.current) return;
+    
     const navItems = navContainerRef.current.querySelectorAll('.nav-item');
     const currentNavItem = navItems[index];
     
@@ -53,6 +53,60 @@ export default function Header() {
     }
   }, []);
 
+  const findActiveMenuIndex = useCallback((): number | null => {
+    const mainIndex = menuItems.findIndex(item => item.href === currentPath);
+    if (mainIndex !== -1) return mainIndex;
+
+    for (let i = 0; i < menuItems.length; i++) {
+      const item = menuItems[i];
+      if (item.dropdownItems?.some(child => child.href === currentPath)) {
+        return i;
+      }
+    }
+    return null;
+  }, [currentPath]);
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setCurrentPath(window.location.pathname);
+      setIsMenuOpen(false);
+    };
+
+    const handleLinkClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const link = target.closest('a');
+      if (link?.href?.startsWith(window.location.origin)) {
+        const pathname = new URL(link.href).pathname;
+        setCurrentPath(pathname);
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('popstate', handleRouteChange);
+    document.addEventListener('click', handleLinkClick);
+
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+      document.removeEventListener('click', handleLinkClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const activeIndex = activeItem ?? findActiveMenuIndex();
+      if (activeIndex !== null) {
+        updateIndicatorPosition(activeIndex);
+      }
+      if (window.innerWidth > 768) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [activeItem, findActiveMenuIndex, updateIndicatorPosition]);
+
   return (
     <header className="header">
       <div className="header-container">
@@ -64,18 +118,27 @@ export default function Header() {
           <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
             <div className="nav-items" ref={navContainerRef}>
               <NavIndicator style={indicatorStyle} />
+
               {menuItems.map((item, index) => (
                 <NavItem
                   key={item.name}
                   item={item}
-                  isActive={isItemActive(item)}
+                  isActive={currentPath === item.href || 
+                    item.dropdownItems?.some(dropItem => dropItem.href === currentPath)}
                   currentPath={currentPath}
-                  onMouseEnter={() => updateIndicatorPosition(index)}
-                  onMouseLeave={() => setIndicatorStyle({ opacity: 0 })}
+                  onMouseEnter={() => {
+                    setActiveItem(index);
+                    updateIndicator(index);
+                  }}
+                  onMouseLeave={() => {
+                    setActiveItem(null);
+                    updateIndicator(null);
+                  }}
                 />
               ))}
             </div>
           </nav>
+
           <ThemeToggle />
         </div>
       </div>
