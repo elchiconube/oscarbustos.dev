@@ -16,12 +16,6 @@ export default function Header() {
   const [currentPath, setCurrentPath] = useState<string>('');
   
   const navContainerRef = useRef<HTMLDivElement>(null);
-  
-  const updatePath = useCallback(() => {
-    const path = window.location.pathname;
-    setCurrentPath(path);
-    setIsMenuOpen(false);
-  }, []);
 
   const updateIndicator = useCallback((index: number | null) => {
     if (index === null) {
@@ -69,23 +63,23 @@ export default function Header() {
   }, [currentPath]);
 
   useEffect(() => {
-    updatePath();
-    const activeIndex = findActiveMenuIndex();
-    if (activeIndex !== null) {
-      updateIndicatorPosition(activeIndex);
-    }
-
-    const handlePageLoad = () => {
-      updatePath();
-      const activeIndex = findActiveMenuIndex();
-      if (activeIndex !== null) {
-        updateIndicatorPosition(activeIndex);
-      }
+    const handleNavigation = () => {
+      const path = window.location.pathname;
+      setCurrentPath(path);
+      setIsMenuOpen(false);
+      
+      setTimeout(() => {
+        const activeIndex = findActiveMenuIndex();
+        if (activeIndex !== null) {
+          updateIndicatorPosition(activeIndex);
+        }
+      }, 0);
     };
 
-    document.addEventListener('astro:page-load', handlePageLoad);
-    return () => document.removeEventListener('astro:page-load', handlePageLoad);
-  }, [updatePath, findActiveMenuIndex, updateIndicatorPosition]);
+    handleNavigation();
+    document.addEventListener('astro:after-navigation', handleNavigation);
+    return () => document.removeEventListener('astro:after-navigation', handleNavigation);
+  }, [findActiveMenuIndex, updateIndicatorPosition]);
 
   useEffect(() => {
     const handleResize = () => {
