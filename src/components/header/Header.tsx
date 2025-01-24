@@ -17,10 +17,17 @@ export default function Header() {
   
   const navContainerRef = useRef<HTMLDivElement>(null);
   
-  useEffect(() => {
-    const path = document.location.pathname;
-    setCurrentPath(path);
+  const updatePath = useCallback(() => {
+    setCurrentPath(window.location.pathname);
+    setIsMenuOpen(false);
   }, []);
+  
+  useEffect(() => {
+    updatePath();
+    
+    document.addEventListener('astro:page-load', updatePath);
+    return () => document.removeEventListener('astro:page-load', updatePath);
+  }, [updatePath]);
 
   const updateIndicator = useCallback((index: number | null) => {
     if (index === null) {
@@ -66,38 +73,6 @@ export default function Header() {
     }
     return null;
   }, [currentPath]);
-
-  useEffect(() => {
-    const handleRouteChange = () => {
-      const path = document.location.pathname;
-      setCurrentPath(path);
-      setIsMenuOpen(false);
-    };
-
-    // Usar MutationObserver para detectar cambios en el DOM
-    const observer = new MutationObserver(handleRouteChange);
-    observer.observe(document.documentElement, {
-      subtree: true,
-      childList: true
-    });
-
-    const handleLinkClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const link = target.closest('a');
-      if (link?.href?.startsWith(window.location.origin)) {
-        const pathname = new URL(link.href).pathname;
-        setCurrentPath(pathname);
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('click', handleLinkClick);
-
-    return () => {
-      observer.disconnect();
-      document.removeEventListener('click', handleLinkClick);
-    };
-  }, []);
 
   useEffect(() => {
     const handleResize = () => {
