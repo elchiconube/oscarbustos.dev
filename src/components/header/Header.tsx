@@ -18,7 +18,8 @@ export default function Header() {
   const navContainerRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
-    setCurrentPath(window.location.pathname);
+    const path = document.location.pathname;
+    setCurrentPath(path);
   }, []);
 
   const updateIndicator = useCallback((index: number | null) => {
@@ -68,9 +69,17 @@ export default function Header() {
 
   useEffect(() => {
     const handleRouteChange = () => {
-      setCurrentPath(window.location.pathname);
+      const path = document.location.pathname;
+      setCurrentPath(path);
       setIsMenuOpen(false);
     };
+
+    // Usar MutationObserver para detectar cambios en el DOM
+    const observer = new MutationObserver(handleRouteChange);
+    observer.observe(document.documentElement, {
+      subtree: true,
+      childList: true
+    });
 
     const handleLinkClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -82,11 +91,10 @@ export default function Header() {
       }
     };
 
-    window.addEventListener('popstate', handleRouteChange);
     document.addEventListener('click', handleLinkClick);
 
     return () => {
-      window.removeEventListener('popstate', handleRouteChange);
+      observer.disconnect();
       document.removeEventListener('click', handleLinkClick);
     };
   }, []);
