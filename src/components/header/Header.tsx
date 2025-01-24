@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { MobileMenuButton } from './MobileMenuButton';
 import { NavIndicator } from './NavIndicator';
