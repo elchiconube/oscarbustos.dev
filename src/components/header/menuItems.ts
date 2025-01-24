@@ -24,7 +24,6 @@ export const menuItems: MenuItem[] = [
     hasDropdown: true,
     dropdownItems: [
       { name: 'About', description: 'More personal info', href: '/about' },
-      { name: 'Gadgets', description: 'Stuff I use daily', href: '/gadgets' },
     ]
   },
 ];
