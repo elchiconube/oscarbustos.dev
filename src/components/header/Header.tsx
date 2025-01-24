@@ -7,8 +7,6 @@ import { NavItem } from './NavItem';
 import { menuItems } from './menuItems';
 import ThemeToggle from '@/components/ThemeToggle';
 
-import './Header.css';
-
 export default function Header() {
   const [activeItem, setActiveItem] = useState<number | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,27 +15,25 @@ export default function Header() {
   
   const navContainerRef = useRef<HTMLDivElement>(null);
 
-  function normalizePath(pathname: string): string {
+  // Memoizamos la función de normalización
+  const normalizePath = useCallback((pathname: string): string => {
     return pathname.replace(/\/+$/, '') || '/';
-  }
-
-  useEffect(() => {
-    setCurrentPath(normalizePath(window.location.pathname));
   }, []);
 
-  const updateIndicator = useCallback((index: number | null) => {
-    if (index === null) {
-      const activeIndex = findActiveMenuIndex();
-      if (activeIndex === null) {
-        setIndicatorStyle({ opacity: 0 });
-      } else {
-        updateIndicatorPosition(activeIndex);
+  // Memoizamos la búsqueda del índice activo
+  const findActiveMenuIndex = useCallback((path: string): number | null => {
+    const mainIndex = menuItems.findIndex(item => item.href === path);
+    if (mainIndex !== -1) return mainIndex;
+
+    for (let i = 0; i < menuItems.length; i++) {
+      if (menuItems[i].dropdownItems?.some(child => child.href === path)) {
+        return i;
       }
-      return;
     }
-    updateIndicatorPosition(index);
+    return null;
   }, []);
 
+  // Optimizamos la actualización del indicador
   const updateIndicatorPosition = useCallback((index: number) => {
     if (!navContainerRef.current) return;
     
@@ -57,59 +53,57 @@ export default function Header() {
     }
   }, []);
 
-  const findActiveMenuIndex = useCallback((): number | null => {
-    const mainIndex = menuItems.findIndex(item => item.href === currentPath);
-    if (mainIndex !== -1) return mainIndex;
+  // Efecto inicial para establecer la ruta actual
+  useEffect(() => {
+    const path = normalizePath(window.location.pathname);
+    setCurrentPath(path);
+  }, [normalizePath]);
 
-    for (let i = 0; i < menuItems.length; i++) {
-      const item = menuItems[i];
-      if (item.dropdownItems?.some(child => child.href === currentPath)) {
-        return i;
-      }
-    }
-    return null;
-  }, [currentPath]);
-
+  // Manejador de eventos de navegación
   useEffect(() => {
     const handleRouteChange = () => {
-      setCurrentPath(window.location.pathname);
+      const newPath = normalizePath(window.location.pathname);
+      setCurrentPath(newPath);
       setIsMenuOpen(false);
-    };
-
-    const handleLinkClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const link = target.closest('a');
-      if (link?.href?.startsWith(window.location.origin)) {
-        const pathname = new URL(link.href).pathname;
-        setCurrentPath(pathname);
-        setIsMenuOpen(false);
-      }
-    };
-
-    window.addEventListener('popstate', handleRouteChange);
-    document.addEventListener('click', handleLinkClick);
-
-    return () => {
-      window.removeEventListener('popstate', handleRouteChange);
-      document.removeEventListener('click', handleLinkClick);
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const activeIndex = activeItem ?? findActiveMenuIndex();
+      
+      const activeIndex = findActiveMenuIndex(newPath);
       if (activeIndex !== null) {
         updateIndicatorPosition(activeIndex);
       }
+    };
+
+    // Usar el evento de Astro para navegación
+    document.addEventListener('astro:page-load', handleRouteChange);
+    
+    return () => {
+      document.removeEventListener('astro:page-load', handleRouteChange);
+    };
+  }, [normalizePath, findActiveMenuIndex, updateIndicatorPosition]);
+
+  // Manejo de resize optimizado
+  useEffect(() => {
+    const handleResize = () => {
+      if (activeItem !== null) {
+        updateIndicatorPosition(activeItem);
+      } else {
+        const activeIndex = findActiveMenuIndex(currentPath);
+        if (activeIndex !== null) {
+          updateIndicatorPosition(activeIndex);
+        }
+      }
+      
       if (window.innerWidth > 768) {
         setIsMenuOpen(false);
       }
     };
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [activeItem, findActiveMenuIndex, updateIndicatorPosition]);
+    const debouncedResize = debounce(handleResize, 150);
+    window.addEventListener('resize', debouncedResize);
+    
+    return () => {
+      window.removeEventListener('resize', debouncedResize);
+    };
+  }, [activeItem, currentPath, findActiveMenuIndex, updateIndicatorPosition]);
 
   return (
     <header className="header">
@@ -132,11 +126,16 @@ export default function Header() {
                   currentPath={currentPath}
                   onMouseEnter={() => {
                     setActiveItem(index);
-                    updateIndicator(index);
+                    updateIndicatorPosition(index);
                   }}
                   onMouseLeave={() => {
                     setActiveItem(null);
-                    updateIndicator(null);
+                    const activeIndex = findActiveMenuIndex(currentPath);
+                    if (activeIndex !== null) {
+                      updateIndicatorPosition(activeIndex);
+                    } else {
+                      setIndicatorStyle({ opacity: 0 });
+                    }
                   }}
                 />
               ))}
@@ -148,4 +147,17 @@ export default function Header() {
       </div>
     </header>
   );
+}
+
+// Utilidad para debounce
+function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout;
+  
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
 }
