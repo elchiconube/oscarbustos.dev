@@ -9,91 +9,132 @@ import ThemeToggle from '@/components/ThemeToggle';
 
 import './Header.css';
 
-export default function Header() {
+// Tip opcional: define un tipo para tus dropdownItems
+// interface DropdownItem {
+//   name: string;
+//   href: string;
+// }
+
+interface MenuItem {
+  name: string;
+  href: string;
+  // dropdownItems?: DropdownItem[];
+  dropdownItems?: { name: string; href: string }[];
+}
+
+interface HeaderProps {
+  currentPath: string; // Ruta actual recibida desde Astro (por ejemplo)
+}
+
+export default function Header({ currentPath }: HeaderProps) {
+  // Estado para el ítem activo cuando pasamos el ratón
   const [activeItem, setActiveItem] = useState<number | null>(null);
+
+  // Estado para abrir/cerrar el menú móvil
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Estado para el estilo del indicador
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({});
-  const [currentPath, setCurrentPath] = useState<string>('');
-  
+
+  // Referencia al contenedor de navegación
   const navContainerRef = useRef<HTMLDivElement>(null);
 
-  // Memoizamos la función de normalización
+  // Guardamos un array con las dimensiones de cada nav-item (left, width)
+  // para no recalcular en cada hover
+  const itemsRectDataRef = useRef<Array<{ left: number; width: number }>>([]);
+
+  // Normaliza la ruta para no tener problemas con slashes finales.
+  // (Podrías hacer esta normalización fuera, si ya la recibes normalizada como prop.)
   const normalizePath = useCallback((pathname: string): string => {
     return pathname.replace(/\/+$/, '') || '/';
   }, []);
 
-  // Memoizamos la búsqueda del índice activo
-  const findActiveMenuIndex = useCallback((path: string): number | null => {
-    const mainIndex = menuItems.findIndex(item => item.href === path);
-    if (mainIndex !== -1) return mainIndex;
+  // Encuentra el índice de menú principal que coincide con la ruta
+  const findActiveMenuIndex = useCallback(
+    (path: string): number | null => {
+      const mainIndex = menuItems.findIndex((item) => item.href === path);
+      if (mainIndex !== -1) return mainIndex;
 
-    for (let i = 0; i < menuItems.length; i++) {
-      if (menuItems[i].dropdownItems?.some(child => child.href === path)) {
-        return i;
+      // Si no está en items principales, busca en dropdowns
+      for (let i = 0; i < menuItems.length; i++) {
+        if (
+          menuItems[i].dropdownItems?.some((child) => child.href === path)
+        ) {
+          return i;
+        }
       }
-    }
-    return null;
-  }, []);
+      return null;
+    },
+    []
+  );
 
-  // Optimizamos la actualización del indicador
-  const updateIndicatorPosition = useCallback((index: number) => {
+  // Función para medir y guardar las dimensiones de todos los nav-items
+  const measureNavItems = useCallback(() => {
     if (!navContainerRef.current) return;
-    
     const navItems = navContainerRef.current.querySelectorAll('.nav-item');
-    const currentNavItem = navItems[index];
-    
-    if (currentNavItem) {
-      const rect = currentNavItem.getBoundingClientRect();
-      const parentRect = navContainerRef.current.getBoundingClientRect();
-      
-      setIndicatorStyle({
-        width: `${rect.width}px`,
-        transform: `translateX(${rect.left - parentRect.left}px)`,
-        height: '40px',
-        opacity: 1,
-      });
-    }
+
+    itemsRectDataRef.current = Array.from(navItems).map((item) => {
+      const rect = (item as HTMLElement).getBoundingClientRect();
+      return {
+        left: rect.left,
+        width: rect.width,
+      };
+    });
   }, []);
 
-  // Efecto inicial para establecer la ruta actual
-  useEffect(() => {
-    const path = normalizePath(window.location.pathname);
-    setCurrentPath(path);
-  }, [normalizePath]);
+  // Actualiza la posición del indicador usando las medidas precalculadas
+  const updateIndicatorPosition = useCallback(
+    (index: number) => {
+      if (!navContainerRef.current) return;
+      const parentRect = navContainerRef.current.getBoundingClientRect();
+      const { left, width } = itemsRectDataRef.current[index] || {};
 
-  // Manejador de eventos de navegación
-  useEffect(() => {
-    const handleRouteChange = () => {
-      const newPath = normalizePath(window.location.pathname);
-      setCurrentPath(newPath);
-      setIsMenuOpen(false);
-      
-      const activeIndex = findActiveMenuIndex(newPath);
-      if (activeIndex !== null) {
-        updateIndicatorPosition(activeIndex);
+      if (width) {
+        setIndicatorStyle({
+          width: `${width}px`,
+          transform: `translateX(${left - parentRect.left}px)`,
+          height: '40px', // si deseas ajustar la altura específica
+          opacity: 1,
+        });
       }
-    };
+    },
+    []
+  );
 
-    // Usar el evento de Astro para navegación
-    document.addEventListener('astro:page-load', handleRouteChange);
-    
-    return () => {
-      document.removeEventListener('astro:page-load', handleRouteChange);
-    };
-  }, [normalizePath, findActiveMenuIndex, updateIndicatorPosition]);
+  // Efecto para medir inicialmente los items (después de que rendericen)
+  useEffect(() => {
+    measureNavItems();
 
-  // Manejo de resize optimizado
+    // Ajustamos el indicador según la ruta actual
+    const path = normalizePath(currentPath);
+    const activeIndex = findActiveMenuIndex(path);
+    if (activeIndex !== null) {
+      updateIndicatorPosition(activeIndex);
+    } else {
+      setIndicatorStyle({ opacity: 0 });
+    }
+  }, [currentPath, measureNavItems, normalizePath, findActiveMenuIndex, updateIndicatorPosition]);
+
+  // Manejo de resize optimizado con debounce
   useEffect(() => {
     const handleResize = () => {
+      // Primero volvemos a medir
+      measureNavItems();
+
+      // Luego movemos el indicador según el ítem activo (si lo hubiera)
       if (activeItem !== null) {
         updateIndicatorPosition(activeItem);
       } else {
-        const activeIndex = findActiveMenuIndex(currentPath);
+        const path = normalizePath(currentPath);
+        const activeIndex = findActiveMenuIndex(path);
         if (activeIndex !== null) {
           updateIndicatorPosition(activeIndex);
+        } else {
+          setIndicatorStyle({ opacity: 0 });
         }
       }
-      
+
+      // Si la pantalla es grande, cierra el menú móvil automáticamente
       if (window.innerWidth > 768) {
         setIsMenuOpen(false);
       }
@@ -101,11 +142,23 @@ export default function Header() {
 
     const debouncedResize = debounce(handleResize, 150);
     window.addEventListener('resize', debouncedResize);
-    
+
     return () => {
       window.removeEventListener('resize', debouncedResize);
     };
-  }, [activeItem, currentPath, findActiveMenuIndex, updateIndicatorPosition]);
+  }, [
+    activeItem,
+    currentPath,
+    findActiveMenuIndex,
+    measureNavItems,
+    normalizePath,
+    updateIndicatorPosition,
+  ]);
+
+  // Cuando hagas click en un NavItem (si utilizas <a> puro), puedes cerrar el menú:
+  const handleNavItemClick = () => {
+    setIsMenuOpen(false);
+  };
 
   return (
     <header className="header">
@@ -119,28 +172,35 @@ export default function Header() {
             <div className="nav-items" ref={navContainerRef}>
               <NavIndicator style={indicatorStyle} />
 
-              {menuItems.map((item, index) => (
-                <NavItem
-                  key={item.name}
-                  item={item}
-                  isActive={currentPath === item.href || 
-                    item.dropdownItems?.some(dropItem => dropItem.href === currentPath)}
-                  currentPath={currentPath}
-                  onMouseEnter={() => {
-                    setActiveItem(index);
-                    updateIndicatorPosition(index);
-                  }}
-                  onMouseLeave={() => {
-                    setActiveItem(null);
-                    const activeIndex = findActiveMenuIndex(currentPath);
-                    if (activeIndex !== null) {
-                      updateIndicatorPosition(activeIndex);
-                    } else {
-                      setIndicatorStyle({ opacity: 0 });
-                    }
-                  }}
-                />
-              ))}
+              {menuItems.map((item, index) => {
+                const path = normalizePath(currentPath);
+                const itemIsActive =
+                  path === item.href ||
+                  item.dropdownItems?.some((child) => child.href === path);
+
+                return (
+                  <NavItem
+                    key={item.name}
+                    item={item}
+                    isActive={itemIsActive}
+                    currentPath={path}
+                    onMouseEnter={() => {
+                      setActiveItem(index);
+                      updateIndicatorPosition(index);
+                    }}
+                    onMouseLeave={() => {
+                      setActiveItem(null);
+                      const activeIndex = findActiveMenuIndex(path);
+                      if (activeIndex !== null) {
+                        updateIndicatorPosition(activeIndex);
+                      } else {
+                        setIndicatorStyle({ opacity: 0 });
+                      }
+                    }}
+                    onClick={handleNavItemClick}
+                  />
+                );
+              })}
             </div>
           </nav>
 
@@ -156,8 +216,7 @@ function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout;
-  
+  let timeout: ReturnType<typeof setTimeout>;
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
