@@ -1,5 +1,3 @@
-'use client';
-
 import { Sun, Moon } from "@phosphor-icons/react";
 import { useEffect, useState } from 'react';
 

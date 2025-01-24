@@ -16,8 +16,11 @@ export default function Header() {
   const navContainerRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
+    console.log('Header 1');
     setCurrentPath(window.location.pathname);
   }, []);
+
+  console.log({currentPath})
 
   const updateIndicator = useCallback((index: number | null) => {
     if (index === null) {
@@ -65,6 +68,8 @@ export default function Header() {
   }, [currentPath]);
 
   useEffect(() => {
+    console.log('Header 2');
+
     const handleRouteChange = () => {
       setCurrentPath(window.location.pathname);
       setIsMenuOpen(false);
@@ -90,6 +95,8 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
+    console.log('Header 3');
+
     const handleResize = () => {
       const activeIndex = activeItem ?? findActiveMenuIndex();
       if (activeIndex !== null) {
