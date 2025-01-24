@@ -6,7 +6,6 @@ import '@fontsource-variable/fraunces';
 import BaseHead from '@/components/BaseHead.astro';
 import Footer from '@/components/Footer.astro';
 import Header from '@/components/header/Header.tsx';
-import Snowfall from '@/components/Snowfall.astro';
 import Video from '@/components/Video.astro';
 import CustomCursor from '@/components/CustomCursor.astro';
 
@@ -63,7 +62,6 @@ const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image
     </script>
     <CustomCursor />
     <main>
-      <Snowfall height={200} numberOfSnowflakes={100} opacity={0.3} />
       <Header client:load />
       <slot />
       <Video />
