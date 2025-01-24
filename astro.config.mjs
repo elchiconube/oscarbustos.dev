@@ -10,7 +10,7 @@ import react from '@astrojs/react';
 // https://astro.build/config
 export default defineConfig({
   prefetch: true,
-  trailingSlash: 'never',
+  trailingSlash: 'always',
   site: 'https://oscarbustos.dev',
   integrations: [mdx(), sitemap(), react()],
   vite: {
