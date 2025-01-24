@@ -1,0 +1,86 @@
+---
+import Container from '@/components/Container.astro';
+import Heading from '@/components/Heading.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import Button from '@/components/Button.astro';
+---
+
+<MainLayout>
+  <Container>
+    <Heading title='Bento' description='2022' />
+    <section>
+      <header>
+        <figure class='icon'>
+          <a
+            href='https://github.com/elchiconube/bento-components'
+            target='_blank'
+            rel='noopener'><img src='/bento.webp' alt='Bento logo' /></a
+          >
+        </figure>
+      </header>
+      <p>
+        Bento is an open-source component library for ReactJS, designed to
+        streamline the development process and ensure visual consistency across
+        applications. Built with scalability and reusability in mind, Bento
+        simplifies the creation of user interfaces while reducing development
+        time and effort. This library is ideal for teams looking to maintain
+        high standards in design and functionality while accelerating project
+        delivery.
+      </p>
+
+      <aside>
+        <ul>
+          <li>
+            <Button
+              href='https://github.com/elchiconube/bento-components'
+              target='_blank'
+              rel='noopener'
+              text='Code'
+            />
+          </li>
+        </ul>
+      </aside>
+    </section>
+
+    <style>
+      header {
+        text-align: center;
+        margin-bottom: 24px;
+        gap: 24px;
+      }
+
+      .icon {
+        margin: 0 auto;
+        box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.5);
+        border-radius: 12px;
+        width: 100px;
+
+        img {
+          width: 100%;
+          display: block;
+          border-radius: 12px;
+          height: auto;
+        }
+      }
+
+      .screenshot {
+        text-align: center;
+        margin: 24px 0;
+
+        img {
+          max-width: 100%;
+          display: inline-block;
+        }
+      }
+
+      aside {
+        margin-top: 38px;
+
+        ul {
+          display: flex;
+          gap: 12px;
+        }
+      }
+    </style>
+  </Container>
+</MainLayout>

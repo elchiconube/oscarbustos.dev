@@ -1,0 +1,31 @@
+---
+import '../styles/bookshelf.css';
+
+interface Props {
+  books?: {
+    imageUrl: string;
+    title: string;
+  }[];
+}
+
+const { books = [] } = Astro.props;
+---
+
+<div class='book-wrapper'>
+  {
+    books.map((book) => (
+      <div class='book-items'>
+        <div class='main-book-wrap'>
+          <div class='book-cover'>
+            <div class='book-inside' />
+            <div class='book-image'>
+              <img src={book.imageUrl} alt={book.title} />
+              <div class='effect' />
+              <div class='light-effect' />
+            </div>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>

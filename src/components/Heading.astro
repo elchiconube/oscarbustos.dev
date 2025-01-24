@@ -1,0 +1,33 @@
+---
+const { title, description } = Astro.props;
+---
+
+<header>
+  <h2 class='gradient retro-2'>{title}</h2>
+  <p>{description}</p>
+</header>
+
+<style>
+  header {
+    text-align: center;
+    margin: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  p {
+    color: var(--light-gray);
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  h2 {
+    display: inline-block;
+    font-size: 36px;
+    letter-spacing: var(--lspace-32);
+    font-weight: 500;
+    font-family: var(--fraunces-font);
+  }
+</style>

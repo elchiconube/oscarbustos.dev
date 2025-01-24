@@ -1,0 +1,200 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from '@/components/FormattedDate.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import Cross from '@/components/Cross.astro';
+import { ClockCountdown, ArrowLeft } from '@phosphor-icons/react';
+
+type Props = CollectionEntry<'blog'>['data'];
+
+const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+---
+
+<MainLayout title={title} description={description} image={heroImage}>
+  <article>
+    <div class='prose'>
+      <div class='breadcrumb'>
+        <a href='/blog' title='Back to blog'>
+          <ArrowLeft size={18} /> Blog
+        </a>
+      </div>
+      <Cross classes='cross' />
+      <Cross classes='cross bottom' />
+      <div class='wrapper'>
+        <header>
+          <h1>{title}</h1>
+          <address>
+            <figure class='author'>
+              <img src='/oscar-bustos.webp' />
+              <figcaption>Oscar Bustos</figcaption>
+            </figure>
+          </address>
+          <p>{description}</p>
+          <div class='times'>
+            <p><ClockCountdown size={21} /> 6 min read</p>
+            <time>
+              <FormattedDate date={pubDate} />
+              {
+                updatedDate && (
+                  <div class='last-updated-on'>
+                    Last updated on <FormattedDate date={updatedDate} />
+                  </div>
+                )
+              }
+            </time>
+          </div>
+        </header>
+        <div class='content'>
+          <slot />
+        </div>
+      </div>
+    </div>
+  </article>
+</MainLayout>
+
+<style is:global>
+  article {
+    margin: 64px auto;
+  }
+
+  .author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    font-style: normal;
+
+    img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    figcaption {
+      font-size: 18px;
+      font-family: var(--fraunces-font);
+    }
+  }
+
+  .breadcrumb {
+    margin: 48px 0 0;
+    font-size: 16px;
+    color: var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--light-gray);
+      text-decoration: none;
+    }
+  }
+
+  .hero-image {
+    text-align: center;
+  }
+
+  .prose {
+    border: 1px solid var(--light-gray);
+    max-width: var(--max-width);
+    margin: 0 48px;
+    position: relative;
+
+    header {
+      h1 {
+        text-align: center;
+        font-family: var(--fraunces-font);
+        font-size: 38px;
+        margin-bottom: 32px;
+      }
+
+      p {
+        color: var(--light-gray);
+        margin-bottom: 32px;
+      }
+
+      .times {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 24px 0 32px;
+        font-size: 14px;
+        color: var(--light-gray);
+
+        time,
+        p {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin: 0;
+          line-height: 0;
+        }
+
+        .last-updated-on {
+          color: var(--light-gray);
+          font-size: 14px;
+        }
+      }
+    }
+
+    .wrapper {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 24px;
+
+      .content {
+        img {
+          max-width: 100%;
+        }
+
+        ol,
+        ul {
+          margin: 24px 24px 24px 48px;
+        }
+
+        ul {
+          list-style-type: disc;
+
+          ul {
+            margin: 5px 18px;
+          }
+        }
+
+        ol {
+          margin: 5px 18px;
+        }
+
+        blockquote {
+          border-left: 4px solid var(--light-gray);
+          padding-left: 24px;
+          margin: 24px 0;
+          font-family: var(--fraunces-font);
+          font-size: 24px;
+        }
+
+        pre {
+          font-size: 14px;
+          padding: 12px;
+          margin: 24px 0;
+          border-radius: 4px;
+          overflow-x: auto;
+        }
+      }
+    }
+  }
+
+  .cross {
+    left: -10.4px;
+    top: -10.2px;
+
+    &.bottom {
+      bottom: -10.2px;
+      top: inherit;
+      right: -10.4px;
+      left: inherit;
+    }
+  }
+</style>

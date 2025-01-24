@@ -1,0 +1,95 @@
+---
+import Container from '@/components/Container.astro';
+import Heading from '@/components/Heading.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import Button from '@/components/Button.astro';
+---
+
+<MainLayout>
+  <Container>
+    <Heading title='Faedo Digital' description='2024' />
+    <section>
+      <header>
+        <figure class='icon'>
+          <a href='https://faedodigital.com/' target='_blank' rel='noopener'
+            ><img src='/faedodigital.webp' alt='Faedo Digital logo' /></a
+          >
+        </figure>
+      </header>
+      <p>
+        Faedo Digital it's a small digital agency based in Spain founded by me
+        and my wife. We help small rural business to grow their online presence
+        and sales. We offer services like SEO, SEM, Social Media, Web
+        Development and more.
+      </p>
+
+      <figure class='screenshot'>
+        <img src='/faedodigital1.webp' alt='Faedo Digital' />
+      </figure>
+
+      <p>
+        Since pandemic situation we decided to move to a small village in the
+        north of Spain and start our own business. Our goal is to help small
+        business to grow and be more competitive in the digital world.
+      </p>
+
+      <figure class='screenshot'>
+        <img src='/faedodigital2.webp' alt='Faedo Digital' />
+      </figure>
+
+      <aside>
+        <ul>
+          <li>
+            <Button
+              href='https://faedodigital.com/'
+              target='_blank'
+              rel='noopener'
+              text='Website'
+            />
+          </li>
+        </ul>
+      </aside>
+    </section>
+
+    <style>
+      header {
+        text-align: center;
+        margin-bottom: 24px;
+        gap: 24px;
+      }
+
+      .icon {
+        margin: 0 auto;
+        box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.5);
+        border-radius: 12px;
+        width: 100px;
+
+        img {
+          width: 100%;
+          display: block;
+          border-radius: 12px;
+          height: auto;
+        }
+      }
+
+      .screenshot {
+        text-align: center;
+        margin: 24px 0;
+
+        img {
+          max-width: 100%;
+          display: inline-block;
+        }
+      }
+
+      aside {
+        margin-top: 38px;
+
+        ul {
+          display: flex;
+          gap: 12px;
+        }
+      }
+    </style>
+  </Container>
+</MainLayout>

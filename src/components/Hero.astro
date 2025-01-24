@@ -1,0 +1,57 @@
+---
+import Container from './Container.astro';
+import SocialLinks from './SocialLinks.astro';
+---
+
+<Container>
+  <article>
+    <p>Hi!, I'm</p>
+    <figure>
+      <img src='oscar-bustos.webp' alt='Oscar Bustos, Frontend Developer' />
+    </figure>
+    <h1 class='gradient retro-2'>Oscar Bustos,</h1>
+    <p class='subtitle'>
+      Senior Frontend Developer at <strong>FCM</strong>
+    </p>
+  </article>
+</Container>
+
+<style>
+  article {
+    font-family: var(--fraunces-font);
+    font-size: 42px;
+    color: var(--text-color);
+    font-weight: 200;
+
+    h1 {
+      line-height: 1.1;
+      padding-top: 16px;
+      font-weight: 400;
+    }
+
+    p {
+      display: inline-block;
+    }
+
+    .subtitle {
+      position: relative;
+      top: -10px;
+      margin: 0;
+    }
+
+    figure {
+      display: inline-block;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      overflow: hidden;
+      position: relative;
+      top: 40px;
+      box-shadow: rgb(0 0 0 / 50%) 0px 21px 24px -14px;
+      img {
+        display: inline-block;
+        width: 100%;
+      }
+    }
+  }
+</style>

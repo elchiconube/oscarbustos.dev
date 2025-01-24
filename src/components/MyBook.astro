@@ -1,0 +1,113 @@
+---
+import Heading from '@/components/Heading.astro';
+import Cover from '@/components/Cover.astro';
+import Button from '@/components/Button.astro';
+import Features from '@/components/Features.astro';
+---
+
+<section class="section">
+  <Heading title="Book" description="Learn frontend development in Spanish" />
+  <div class="wrapper">
+    <Cover />
+    <article>
+      <h3>Aprende a crear páginas web desde 0</h3>
+      <h2>Fácil y práctico para todos los públicos</h2>
+      <p>Con este libro prodrás aprender desde 0 las tecnologías básicas sobre las que se sustentan el desarrollo web. Explicado con multitud de casos prácticos y ejercicios que te ayudarán a entenderlo de una manera sencilla</p>
+      <Features features={["Acceso a comunidad privada", "Acceso a contenidos actualizados", "Aprenderás HTML5, CSS3, Javascript", "Tendrás ejercicios prácticos"]} />
+
+      <Button href="https://leanpub.com/desarrollo-frontend" target="_blank" title="" text="Comprar" />
+    </article>
+  </div>
+</section>
+
+<style>
+  .wrapper{
+    color: var(--text-color);
+    display: grid;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 24px;
+    grid-template-columns: 480px 1fr;
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  @media screen and (max-width: 768px){
+    .wrapper{
+      grid-template-columns: 1fr;
+      gap: 80px;
+
+    }
+    
+  }
+
+  .cover{
+    perspective: 1000px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: book-3d 1s ease forwards;
+
+    &::before{
+      position: absolute;
+      content: ' ';
+      left: 100%;
+      top: 1%;
+      width: calc(var(--book-thickness)* 2);
+      height: 98%;
+      transform: translate(-55%, 0) rotateY(90deg);
+      background: linear-gradient(90deg, #fff 0%, hsl(0, 0%, 94%) 5%, #fff 10%, hsl(0, 0%, 94%) 15%, #fff 20%, hsl(0, 0%, 94%) 25%, #fff 30%, hsl(0, 0%, 94%) 35%, #fff 40%, hsl(0, 0%, 94%) 45%, #fff 50%, hsl(0, 0%, 94%) 55%, #fff 60%, hsl(0, 0%, 94%) 65%, #fff 70%, hsl(0, 0%, 94%) 75%, #fff 80%, hsl(0, 0%, 94%) 85%, #fff 90%, hsl(0, 0%, 94%) 95%, #fff 100%);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 1%;
+      width: 100%;
+      height: 100%;
+      transform: translateZ(calc(30)* -1));
+      background-color: var(--cover-color);
+      border-radius: 0 2px 2px 0;
+      box-shadow: -10px 0 50px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    h4{
+      font-family: sans-serif;
+      font-weight: 600;
+      letter-spacing: var(--lspace-32);
+      font-size: 72px;
+      line-height: 67px;
+      position: relative;
+    }
+
+    i{
+      display: block;
+      width: 44%;
+      height: 13px;
+      background-color: var(--text-color);
+      margin: 5px 0 10px;
+    }
+    h2{
+      font-family: sans-serif;
+      width: 61%;
+      font-size: 18px;
+      position: relative;
+    }
+    h3{
+      font-family: var(--fraunces-font);
+      position: absolute;
+        bottom: 40px;
+    }
+
+    &:after{
+        content: " ";
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background-color: #fdbb07;
+        height: 13px;
+    }
+  }
+  
+</style>

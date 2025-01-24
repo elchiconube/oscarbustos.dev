@@ -1,0 +1,366 @@
+---
+// src/components/BlueskyFeed.astro
+import { BskyAgent } from '@atproto/api';
+import Heading from '@/components/Heading.astro';
+import Container from '@/components/Container.astro';
+
+interface Props {
+  limit?: number;
+}
+
+const { limit = 20 } = Astro.props;
+
+const agent = new BskyAgent({ service: 'https://bsky.social' });
+
+let posts = [];
+let error = null;
+
+const BLUESKY_EMAIL = import.meta.env.BLUESKY_EMAIL;
+const BLUESKY_PASSWORD = import.meta.env.BLUESKY_PASSWORD;
+const BLUESKY_ACTOR = import.meta.env.BLUESKY_ACTOR;
+
+// Función para obtener el contenido embebido
+function getEmbedContent(post) {
+  const embed = post.post.embed;
+  if (!embed) return null;
+
+  // Manejo de imágenes
+  if (embed.images) {
+    return {
+      type: 'images',
+      content: embed.images.map(img => ({
+        url: img.fullsize,
+        alt: img.alt,
+        thumb: img.thumb
+      }))
+    };
+  }
+
+  // Manejo de links externos
+  if (embed.$type === 'app.bsky.embed.external') {
+    return {
+      type: 'external',
+      content: {
+        url: embed.external.uri,
+        title: embed.external.title,
+        description: embed.external.description,
+        thumb: embed.external.thumb,
+      }
+    };
+  }
+
+  // Manejo de citas (reposts con comentario)
+  if (embed.$type === 'app.bsky.embed.record') {
+    return {
+      type: 'quote',
+      content: {
+        text: embed.record.value.text,
+        author: embed.record.author,
+        uri: embed.record.uri
+      }
+    };
+  }
+
+  // Manejo de videos
+  if (embed.$type === 'app.bsky.embed.media' && embed.media?.videos) {
+    return {
+      type: 'video',
+      content: embed.media.videos.map(video => ({
+        url: video.url,
+        thumb: video.thumb,
+        alt: video.alt
+      }))
+    };
+  }
+
+  return null;
+}
+
+try {
+  await agent.login({
+    identifier: BLUESKY_EMAIL,
+    password: BLUESKY_PASSWORD,
+  });
+
+  const { data } = await agent.getAuthorFeed({
+    actor: BLUESKY_ACTOR,
+    limit: limit
+  });
+
+  posts = data.feed;
+} catch (error) {
+  console.error('Error:', error);
+  error = error.message;
+}
+---
+<Container/>
+  <Heading title="Timeline" description="Latest posts" />
+  <div class="bluesky-feed">
+    {error ? (
+      <p class="error">Error loading posts: {error}</p>
+    ) : posts.length > 0 ? (
+      <ul class="posts-list">
+        {posts.map((feedView) => {
+          const embedContent = getEmbedContent(feedView);
+          return (
+            <li class="post">
+              <div class="post-content">
+                {feedView.post.record.text}
+              </div>
+
+              {embedContent && (
+                <div class="embed-content">
+                  {embedContent.type === 'images' && (
+                    <div class={`media-grid media-grid-${Math.min(embedContent.content.length, 4)}`}>
+                      {embedContent.content.map(img => (
+                        <div class="media-item">
+                          <img src={img.url} alt={img.alt || 'Post image'} loading="lazy" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {embedContent.type === 'video' && (
+                    <div class="video-container">
+                      {embedContent.content.map(video => (
+                        <div class="video-wrapper">
+                          <video 
+                            controls 
+                            poster={video.thumb}
+                            preload="none"
+                          >
+                            <source src={video.url} type="video/mp4" />
+                            Your browser does not support video playback.
+                          </video>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {embedContent.type === 'external' && (
+                    <a 
+                      href={embedContent.content.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      class="external-link"
+                    >
+                      {embedContent.content.thumb && (
+                        <img 
+                          src={embedContent.content.thumb} 
+                          alt={embedContent.content.title} 
+                          class="external-thumb"
+                        />
+                      )}
+                      <div class="external-info">
+                        <h3>{embedContent.content.title}</h3>
+                        <p>{embedContent.content.description}</p>
+                      </div>
+                    </a>
+                  )}
+
+                  {embedContent.type === 'quote' && (
+                    <blockquote class="quote-post">
+                      <p class="quote-author">@{embedContent.content.author.handle}</p>
+                      <p class="quote-text">{embedContent.content.text}</p>
+                    </blockquote>
+                  )}
+                </div>
+              )}
+
+              <div class="post-meta">
+                <span class="date">
+                  {new Date(feedView.post.indexedAt).toLocaleDateString()}
+                </span>
+                
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    ) : (
+      <p>No posts found</p>
+    )}
+  </div>
+</Container>
+
+<style>
+  .bluesky-feed {
+    width: 100%;
+    max-width: 600px;
+    margin: 2rem auto;
+  }
+
+  .posts-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--border-color, #eee);
+
+  }
+
+  .post {
+    border-left: 1px solid var(--border-color, #eee);
+    border-right: 1px solid var(--border-color, #eee);
+    border-bottom: 1px solid var(--border-color, #eee);
+
+    padding: 1rem;
+    background: var(--post-bg, #fff);
+  }
+
+  .post-content {
+    margin-bottom: 0.8rem;
+    font-size:16px;
+  }
+
+  .post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-muted, #666);
+  }
+
+  .stats {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .error {
+    color: #ef4444;
+    padding: 1rem;
+    border: 1px solid currentColor;
+    border-radius: 8px;
+  }
+
+  /* Estilos para modo oscuro si lo necesitas */
+  :global([data-theme="dark"]) .post {
+    --border-color: #2d2d2d;
+    --post-bg: #1a1a1a;
+    --text-muted: #888;
+  }
+
+  .media-grid {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    overflow: hidden;
+  }
+
+  .media-grid-1 { grid-template-columns: 1fr; }
+  .media-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .media-grid-3,
+  .media-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+
+  .media-item {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+  }
+
+  .media-grid-1 .media-item {
+    aspect-ratio: 16/9;
+  }
+
+  .media-item img {
+    max-width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+  }
+
+  .media-item img:hover {
+    transform: scale(1.05);
+  }
+
+  .video-container {
+    margin: 1rem 0;
+  }
+
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .external-link {
+    display: flex;
+    margin: 1rem 0;
+    border-left: 1px solid var(--border-color, #eee);
+    border-right: 1px solid var(--border-color, #eee);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease;
+  }
+
+  .external-link:hover {
+    transform: translateY(-2px);
+  }
+
+  .external-thumb {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+  }
+
+  .external-info {
+    padding: 1rem;
+    flex: 1;
+  }
+
+  .external-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+  }
+
+  .external-info p {
+    margin: 0;
+    color: var(--text-muted, #666);
+    font-size: 0.9rem;
+  }
+
+  .quote-post {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-left: 4px solid var(--border-color, #eee);
+    background: var(--quote-bg, #f8f8f8);
+  }
+
+  .quote-author {
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    color: var(--text-muted, #666);
+  }
+
+  .quote-text {
+    margin: 0;
+    font-style: italic;
+  }
+
+  :global([data-theme="dark"]) {
+    .quote-post {
+      --quote-bg: #1a1a1a;
+    }
+    
+    .external-link {
+      background: var(--post-bg, #1a1a1a);
+    }
+  }
+</style>

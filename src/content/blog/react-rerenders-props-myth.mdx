@@ -1,0 +1,148 @@
+---
+title: 'Understanding React Re-renders: The Great Props Myth'
+description: 'Learn how React re-renders really work and debunk common misconceptions about props triggering re-renders'
+pubDate: 'Jan 10 2025'
+heroImage: ''
+slug: react-rerenders-props-myth
+---
+
+One of the most common misconceptions in React is the statement: "Components re-render when their props change." While this sounds logical, it's not entirely accurate. Let's explore how React re-renders actually work and debunk this myth.
+
+## The Basics: What Triggers a Re-render?
+
+The initial source of all re-renders in React is **state changes**. When a state update occurs, React will re-render the component where the state lives AND all its nested components, regardless of their props.
+
+Let's see a simple example:
+
+```jsx
+const Child = () => {
+  console.log("Child component renders");
+  return <div>I'm a child</div>;
+}
+
+const Parent = () => {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+      <Child />
+    </div>
+  );
+}
+```
+
+Every time you click the button, the `Child` component will re-render even though it receives no props! You can verify this by checking the console logs.
+
+## The Props Myth in Action
+
+Let's modify our example to pass a prop that doesn't change:
+
+```jsx
+const Child = ({ text }) => {
+  console.log("Child component renders");
+  return <div>{text}</div>;
+}
+
+const Parent = () => {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+      <Child text="I never change" />
+    </div>
+  );
+}
+```
+
+The `Child` component will still re-render on every button click, even though its `text` prop never changes. This demonstrates that prop changes alone don't determine whether a component re-renders.
+
+## When Do Props Matter?
+
+Props only matter for re-renders when a component is wrapped in `React.memo`:
+
+```jsx
+const Child = React.memo(({ text }) => {
+  console.log("Child component renders");
+  return <div>{text}</div>;
+});
+
+const Parent = () => {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+      <Child text="I never change" />
+    </div>
+  );
+}
+```
+
+Now the `Child` component will only re-render if its props change. Since we're passing a static string, it won't re-render when the parent's state changes.
+
+## Real World Example: Optimizing a Form
+
+Here's a practical example of how understanding re-renders can help optimize performance:
+
+```jsx
+const ExpensiveComponent = () => {
+  // Imagine this component does heavy calculations
+  console.log("Expensive render");
+  return <div>I'm expensive to render!</div>;
+}
+
+// ❌ Bad: ExpensiveComponent will re-render on every keystroke
+const Form = () => {
+  const [text, setText] = useState("");
+  
+  return (
+    <div>
+      <input 
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <ExpensiveComponent />
+    </div>
+  );
+}
+
+// ✅ Good: Move state to a separate component
+const Input = () => {
+  const [text, setText] = useState("");
+  
+  return (
+    <input 
+      value={text}
+      onChange={(e) => setText(e.target.value)}
+    />
+  );
+}
+
+const BetterForm = () => {
+  return (
+    <div>
+      <Input />
+      <ExpensiveComponent />
+    </div>
+  );
+}
+```
+
+In the optimized version, typing in the input won't cause `ExpensiveComponent` to re-render because the state changes are isolated in the `Input` component.
+
+## Key Takeaways
+
+1. State changes trigger re-renders, not prop changes
+2. When a component re-renders, all its children re-render by default
+3. `React.memo` makes components check their props before re-rendering
+4. Moving state down the component tree can prevent unnecessary re-renders
+
+Understanding these concepts helps write more performant React applications without premature optimization.

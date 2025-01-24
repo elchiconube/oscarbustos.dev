@@ -1,0 +1,162 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Heading from '@/components/Heading.astro';
+import Container from '@/components/Container.astro';
+import BookShelf from '@/components/BookShelf.astro';
+
+const myBooks = [
+  {
+    imageUrl: '/elantris.webp',
+    title: 'Elantris',
+  },
+  {
+    imageUrl: '/trenza.webp',
+    title: 'Trenza del mar esperanza',
+  },
+  {
+    imageUrl: '/storyteller.webp',
+    title: 'The Storyteller',
+  },
+  {
+    imageUrl: '/serenidad.webp',
+    title: 'Manual de serenidad',
+  },
+  {
+    imageUrl: '/javascript.webp',
+    title: 'Javascript The Good Parts',
+  },
+  {
+    imageUrl: '/pragmatico.webp',
+    title: 'El programador pragmático',
+  },
+  {
+    imageUrl: '/sostenible.webp',
+    title: 'Código sostenible',
+  },
+  {
+    imageUrl: '/patterns.webp',
+    title: 'Javascript Patterns',
+  },
+  {
+    imageUrl: '/marte.webp',
+    title: 'UI from Mars',
+  },
+  // ... más libros
+];
+---
+
+<MainLayout>
+  <Heading title='About' description="Coding it's not everything" />
+  <section>
+    <Container>
+      <p>
+        I love my work, but staying healthy is also very important to me.
+        Fitness is a big part of my life, and I enjoy training to stay strong
+        and active. If you're curious about my workouts, feel free to follow me
+        on these apps. Let's connect and share our fitness journeys!
+      </p>
+
+      <ul>
+        <li>
+          <figure>
+            <a
+              href='https://www.strava.com/athletes/16933893'
+              title='Strava'
+              target='_blank'
+            >
+              <img class='icon' src='/strava.webp' alt='Strava' />
+            </a>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <a
+              href='https://hevy.com/user/elchiconube'
+              title='Hevy'
+              target='_blank'
+            >
+              <img class='icon' src='/hevy.webp' alt='Hevy' />
+            </a>
+          </figure>
+        </li>
+      </ul>
+      <p>
+        I have a deep love for nature, and I enjoy hiking in the mountains and
+        exploring new places whenever I can. Traveling helps me recharge and
+        discover new perspectives.
+      </p>
+    </Container>
+    <ul class='gallery'>
+      <li>
+        <figure class='image'>
+          <img src='/joi1.webp' alt='Nature' />
+        </figure>
+      </li>
+      <li>
+        <figure class='image'>
+          <img src='/joi2.webp' alt='Nature' />
+        </figure>
+      </li>
+      <li>
+        <figure class='image'>
+          <img src='/joi3.webp' alt='Nature' />
+        </figure>
+      </li>
+    </ul>
+
+    <Container>
+      <p>
+        But what truly makes me happiest is spending time with my family.
+        There's nothing I value more than sharing moments with my wife and our
+        two daughters—they are my greatest joy and the most important part of my
+        life.
+      </p>
+    </Container>
+    <figure class='family'>
+      <img class='full' src='/family.webp' alt='Family' />
+    </figure>
+  </section>
+  <Heading
+    title='Bookshelf'
+    description="Here are some of my favorite books I've read or have on my bookshelf."
+  />
+
+  <BookShelf books={myBooks} />
+</MainLayout>
+
+<style>
+  .family {
+    margin-bottom: 120px;
+    display: block;
+  }
+  .gallery {
+    max-width: 1000px;
+    margin: 48px auto;
+
+    figure {
+      display: inline-block;
+      img {
+        border-top: solid 15px #efefef;
+        border-left: solid 15px #efefef;
+        border-bottom: solid 60px #efefef;
+        border-right: solid 15px #efefef;
+        box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.5);
+        max-width: 100%;
+      }
+    }
+  }
+
+  ul {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin: 24px 0;
+
+    .icon {
+      width: 100px;
+      display: block;
+      box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+    }
+  }
+</style>

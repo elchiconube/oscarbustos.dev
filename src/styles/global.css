@@ -1,0 +1,149 @@
+:root {
+  --max-width: 1200px;
+  
+  --light-gray: rgba(114, 120, 136, .6);
+
+  --nunito-font: 'Nunito Variable', sans-serif;
+  --fraunces-font: 'Fraunces Variable', serif;
+  
+  --lspace-32: -1.2px;
+  
+  --rainbow-2: linear-gradient(90deg, #DC36FA 0%, #A167EF 25%, #609FE4 50%, #3ABFDE 75%, #04D18E 100%);
+  --retro-2: linear-gradient(90.42deg, #4AB1F1 0.58%, #566CEC 37.22%, #D749AF 73.87%, #FF7C51 112.26%);
+  
+}
+
+html.light {
+  --background: #fff;
+  --text-color: rgb(51, 51, 51);
+  --hover-bg: rgba(0, 0, 0, 0.05);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --nav-bg: rgba(255, 255, 255, 0.3);
+  --nav-shadow: 0px 0px 8px rgba(255, 255, 255, 0.45);
+
+  --card-bg: rgba(245, 245, 245, 0.6);
+  --card-bg-hover: linear-gradient(180deg, rgba(245, 245, 245, 0.9) 0%, rgba(250, 250, 250, 0.6) 100%);
+  --card-shadow: 0px 2.9px 5.7px rgba(0, 0, 0, 0.2), 0px 8.6px 8.6px rgba(0, 0, 0, 0.2), 0px 21.4px 13px rgba(0, 0, 0, 0.15), 0px 37.1px 15px rgba(0, 0, 0, 0.05);
+
+  --cross-color: #4d4d4d;
+
+}
+
+
+html.dark {
+	--background: #121212;
+	--text-color: rgba(255, 255, 255, 0.87);
+	--hover-bg: rgba(255, 255, 255, 0.05);
+	--border-color: rgba(255, 255, 255, 0.1);
+	--nav-bg: rgba(18, 18, 18, 0.3);
+	--nav-shadow: 0px 0px 8px rgba(0, 0, 0, 0.45);
+  --card-bg: rgba(25, 25, 32, 0.6);
+  --card-bg-hover: linear-gradient(180deg, rgba(25, 25, 32, 0.9) 0%, rgba(25, 26, 25, 0.5) 100%);
+  --card-shadow: 0px 2.9px 5.7px rgba(0, 0, 0, 0.3), 0px 8.6px 8.6px rgba(0, 0, 0, 0.2), 0px 21.4px 13px rgba(0, 0, 0, 0.2), 0px 37.1px 15px rgba(0, 0, 0, 0.2);
+
+  --cross-color: #9c9c9c;
+
+}
+
+body {
+  font-family: var(--nunito-font);
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  background-size: 100% 600px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  color: var(--text-color);
+  font-size: 20px;
+  line-height: 1.7;
+  background-color: var(--background);
+  transition: background-color 0.3s ease;
+}
+
+main{
+	position: relative;
+	min-height: 100vh;
+  z-index: 10; /* Un z-index menor que el del header */
+  padding: 0 12px;
+}
+
+main::before{
+    content: "";
+    position: absolute;
+    inset: 0px;
+    z-index: -100;
+    background-image: url(/header-gradient.svg), url(/footer-gradient.svg);
+    background-repeat: no-repeat;
+    background-position: center top, center bottom;
+    background-size: 1400px;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--fraunces-font);
+  font-weight: 400;
+}
+
+h2{
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+h3{
+  font-size: 18px;
+}
+
+.section {
+  margin: 80px auto;
+}
+
+.full{
+  display: block;
+  width: 100%;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+ul{
+  list-style: none;
+}
+
+a{
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+p{
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+
+.gradient {
+	background-size: 100%;
+	background-repeat: repeat;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.rainbow-2 {
+	background-image: var(--rainbow-2);
+}
+
+.retro-2 {
+	background-image: var(--retro-2);
+}
+
+.card-list{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 6px;
+  padding: 4px;
+}
+
+.card-list .double{
+  grid-column: span 2;
+}

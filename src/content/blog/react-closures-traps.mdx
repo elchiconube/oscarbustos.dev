@@ -1,0 +1,199 @@
+---
+title: 'React Closures: Common Traps and How to Avoid Them'
+description: 'Understanding closures in React and preventing stale closure bugs in your applications'
+pubDate: 'Nov 22 2024'
+heroImage: ''
+slug: react-closures-traps
+---
+
+JavaScript closures are a powerful feature, but they can lead to subtle bugs in React applications. Let's explore common closure traps and their solutions.
+
+## Understanding Closures in React
+
+A closure is formed when a function captures variables from its outer scope:
+
+```jsx
+const Counter = () => {
+  const [count, setCount] = useState(0);
+  
+  // This function forms a closure over 'count'
+  const logCount = () => {
+    console.log(count);
+  };
+
+  return (
+    <button onClick={logCount}>
+      Log count: {count}
+    </button>
+  );
+};
+```
+
+## The Stale Closure Problem
+
+### Problem 1: useEffect Dependencies
+
+```jsx
+const Timer = () => {
+  const [count, setCount] = useState(0);
+
+  // ❌ Stale closure: callback always sees initial count value
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount(count + 1); // count is captured in closure
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []); // Missing dependency
+
+  // ✅ Solution: Use functional update
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount(c => c + 1); // Always uses latest count
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+};
+```
+
+### Problem 2: Event Handlers
+
+```jsx
+const SearchForm = () => {
+  const [query, setQuery] = useState('');
+  
+  // ❌ Stale closure in event handler
+  const handleSearch = useCallback(() => {
+    fetchResults(query);
+  }, []); // Missing dependency
+
+  // ✅ Solution: Include dependency
+  const handleSearch = useCallback(() => {
+    fetchResults(query);
+  }, [query]);
+
+  return <input onChange={e => setQuery(e.target.value)} />;
+};
+```
+
+## Using Refs to Escape Closure Traps
+
+When you need the latest value but don't want to trigger re-renders:
+
+```jsx
+const LatestValueComponent = () => {
+  const [value, setValue] = useState('');
+  const valueRef = useRef(value);
+
+  // Keep ref updated with latest value
+  useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
+
+  const handleClick = useCallback(() => {
+    // Always access latest value without dependency
+    console.log(valueRef.current);
+  }, []); // No dependencies needed
+
+  return (
+    <input 
+      value={value}
+      onChange={e => setValue(e.target.value)}
+      onClick={handleClick}
+    />
+  );
+};
+```
+
+## Real World Example: Debounced Search
+
+```jsx
+const SearchComponent = () => {
+  const [query, setQuery] = useState('');
+  const queryRef = useRef(query);
+
+  useEffect(() => {
+    queryRef.current = query;
+  }, [query]);
+
+  const debouncedSearch = useMemo(() => {
+    return debounce(async () => {
+      // Always uses latest query value
+      const results = await fetchResults(queryRef.current);
+      console.log(results);
+    }, 500);
+  }, []); // Empty deps - debounce function never changes
+
+  return (
+    <input
+      value={query}
+      onChange={e => {
+        setQuery(e.target.value);
+        debouncedSearch();
+      }}
+    />
+  );
+};
+```
+
+## Event Listeners and Cleanup
+
+```jsx
+const EventListener = () => {
+  const [data, setData] = useState(null);
+  const dataRef = useRef(data);
+
+  useEffect(() => {
+    dataRef.current = data;
+  }, [data]);
+
+  useEffect(() => {
+    const handler = (event) => {
+      // Always access latest data
+      console.log(dataRef.current);
+    };
+
+    window.addEventListener('scroll', handler);
+    return () => window.removeEventListener('scroll', handler);
+  }, []); // No dependencies needed
+
+  return <div>{data}</div>;
+};
+```
+
+## useCallback and Dependencies
+
+```jsx
+const CallbackComponent = ({ onSubmit }) => {
+  const [value, setValue] = useState('');
+  
+  // ❌ Stale closure: callback uses old value
+  const handleSubmit = useCallback(() => {
+    onSubmit(value);
+  }, [onSubmit]); // Missing 'value' dependency
+
+  // ✅ Solution 1: Add all dependencies
+  const handleSubmit = useCallback(() => {
+    onSubmit(value);
+  }, [onSubmit, value]);
+
+  // ✅ Solution 2: Use ref if you need stable callback
+  const valueRef = useRef(value);
+  useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
+
+  const handleSubmit = useCallback(() => {
+    onSubmit(valueRef.current);
+  }, [onSubmit]);
+};
+```
+
+## Key Takeaways
+
+1. Always include dependencies in hooks unless you have a specific reason not to
+2. Use functional updates with setState to avoid closure problems
+3. Refs can help access latest values without triggering re-renders
+4. Be careful with useCallback dependencies and closures
+5. Watch out for stale closures in event listeners and timeouts

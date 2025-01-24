@@ -1,0 +1,259 @@
+---
+import '@/styles/theme.css';
+const { image, alt, title, year, personal } = Astro.props;
+---
+
+<div class='card-wrapper'>
+  <article class='card'>
+    {
+      personal && (
+        <p class='ribbon'>
+          <span>Personal</span>
+        </p>
+      )
+    }
+    {
+      image && (
+        <figure>
+          <img src={image} alt={alt} />
+        </figure>
+      )
+    }
+    <h2>{title}</h2>
+    <p>{year}</p>
+    <slot />
+    <div class='glow'></div>
+  </article>
+</div>
+
+<style>
+  .ribbon {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    z-index: 1;
+    overflow: hidden;
+    width: 75px;
+    height: 75px;
+    text-align: right;
+  }
+  .ribbon span {
+    font-size: 10px;
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: bold;
+    line-height: 20px;
+    transform: rotate(45deg);
+    width: 100px;
+    display: block;
+    background: var(--retro-2);
+    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+    position: absolute;
+    top: 19px;
+    right: -21px;
+  }
+  .ribbon span::before {
+    content: '';
+    position: absolute;
+    left: 0px;
+    top: 100%;
+    z-index: -1;
+    border-left: 3px solid #4ab1f1;
+    border-right: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid #4ab1f1;
+  }
+  .ribbon span::after {
+    content: '';
+    position: absolute;
+    right: 0%;
+    top: 100%;
+    z-index: -1;
+    border-right: 3px solid #ff7c51;
+    border-left: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid #ff7c51;
+  }
+
+  .card-wrapper {
+    perspective: 500px;
+    width: 100%;
+  }
+
+  .card {
+    position: relative;
+    cursor: pointer;
+    padding: 32px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--card-bg);
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition:
+      transform 0.2s ease-out,
+      box-shadow 0.2s ease-out;
+    text-align: center;
+    height: 240px;
+    justify-content: center;
+  }
+
+  .card:hover {
+    box-shadow:
+      0 5px 20px rgba(0, 0, 0, 0.1),
+      0 20px 50px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada en hover */
+  }
+
+  .card figure,
+  .card h2,
+  .card p {
+    transform: translateZ(
+      50px
+    ); /* Aumentado para mayor efecto de profundidad */
+  }
+
+  .glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-image: radial-gradient(circle at 50% -20%, #ffffff22, #0000000f);
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+    transition: background-image 0.3s ease-out;
+  }
+
+  figure {
+    width: 100%;
+    margin: 0;
+    box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+    width: 100px;
+    margin-bottom: 12px;
+  }
+
+  img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+    height: auto;
+  }
+
+  h2 {
+    font-size: 23px;
+    color: var(--text-color);
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.5;
+    color: var(--light-gray);
+    font-size: 14px;
+    font-weight: bold;
+  }
+</style>
+
+<script>
+  const cardInstances = new Map();
+
+  function initCard(card: HTMLElement) {
+    // Si la card ya está inicializada, la limpiamos primero
+    if (cardInstances.has(card)) {
+      cardInstances.get(card)();
+      cardInstances.delete(card);
+    }
+
+    const wrapper = card.closest('.card-wrapper') as HTMLElement;
+    let bounds: DOMRect;
+
+    function rotateToMouse(e: MouseEvent) {
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      bounds = card.getBoundingClientRect();
+
+      const leftX = mouseX - bounds.x;
+      const topY = mouseY - bounds.y;
+
+      const center = {
+        x: leftX - bounds.width / 2,
+        y: topY - bounds.height / 2,
+      };
+
+      const maxRotation = 15;
+      const rotateX = (center.y / bounds.height) * maxRotation;
+      const rotateY = -(center.x / bounds.width) * maxRotation;
+
+      card.style.transform = `
+        rotateX(${rotateX}deg)
+        rotateY(${rotateY}deg)
+        scale3d(1.05, 1.05, 1.05)
+      `;
+
+      const glow = card.querySelector('.glow') as HTMLElement;
+      if (glow) {
+        const glowX = (center.x / bounds.width) * 100 + 50;
+        const glowY = (center.y / bounds.height) * 100 + 50;
+
+        glow.style.backgroundImage = `
+          radial-gradient(
+            circle at ${glowX}% ${glowY}%,
+            rgba(255, 255, 255, 0.3),
+            rgba(255, 255, 255, 0.1) 30%,
+            rgba(0, 0, 0, 0.05) 80%
+          )
+        `;
+      }
+    }
+
+    function handleMouseEnter() {
+      document.addEventListener('mousemove', rotateToMouse);
+    }
+
+    function handleMouseLeave() {
+      document.removeEventListener('mousemove', rotateToMouse);
+      card.style.transform = 'none';
+      const glow = card.querySelector('.glow') as HTMLElement;
+      if (glow) {
+        glow.style.backgroundImage =
+          'radial-gradient(circle at 50% -20%, #ffffff22, #0000000f)';
+      }
+    }
+
+    card.addEventListener('mouseenter', handleMouseEnter);
+    card.addEventListener('mouseleave', handleMouseLeave);
+
+    // Guardar la función de limpieza
+    const cleanup = () => {
+      card.removeEventListener('mouseenter', handleMouseEnter);
+      card.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('mousemove', rotateToMouse);
+    };
+
+    // Almacenar la instancia
+    cardInstances.set(card, cleanup);
+
+    return cleanup;
+  }
+
+  function initAllCards() {
+    document.querySelectorAll('.card').forEach((card) => {
+      initCard(card as HTMLElement);
+    });
+  }
+
+  // Inicializar las cards en la carga inicial
+  initAllCards();
+
+  // Reinicializar las cards después de las transiciones de página
+  document.addEventListener('astro:page-load', () => {
+    initAllCards();
+  });
+
+  // Limpiar las instancias antes de la transición
+  document.addEventListener('astro:before-preparation', () => {
+    cardInstances.forEach((cleanup) => cleanup());
+    cardInstances.clear();
+  });
+</script>
