@@ -9,6 +9,11 @@ const { full = false } = Astro.props
   <Heading title='Projects' description="Latests projects I've made" />
   <ul class='card-list'>
     <li>
+      <a href='#' title='Bridge project' target='_blank'>
+        <Card image='/bridge.webp' alt='Bridge logo' title='Bridge' year='WIP' personal/>
+      </a>
+    </li>
+    <li>
       <a href='/projects/fcm' title='FCM project' target='_blank'>
         <Card image='/fcm.webp' alt='FCM logo' title='FCM' year='2025' />
       </a>
@@ -61,12 +66,13 @@ const { full = false } = Astro.props
         />
       </a>
     </li>
+    {full ? (
     <li>
       <a href='/projects/pulse' title='Pulse' target='_blank'>
         <Card image='/pulse.webp' alt='Pulse logo' title='Pulse' year='2021' />
       </a>
     </li>
-    {full ? ( <li>
+    <li>
       <a href='/projects/bento' title='Bento components' target='_blank'>
         <Card image='/bento.webp' alt='Bento logo' title='Bento' year='2021' />
       </a>
