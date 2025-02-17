@@ -1,7 +1,7 @@
 [build]
   command = "astro build"
   publish = "dist"
-  edge_functions = true
+  edge_functions = "edge-functions"
 
 [[headers]]
   for = "/*"
