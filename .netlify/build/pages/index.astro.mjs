@@ -6,7 +6,7 @@ import { $ as $$Container } from '../chunks/Container_CKziVX-Z.mjs';
 import 'clsx';
 import { $ as $$LatestsProjects } from '../chunks/LatestsProjects_B9NvjLgh.mjs';
 import { a as $$Button, b as $$SocialLinks, $ as $$MainLayout } from '../chunks/MainLayout_CDs1ikiz.mjs';
-import { g as getCollection } from '../chunks/_astro_content_Da8MJUMy.mjs';
+import { g as getCollection } from '../chunks/_astro_content_s6EtqOHK.mjs';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { $ as $$FormattedDate } from '../chunks/FormattedDate_Bp_TYzh5.mjs';
 import { $ as $$Heading } from '../chunks/Heading_DgzD4r6r.mjs';
