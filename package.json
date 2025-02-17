@@ -9,9 +9,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.0.2",
-    "@astrojs/react": "^4.1.0",
-    "@astrojs/rss": "^4.0.10",
+    "@astrojs/mdx": "^4.0.8",
+    "@astrojs/react": "^4.2.0",
+    "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.2.1",
     "@atproto/api": "^0.13.27",
     "@fontsource-variable/fraunces": "^5.1.1",
@@ -19,7 +19,7 @@
     "@phosphor-icons/react": "^2.1.7",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",
-    "astro": "^5.0.5",
+    "astro": "^5.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }
