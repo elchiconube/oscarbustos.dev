@@ -11,7 +11,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
 <MainLayout title={title} description={description} image={heroImage}>
-  <article>
+  <article itemscope itemtype="https://schema.org/BlogPosting">
     <div class='prose'>
       <div class='breadcrumb'>
         <a href='/blog' title='Back to blog'>
@@ -22,17 +22,19 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
       <Cross classes='cross bottom' />
       <div class='wrapper'>
         <header>
-          <h1>{title}</h1>
+          <h1 itemprop="headline">{title}</h1>
           <address>
             <figure class='author'>
-              <img src='/oscar-bustos.webp' />
-              <figcaption>Oscar Bustos</figcaption>
+              <img itemprop="image" src='/oscar-bustos.webp' alt='Oscar Bustos' />
+              <figcaption itemprop="author" itemscope itemtype="https://schema.org/Person">
+                <span itemprop="name">Oscar Bustos</span>
+              </figcaption>
             </figure>
           </address>
-          <p>{description}</p>
+          <p itemprop="description">{description}</p>
           <div class='times'>
             <p><ClockCountdown size={21} /> 6 min read</p>
-            <time>
+            <time itemprop="datePublished" datetime={pubDate.toISOString()}>
               <FormattedDate date={pubDate} />
               {
                 updatedDate && (
@@ -44,7 +46,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
             </time>
           </div>
         </header>
-        <div class='content'>
+        <div class='content' itemprop="articleBody">
           <slot />
         </div>
       </div>

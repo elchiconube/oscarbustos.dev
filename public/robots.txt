@@ -3,3 +3,4 @@ Allow: /
 
 # Sitemaps
 Sitemap: https://oscarbustos.dev/sitemap-index.xml
+Sitemap: https://oscarbustos.dev/blog-sitemap.xml
