@@ -7,9 +7,37 @@ import LatestsProjects from '@/components/LatestsProjects.astro';
 import SocialLinks from '@/components/SocialLinks.astro';
 import LatestsPosts from '@/components/LatestsPosts.astro';
 import MainLayout from '@/layouts/MainLayout.astro';
+import JsonLd from '@/components/JsonLd.astro';
 ---
 
 <MainLayout>
+  <JsonLd
+    type="Person"
+    data={{
+      name: 'Oscar Bustos',
+      jobTitle: 'Senior Frontend Developer',
+      url: 'https://oscarbustos.dev',
+      sameAs: [
+        'https://twitter.com/elchiconube',
+        'https://github.com/elchiconube',
+        'https://linkedin.com/in/oscarbustos'
+      ],
+      image: 'https://oscarbustos.dev/oscar-bustos.webp',
+      description: 'Senior Frontend Developer with expertise in React, JavaScript, and TypeScript'
+    }}
+  />
+  <JsonLd
+    type="WebSite"
+    data={{
+      name: 'Oscar Bustos',
+      url: 'https://oscarbustos.dev',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: 'https://oscarbustos.dev/blog?q={search_term_string}',
+        'query-input': 'required name=search_term_string'
+      }
+    }}
+  />
   <Hero />
   <Container>
     <SocialLinks />

@@ -4,13 +4,44 @@ import FormattedDate from '@/components/FormattedDate.astro';
 import MainLayout from '@/layouts/MainLayout.astro';
 import Cross from '@/components/Cross.astro';
 import { ClockCountdown, ArrowLeft } from '@phosphor-icons/react';
+import JsonLd from '@/components/JsonLd.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
-<MainLayout title={title} description={description} image={heroImage}>
+<MainLayout 
+  title={title} 
+  description={description} 
+  image={heroImage}
+  type="article"
+  publishedTime={pubDate.toISOString()}
+  modifiedTime={updatedDate?.toISOString()}
+>
+  <JsonLd
+    type="BlogPosting"
+    data={{
+      headline: title,
+      description: description,
+      image: new URL(heroImage, Astro.site),
+      datePublished: pubDate.toISOString(),
+      dateModified: updatedDate ? updatedDate.toISOString() : pubDate.toISOString(),
+      author: {
+        '@type': 'Person',
+        name: 'Oscar Bustos',
+        url: 'https://oscarbustos.dev'
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Oscar Bustos',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://oscarbustos.dev/logo.png'
+        }
+      }
+    }}
+  />
   <article itemscope itemtype="https://schema.org/BlogPosting">
     <div class='prose'>
       <div class='breadcrumb'>

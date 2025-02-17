@@ -1,5 +1,6 @@
 ---
 import '@/styles/theme.css';
+import { Image } from 'astro:assets';
 const { image, alt, title, year, personal } = Astro.props;
 ---
 
@@ -15,7 +16,14 @@ const { image, alt, title, year, personal } = Astro.props;
     {
       image && (
         <figure>
-          <img src={image} alt={alt} />
+          <Image
+            src={image}
+            alt={alt}
+            width={400}
+            height={300}
+            loading="lazy"
+            decoding="async"
+          />
         </figure>
       )
     }

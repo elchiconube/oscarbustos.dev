@@ -8,11 +8,21 @@ interface Props {
   title: string;
   description: string;
   image?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  modifiedTime?: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = '/og_image.png' } = Astro.props;
+const { 
+  title, 
+  description, 
+  image = '/og_image.png',
+  type = 'website',
+  publishedTime,
+  modifiedTime
+} = Astro.props;
 ---
 
 <!-- Global Metadata -->
@@ -29,6 +39,9 @@ const { title, description, image = '/og_image.png' } = Astro.props;
 
 <meta name='generator' content={Astro.generator} />
 
+<!-- RSS Feed -->
+<link rel="alternate" type="application/rss+xml" title="Oscar Bustos Blog RSS Feed" href="/rss.xml" />
+
 <!-- Canonical URL -->
 <link rel='canonical' href={canonicalURL} />
 
@@ -36,17 +49,27 @@ const { title, description, image = '/og_image.png' } = Astro.props;
 <title>{title}</title>
 <meta name='title' content={title} />
 <meta name='description' content={description} />
+<meta name='author' content='Oscar Bustos' />
+<meta name='keywords' content='Frontend Developer, React, JavaScript, TypeScript, Web Development, Oscar Bustos' />
+<meta name='robots' content='index, follow' />
+<meta name='language' content='English' />
 
 <!-- Open Graph / Facebook -->
-<meta property='og:type' content='website' />
+<meta property='og:type' content={type} />
 <meta property='og:url' content={Astro.url} />
 <meta property='og:title' content={title} />
 <meta property='og:description' content={description} />
 <meta property='og:image' content={new URL(image, Astro.url)} />
+<meta property='og:site_name' content='Oscar Bustos' />
+<meta property='og:locale' content='en_US' />
+{publishedTime && <meta property='article:published_time' content={publishedTime} />}
+{modifiedTime && <meta property='article:modified_time' content={modifiedTime} />}
 
 <!-- Twitter -->
 <meta property='twitter:card' content='summary_large_image' />
 <meta property='twitter:url' content={Astro.url} />
 <meta property='twitter:title' content={title} />
 <meta property='twitter:description' content={description} />
+<meta name='twitter:creator' content='@elchiconube' />
+<meta name='twitter:site' content='@elchiconube' />
 <meta property='twitter:image' content={new URL(image, Astro.url)} />

@@ -3,6 +3,7 @@ import type { Page, GetStaticPathsOptions } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 import MainLayout from '@/layouts/MainLayout.astro';
+import { ViewTransitions, fade } from 'astro:transitions';
 import FormattedDate from '@/components/FormattedDate.astro';
 import Container from '@/components/Container.astro';
 import { ArrowLeft, ArrowRight, ArrowUpRight } from '@phosphor-icons/react';
@@ -24,10 +25,11 @@ const { page } = Astro.props;
 ---
 
 <MainLayout>
+  <ViewTransitions />
   <Container>
     <Heading title='Blog' description='Homines, dum docent, discunt' />
     <section>
-      <ul class='posts-list'>
+      <ul class='posts-list' transition:animate={fade({ duration: '1s' })}>
         {
           page.data.map((post) => (
             <li class='post-item'>
