@@ -1,0 +1,76 @@
+---
+import Container from '@/components/Container.astro';
+import Heading from '@/components/Heading.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+---
+
+<MainLayout>
+  <Container>
+    <Heading title='ABC' description='2011' />
+    <section>
+      <header>
+        <figure class='icon'>
+          <a href='https://abc.es/' target='_blank' rel='noopener'
+            ><img src='/abc.webp' alt='ABC logo' /></a
+          >
+        </figure>
+      </header>
+      <p>
+        During my time at Vocento, I contributed to the development of various
+        digital solutions for some of Spain's leading media outlets. This role
+        allowed me to refine my skills in creating user-friendly web
+        applications and adapting designs for compatibility with older browsers,
+        ensuring accessibility for a diverse audience. My work focused on
+        delivering innovative solutions that enhanced the digital presence of
+        the company's brands and improved the user experience for their readers.
+      </p>
+      <figure class='screenshot'>
+        <img src='/vocento.webp' alt='Vocento projects' />
+      </figure>
+
+      <p>
+        One of my standout projects at Vocento was the development of the ABC
+        app, a groundbreaking project that enabled users to access high-quality
+        content on iOS and Android devices. This web-based application showcased
+        my ability to integrate responsive designs and deliver a seamless user
+        experience across platforms. The app was not only a technical
+        achievement but also received industry recognition for its design,
+        earning a prestigious award. This project highlighted my ability to lead
+        the development of impactful digital solutions, combining technical
+        excellence with user-focused design.
+      </p>
+    </section>
+
+    <style>
+      header {
+        text-align: center;
+        margin-bottom: 24px;
+        gap: 24px;
+      }
+
+      .icon {
+        margin: 0 auto;
+        box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.5);
+        border-radius: 12px;
+        width: 100px;
+
+        img {
+          width: 100%;
+          display: block;
+          border-radius: 12px;
+          height: auto;
+        }
+      }
+
+      .screenshot {
+        text-align: center;
+        margin: 24px 0;
+
+        img {
+          max-width: 100%;
+          display: inline-block;
+        }
+      }
+    </style>
+  </Container>
+</MainLayout>

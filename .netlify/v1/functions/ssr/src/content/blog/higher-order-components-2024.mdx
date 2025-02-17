@@ -1,0 +1,211 @@
+---
+title: 'Higher-Order Components in 2024: Are They Still Relevant?'
+description: 'A practical examination of HOCs in modern React development and when they still make sense to use'
+pubDate: 'Nov 15 2024'
+heroImage: ''
+slug: higher-order-components-2024
+---
+
+Higher-Order Components (HOCs) were once a primary pattern for code reuse in React. While hooks have largely replaced them, HOCs still have specific use cases where they excel.
+
+## What is a Higher-Order Component?
+
+At its core, a HOC is just a function that takes a component and returns a new enhanced component:
+
+```jsx
+const withData = (WrappedComponent) => {
+  return (props) => {
+    // Add new functionality here
+    return <WrappedComponent {...props} />;
+  };
+};
+```
+
+## Modern Use Cases for HOCs
+
+### 1. DOM Event Interception
+
+HOCs excel at intercepting and modifying DOM events:
+
+```jsx
+const withClickOutside = (Component) => {
+  return (props) => {
+    const ref = useRef();
+
+    useEffect(() => {
+      const handleClick = (event) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+          props.onClickOutside?.();
+        }
+      };
+
+      document.addEventListener('click', handleClick);
+      return () => document.removeEventListener('click', handleClick);
+    }, []);
+
+    return (
+      <div ref={ref}>
+        <Component {...props} />
+      </div>
+    );
+  };
+};
+
+// Usage
+const Menu = withClickOutside(({ onClickOutside }) => {
+  return <div>Menu Content</div>;
+});
+```
+
+### 2. Analytics and Tracking
+
+HOCs provide a clean way to add analytics without cluttering components:
+
+```jsx
+const withTracking = (Component, trackingName) => {
+  return (props) => {
+    useEffect(() => {
+      analytics.trackPageView(trackingName);
+    }, []);
+
+    const trackEvent = (eventName) => {
+      analytics.trackEvent(trackingName, eventName);
+    };
+
+    return <Component {...props} onTrack={trackEvent} />;
+  };
+};
+
+// Usage
+const UserProfile = withTracking(({ onTrack }) => {
+  return (
+    <button onClick={() => onTrack('profile_updated')}>
+      Update Profile
+    </button>
+  );
+}, 'user_profile');
+```
+
+### 3. Context Selectors
+
+HOCs can optimize Context performance by preventing unnecessary re-renders:
+
+```jsx
+const withTheme = (selector) => (WrappedComponent) => {
+  const MemoizedComponent = React.memo(WrappedComponent);
+  
+  return (props) => {
+    const theme = useContext(ThemeContext);
+    const selectedValue = selector(theme);
+    
+    return <MemoizedComponent {...props} theme={selectedValue} />;
+  };
+};
+
+// Usage
+const Button = withTheme(
+  theme => ({ color: theme.primary })
+)(({ theme }) => {
+  return <button style={{ backgroundColor: theme.color }}>Click</button>;
+});
+```
+
+## When Not to Use HOCs
+
+### 1. Simple State Logic
+
+```jsx
+// ❌ Don't use HOC for this
+const withCounter = (Component) => {
+  return (props) => {
+    const [count, setCount] = useState(0);
+    return (
+      <Component 
+        {...props} 
+        count={count} 
+        increment={() => setCount(c => c + 1)} 
+      />
+    );
+  };
+};
+
+// ✅ Use a hook instead
+const useCounter = () => {
+  const [count, setCount] = useState(0);
+  return {
+    count,
+    increment: () => setCount(c => c + 1)
+  };
+};
+```
+
+### 2. Data Fetching
+
+```jsx
+// ❌ Don't use HOC for data fetching
+const withUserData = (Component) => {
+  return (props) => {
+    const [user, setUser] = useState(null);
+    
+    useEffect(() => {
+      fetchUser().then(setUser);
+    }, []);
+    
+    return <Component {...props} user={user} />;
+  };
+};
+
+// ✅ Use a hook or data fetching library instead
+const useUser = () => {
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    fetchUser().then(setUser);
+  }, []);
+  return user;
+};
+```
+
+## Modern HOC Implementation Tips
+
+### Use TypeScript for Better Type Safety
+
+```typescript
+type WithLoadingProps = {
+  loading?: boolean;
+};
+
+function withLoading<T extends WithLoadingProps = WithLoadingProps>(
+  WrappedComponent: React.ComponentType<T>
+) {
+  return function WithLoadingComponent(
+    props: Omit<T, keyof WithLoadingProps> & WithLoadingProps
+  ) {
+    if (props.loading) {
+      return <div>Loading...</div>;
+    }
+    return <WrappedComponent {...(props as T)} />;
+  };
+}
+```
+
+### Compose Multiple HOCs
+
+```jsx
+const compose = (...fns) => x => fns.reduceRight((y, f) => f(y), x);
+
+const enhance = compose(
+  withTheme,
+  withTracking('button'),
+  withClickOutside
+);
+
+const EnhancedButton = enhance(Button);
+```
+
+## Key Takeaways
+
+1. HOCs are still useful for cross-cutting concerns like analytics and event handling
+2. Prefer hooks for state management and data fetching
+3. HOCs work well with TypeScript for type safety
+4. Consider HOCs when you need to wrap components with DOM manipulations
+5. Use composition utilities when combining multiple HOCs

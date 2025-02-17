@@ -1,0 +1,81 @@
+---
+title: 'Git Stash: A Safe Place for Your Work in Progress'
+description: 'Learn how to temporarily store your changes with Git stash and why it can save you in tricky situations'
+pubDate: 'Jan 29 2025'
+heroImage: ''
+slug: git-stash-explained
+---
+
+As a developer, I often find myself in situations where I'm working on some changes but suddenly need to switch context - maybe to fix a critical bug on another branch or help a teammate with their code. This is where Git stash becomes my best friend.
+
+# What is Git Stash?
+
+Git stash is like a drawer where you can temporarily store your work in progress without committing it. It's separate from your working directory, staging area, and repository. Think of it as a safe place where your changes won't get lost when you need to switch contexts.
+
+# When Do I Use Git Stash?
+
+The most common scenario where I use stash is when I need to switch branches but have uncommitted changes. Instead of creating a messy commit or losing my work, I can simply stash my changes, switch branches, and later retrieve them when I'm ready.
+
+# Basic Stash Commands I Use Daily
+
+Let's go through the commands I use most frequently:
+
+## Saving Changes
+
+To store changes in the stash, I use:
+
+```bash
+git stash save "optional message"
+```
+
+I always try to add a descriptive message - it has saved me countless times when trying to remember what I was working on.
+
+## Viewing Stashed Changes
+
+To see what I have stored, I use:
+
+```bash
+git stash list
+```
+
+This shows me all my stashed changes in the format `stash@{0}: BRANCH: MESSAGE`. The number in curly braces is the stash index - think of it as an ID for each set of changes.
+
+If I need to see the actual changes in a stash, I use:
+
+```bash
+git stash show -p stash@{0}
+```
+
+The `-p` flag gives me a detailed view of the changes, which is particularly helpful when I have multiple stashes and need to find the right one.
+
+## Retrieving Changes
+
+When I want to get my changes back, I have two options:
+
+```bash
+git stash apply stash@{0}  # Applies changes and keeps them in stash
+git stash pop stash@{0}    # Applies changes and removes them from stash
+```
+
+I typically use `pop` when I'm sure I won't need those changes again, and `apply` when I might need to apply the same changes multiple times.
+
+## Cleaning Up
+
+To keep my stash organized, I occasionally need to remove old stashes:
+
+```bash
+git stash drop stash@{0}  # Removes a specific stash
+git stash clear          # Removes all stashes
+```
+
+# Important Things to Remember
+
+Through my experience with Git stash, I've learned a few important lessons:
+
+1. Stash only works with tracked files. If you've created new files, make sure to add them to Git first.
+2. Stashes are available across all branches in your repository.
+3. You might encounter conflicts when applying stashed changes - resolve them just like you would resolve merge conflicts.
+
+Git stash has become an essential tool in my daily workflow. It gives me the flexibility to quickly switch between tasks without losing work or creating unnecessary commits. While it might seem like a simple feature, knowing how to use it effectively can make a big difference in your development workflow.
+
+What git stash commands do you use most often? Let me know in the comments below!

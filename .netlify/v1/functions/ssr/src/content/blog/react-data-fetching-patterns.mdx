@@ -1,0 +1,247 @@
+---
+title: 'React Data Fetching Patterns: Performance and Best Practices'
+description: 'Learn the most effective patterns for fetching data in React applications while maintaining optimal performance'
+pubDate: 'Nov 29 2024'
+heroImage: ''
+slug: react-data-fetching-patterns
+---
+
+Data fetching in React can significantly impact your application's performance. Let's explore the most effective patterns and common pitfalls to avoid.
+
+## Basic Data Fetching Pattern
+
+The simplest approach using `useEffect`:
+
+```jsx
+const UserProfile = ({ userId }) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/users/${userId}`);
+        const json = await response.json();
+        setData(json);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
+
+  if (loading) return <Spinner />;
+  if (error) return <Error message={error.message} />;
+  if (!data) return null;
+
+  return <ProfileCard user={data} />;
+};
+```
+
+## Avoiding Request Waterfalls
+
+Request waterfalls occur when fetches depend on each other:
+
+```jsx
+// ❌ Bad: Sequential requests
+const Dashboard = () => {
+  const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userData = await fetch('/api/user');
+      setUser(userData);
+    };
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    const fetchPosts = async () => {
+      const postsData = await fetch(`/api/posts/${user.id}`);
+      setPosts(postsData);
+    };
+    fetchPosts();
+  }, [user]);
+};
+
+// ✅ Good: Parallel requests
+const Dashboard = () => {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [userData, postsData] = await Promise.all([
+        fetch('/api/user'),
+        fetch('/api/posts')
+      ]);
+      setData({ user: userData, posts: postsData });
+    };
+    fetchData();
+  }, []);
+};
+```
+
+## Data Provider Pattern
+
+Isolate fetching logic and provide data to multiple components:
+
+```jsx
+const DataContext = createContext();
+
+const DataProvider = ({ children }) => {
+  const [data, setData] = useState(null);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch('/api/data');
+      setData(result);
+    };
+    fetchData();
+  }, []);
+
+  return (
+    <DataContext.Provider value={data}>
+      {children}
+    </DataContext.Provider>
+  );
+};
+
+// Usage in components
+const useData = () => useContext(DataContext);
+
+const Component = () => {
+  const data = useData();
+  return <div>{data}</div>;
+};
+```
+
+## Custom Hook for Reusable Fetching
+
+Create a reusable hook with loading, error, and data states:
+
+```jsx
+const useFetch = (url, options = {}) => {
+  const [state, setState] = useState({
+    data: null,
+    loading: true,
+    error: null
+  });
+
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchData = async () => {
+      try {
+        setState(prev => ({ ...prev, loading: true }));
+        const response = await fetch(url, options);
+        const data = await response.json();
+        
+        if (mounted) {
+          setState({ data, loading: false, error: null });
+        }
+      } catch (error) {
+        if (mounted) {
+          setState({ data: null, loading: false, error });
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      mounted = false;
+    };
+  }, [url]);
+
+  return state;
+};
+
+// Usage
+const Component = () => {
+  const { data, loading, error } = useFetch('/api/data');
+  
+  if (loading) return <Spinner />;
+  if (error) return <Error message={error.message} />;
+  
+  return <div>{data}</div>;
+};
+```
+
+## Race Condition Prevention
+
+Handle multiple requests and prevent stale data:
+
+```jsx
+const SearchResults = ({ query }) => {
+  const [results, setResults] = useState([]);
+  
+  useEffect(() => {
+    let currentQuery = true;
+    
+    const fetchResults = async () => {
+      try {
+        const response = await fetch(`/api/search?q=${query}`);
+        const data = await response.json();
+        
+        if (currentQuery) {
+          setResults(data);
+        }
+      } catch (error) {
+        if (currentQuery) {
+          console.error(error);
+        }
+      }
+    };
+    
+    fetchResults();
+    
+    return () => {
+      currentQuery = false;
+    };
+  }, [query]);
+  
+  return <ResultsList results={results} />;
+};
+```
+
+## Browser Limitations and Performance
+
+Remember browser request limits:
+
+```jsx
+// ❌ Bad: Too many parallel requests
+const Dashboard = () => {
+  useEffect(() => {
+    // Browser might queue these requests
+    fetch('/api/users');
+    fetch('/api/posts');
+    fetch('/api/comments');
+    fetch('/api/notifications');
+    fetch('/api/messages');
+    fetch('/api/settings');
+  }, []);
+};
+
+// ✅ Good: Batch related requests
+const Dashboard = () => {
+  useEffect(() => {
+    fetch('/api/dashboard-data');  // Single endpoint returns all needed data
+  }, []);
+};
+```
+
+## Key Takeaways
+
+1. Use parallel fetching when possible
+2. Implement proper error and loading states
+3. Prevent race conditions in search/filter scenarios
+4. Consider browser request limits
+5. Use data providers for shared data
+6. Create reusable fetch hooks for common patterns

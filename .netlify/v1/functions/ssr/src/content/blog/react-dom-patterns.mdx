@@ -1,0 +1,237 @@
+---
+title: 'Advanced DOM Handling Patterns in React'
+description: 'Learn advanced patterns for handling DOM operations effectively in React applications'
+pubDate: 'Dec 13 2024'
+heroImage: ''
+slug: react-dom-patterns
+---
+
+## Refs for Complex DOM Operations
+
+```jsx
+const ScrollSync = () => {
+  const containerRef = useRef();
+  const contentRef = useRef();
+  
+  useLayoutEffect(() => {
+    const syncScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+      const progress = scrollTop / (scrollHeight - clientHeight);
+      
+      contentRef.current.style.transform = `translateY(-${progress * 100}%)`;
+    };
+    
+    const container = containerRef.current;
+    container.addEventListener('scroll', syncScroll);
+    return () => container.removeEventListener('scroll', syncScroll);
+  }, []);
+
+  return (
+    <div ref={containerRef} className="scroll-container">
+      <div ref={contentRef} className="sync-content">
+        {/* Content */}
+      </div>
+    </div>
+  );
+};
+```
+
+## DOM Measurements Hook
+
+```jsx
+const useMeasure = () => {
+  const ref = useRef();
+  const [bounds, setBounds] = useState({
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0
+  });
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      setBounds(ref.current.getBoundingClientRect());
+    };
+
+    measure();
+    
+    const observer = new ResizeObserver(measure);
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return [ref, bounds];
+};
+
+// Usage
+const ResponsiveComponent = () => {
+  const [ref, bounds] = useMeasure();
+  
+  return (
+    <div ref={ref}>
+      Width: {bounds.width}px
+      Height: {bounds.height}px
+    </div>
+  );
+};
+```
+
+## IntersectionObserver Hook
+
+```jsx
+const useIntersection = (options = {}) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const elementRef = useRef();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsVisible(entry.isIntersecting);
+    }, options);
+
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
+    }
+
+    return () => {
+      if (elementRef.current) {
+        observer.unobserve(elementRef.current);
+      }
+    };
+  }, [options]);
+
+  return [elementRef, isVisible];
+};
+
+// Usage
+const LazyImage = ({ src, alt }) => {
+  const [ref, isVisible] = useIntersection({ threshold: 0.1 });
+  
+  return (
+    <div ref={ref}>
+      {isVisible && <img src={src} alt={alt} />}
+    </div>
+  );
+};
+```
+
+## Focus Management
+
+```jsx
+const useFocusTrap = () => {
+  const elementRef = useRef();
+
+  useEffect(() => {
+    const element = elementRef.current;
+    const focusableElements = element.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    };
+
+    element.addEventListener('keydown', handleKeyDown);
+    firstElement.focus();
+
+    return () => {
+      element.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  return elementRef;
+};
+
+// Usage
+const Modal = () => {
+  const focusTrapRef = useFocusTrap();
+  
+  return (
+    <div ref={focusTrapRef}>
+      <button>First</button>
+      <input type="text" />
+      <button>Last</button>
+    </div>
+  );
+};
+```
+
+## Custom ScrollTo Animation
+
+```jsx
+const useScrollTo = () => {
+  const scrollTo = useCallback((element, options = {}) => {
+    const {
+      offset = 0,
+      duration = 1000,
+      easing = t => t
+    } = options;
+
+    const start = window.pageYOffset;
+    const target = element.getBoundingClientRect().top + start + offset;
+    const startTime = performance.now();
+    
+    const animate = currentTime => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      window.scrollTo(0, start + (target - start) * easing(progress));
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }, []);
+
+  return scrollTo;
+};
+
+// Usage
+const ScrollableContent = () => {
+  const scrollTo = useScrollTo();
+  const targetRef = useRef();
+  
+  const handleClick = () => {
+    scrollTo(targetRef.current, {
+      offset: -20,
+      duration: 800
+    });
+  };
+
+  return (
+    <div>
+      <button onClick={handleClick}>Scroll to element</button>
+      <div ref={targetRef}>Target Element</div>
+    </div>
+  );
+};
+```
+
+## Key Takeaways
+
+1. Use Refs for direct DOM manipulation
+2. Implement custom hooks for reusable DOM operations
+3. Handle cleanup properly in useEffect
+4. Use ResizeObserver for element measurements
+5. Manage focus for accessibility
