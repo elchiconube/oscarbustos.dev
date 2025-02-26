@@ -1,0 +1,44 @@
+---
+title: 'Improving React Performance with the "Moving State Down" Pattern'
+description: 'Learn how to optimize your React applications by moving state down the component tree'
+pubDate: 'Feb 26 2025'
+heroImage: ''
+slug: react-performance-moving-state-down
+---
+
+# Improving React Performance with the "Moving State Down" Pattern
+
+One of the biggest challenges when building scalable React applications is maintaining optimal performance as the application grows. A common issue is that small state changes can trigger unnecessary re-renders across large portions of your app.
+
+## The Big Re-renders Myth in React
+
+There's a widespread misconception in the React world: "A component re-renders when its props change." This simply isn't true.
+
+React's normal behavior is that when a state update is triggered, React will re-render **all nested components** regardless of their props. And if a state update is not triggered, then changing props will be "swallowed" - React doesn't monitor them.
+
+This behavior is important because it means we need to be strategic about **where** we place our state in the component hierarchy.
+
+## The Problem: Unnecessary Re-renders
+
+Imagine an application where you have a button that opens a modal. The simplest implementation would look something like this:
+
+```jsx
+const App = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <div className="layout">
+      <Button onClick={() => setIsOpen(true)}>
+        Open dialog
+      </Button>
+      
+      {isOpen ? (
+        <ModalDialog onClose={() => setIsOpen(false)} />
+      ) : null}
+      
+      <VerySlowComponent />
+      <BunchOfStuff />
+      <OtherStuffAlsoComplicated />
+    </div>
+  );
+};
