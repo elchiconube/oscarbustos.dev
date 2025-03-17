@@ -1,0 +1,259 @@
+---
+title: 'Open-Closed Principle in React: Building Extensible Components'
+description: 'Learn how to build flexible React components using the Open-Closed Principle for better maintainability and extensibility'
+pubDate: 'Mar 03 2025'
+heroImage: ''
+slug: react-open-closed-principle
+---
+
+The Open-Closed Principle (OCP) states that software entities should be open for extension but closed for modification. In React terms, this means our components should be easy to extend without changing their existing code. Let's explore practical ways to implement this principle.
+
+## The Problem with Closed Components
+
+Here's a common anti-pattern we often see in React codebases:
+
+```jsx
+// DON'T DO THIS
+const Button = ({ label, onClick, variant }) => {
+  let className = "button";
+
+  // Direct modification for each variant
+  if (variant === "primary") {
+    className += " button-primary";
+  } else if (variant === "secondary") {
+    className += " button-secondary";
+  } else if (variant === "danger") {
+    className += " button-danger";
+  }
+
+  return (
+    <button className={className} onClick={onClick}>
+      {label}
+    </button>
+  );
+};
+```
+
+This violates OCP because:
+- Adding a new variant requires modifying the component
+- The component needs to know about all possible variants
+- Testing becomes more complex with each addition
+
+## Building Open Components
+
+Let's refactor this to follow OCP:
+
+```jsx
+const ButtonBase = ({
+  label,
+  onClick,
+  className = "",
+  children,
+}) => (
+  <button className={`button ${className}`.trim()} onClick={onClick}>
+    {children || label}
+  </button>
+);
+
+// Variant components extend the base
+const PrimaryButton = (props) => (
+  <ButtonBase {...props} className="button-primary" />
+);
+
+const SecondaryButton = (props) => (
+  <ButtonBase {...props} className="button-secondary" />
+);
+
+const DangerButton = (props) => (
+  <ButtonBase {...props} className="button-danger" />
+);
+```
+
+Now we can easily add new variants without modifying existing code:
+
+```jsx
+// Adding a new variant without touching the original components
+const OutlineButton = (props) => (
+  <ButtonBase {...props} className="button-outline" />
+);
+```
+
+## Component Composition Pattern
+
+Let's look at a more complex example using composition:
+
+```jsx
+const Card = ({
+  title,
+  children,
+  renderHeader,
+  renderFooter,
+  className = "",
+}) => (
+  <div className={`card ${className}`.trim()}>
+    {renderHeader ? (
+      renderHeader(title)
+    ) : (
+      <div className="card-header">{title}</div>
+    )}
+
+    <div className="card-content">{children}</div>
+
+    {renderFooter && renderFooter()}
+  </div>
+);
+
+// Extended without modification
+const ProductCard = ({ product, onAddToCart, ...props }) => (
+  <Card
+    {...props}
+    renderFooter={() => (
+      <button onClick={onAddToCart}>Add to Cart - ${product.price}</button>
+    )}
+  />
+);
+```
+
+## Higher-Order Components for Extension
+
+HOCs provide another way to follow OCP:
+
+```jsx
+const withLoading = (WrappedComponent) => {
+  return ({ isLoading, ...props }) => {
+    if (isLoading) {
+      return <div className="loader">Loading...</div>;
+    }
+
+    return <WrappedComponent {...props} />;
+  };
+};
+
+// Usage
+const UserProfileWithLoading = withLoading(UserProfile);
+```
+
+## Custom Hooks Following OCP
+
+Custom hooks can also follow OCP:
+
+```jsx
+const useDataFetching = (url) => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, [url]);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(url);
+      const result = await response.json();
+      setData(result);
+    } catch (e) {
+      setError(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { data, error, loading, refetch: fetchData };
+};
+
+// Extended without modification
+const useUserData = (userId) => {
+  const result = useDataFetching(`/api/users/${userId}`);
+
+  // Add user-specific functionality
+  const updateUser = async (data) => {
+    // Update logic
+  };
+
+  return { ...result, updateUser };
+};
+```
+
+## Testing Benefits
+
+OCP makes testing much more straightforward:
+
+```jsx
+describe("ButtonBase", () => {
+  it("renders with custom className", () => {
+    render(<ButtonBase label="Test" onClick={() => {}} className="custom" />);
+
+    expect(screen.getByRole("button")).toHaveClass("button custom");
+  });
+});
+
+// New variants can have their own tests
+describe("PrimaryButton", () => {
+  it("includes primary styling", () => {
+    render(<PrimaryButton label="Test" onClick={() => {}} />);
+
+    expect(screen.getByRole("button")).toHaveClass("button button-primary");
+  });
+});
+```
+
+## OCP and "Composition over Inheritance"
+
+The React team's recommendation of "composition over inheritance" aligns perfectly with the Open-Closed Principle. Here's why:
+
+```jsx
+// Composition-based approach (more flexible, follows OCP)
+const Button = ({
+  label,
+  icon,
+  renderPrefix,
+  renderSuffix,
+  ...props
+}) => (
+  <ButtonBase {...props}>
+    {renderPrefix?.()}
+    {icon && <Icon name={icon} />}
+    {label}
+    {renderSuffix?.()}
+  </ButtonBase>
+);
+
+// Now we can extend behavior without modification
+const DropdownButton = ({ items, ...props }) => (
+  <Button
+    {...props}
+    renderSuffix={() => <DropdownIcon />}
+    onClick={() => setIsOpen(true)}
+  />
+);
+
+const LoadingButton = ({ isLoading, ...props }) => (
+  <Button
+    {...props}
+    renderPrefix={() => isLoading && <Spinner />}
+    disabled={isLoading}
+  />
+);
+```
+
+This composition-based approach:
+
+- Makes components open for extension (through props and render functions)
+- Keeps base components closed for modification
+- Allows for unlimited combinations of behaviors
+- Maintains type safety and prop transparency
+
+## Key Takeaways
+
+- Use composition over modification - extend through props and render props
+- Create base components that are easy to extend
+- Leverage HOCs and custom hooks for reusable extensions
+- Think in terms of extension points - what might need to change?
+- Use TypeScript to make extensions type-safe
+
+## Pro Tip
+
+If you find yourself using lots of if/else statements for different variants or behaviors, you're probably violating OCP. Consider using composition instead.
+
+The next time you're building a component that might need variants or extensions in the future, remember the Open-Closed Principle. Your future self (and your team) will thank you for creating components that are easy to extend without modification.
