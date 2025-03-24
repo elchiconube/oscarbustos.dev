@@ -1,0 +1,145 @@
+---
+title: 'Common React Libraries Architecture'
+description: 'Understanding the internal architecture patterns that power popular React libraries and how they interact with React'
+pubDate: 'Mar 24 2025'
+heroImage: ''
+slug: react-libraries-architecture
+---
+
+React is famous for its ecosystem. We have different tools that handle state management, forms, routing, styling, and more. But have you ever wondered how these libraries work internally? Most of them share similar architectural choices aligned with React's design principles.
+
+Let's explore these common structures that power the React ecosystem.
+
+## The Core and Binding Architecture
+
+Most React libraries are built around two main parts:
+
+1. **The Core** - Where the logic and functionality resides
+2. **The Binding** - The connection between the core and React (components and hooks)
+
+```jsx
+// Simplified example of a state management library architecture
+// The Core
+const createStore = (initialState) => {
+  let state = initialState;
+  const listeners = new Set();
+  
+  const getState = () => state;
+  
+  const setState = (newState) => {
+    state = newState;
+    listeners.forEach(listener => listener());
+  };
+  
+  const subscribe = (listener) => {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  };
+  
+  return { getState, setState, subscribe };
+};
+
+// The Binding (with React)
+const StoreContext = createContext();
+
+const StoreProvider = ({ children, store }) => (
+  <StoreContext.Provider value={store}>
+    {children}
+  </StoreContext.Provider>
+);
+
+const useStore = () => {
+  const store = useContext(StoreContext);
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
+  
+  useEffect(() => {
+    // Subscribe to store changes
+    return store.subscribe(forceUpdate);
+  }, [store]);
+  
+  return store.getState();
+};
+```
+
+In most libraries, the core object is created externally. This has a major benefit: it exists outside React's re-rendering cycle, so you don't need to worry about memoization. The core then connects to React through the Context API.
+
+This is why so many libraries have Providers. They inject the external core data into the entire component tree. While Context API can have performance issues with dynamic data, since the reference to the core is stable, this isn't a problem.
+
+## Real-World Examples
+
+You can see this pattern in many popular libraries:
+
+- **TanStack Query**: The QueryClient is the core, and QueryClientProvider connects it to React. Using the same query key in different components leverages the shared cache managed by this architecture.
+
+- **React Router**: When you call hooks like `useParams` or `useNavigate`, you're accessing data and methods from the router's core, which is connected through context providers.
+
+- **Redux**: The store is the core, and Provider connects it to React. Hooks like `useSelector` leverage this connection.
+
+## External State Connection
+
+Once we have a core maintained outside of React, we need a way to notify React when the external state changes. How does React know when to re-render?
+
+Most libraries implement the **Observer pattern**. This involves:
+
+1. A method to **subscribe** to changes
+2. A **getState** method to retrieve current data
+3. A method to **trigger state updates** (setState, dispatch, refetch, etc.)
+
+There are two primary ways to connect this pattern to React:
+
+### 1. useSyncExternalStore
+
+This is a primitive hook from React created specifically to handle external data:
+
+```jsx
+const useMyLibraryState = () => {
+  const store = useContext(MyLibraryContext);
+  
+  return useSyncExternalStore(
+    store.subscribe,  // Subscribe function
+    store.getState,   // Get state for client
+    store.getState    // Get state for server (SSR)
+  );
+};
+```
+
+### 2. Custom Hook Implementation
+
+Before `useSyncExternalStore`, libraries created their own implementations using `useEffect` and `useReducer`:
+
+```jsx
+const useCustomStoreState = () => {
+  const store = useContext(StoreContext);
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
+  
+  useEffect(() => {
+    return store.subscribe(() => {
+      forceUpdate();
+    });
+  }, [store]);
+  
+  return store.getState();
+};
+```
+
+## Trade-offs Between Approaches
+
+`useSyncExternalStore` is de-optimized by design, treating updates as high priority. This kills concurrent features optimizations but avoids "tearing" (showing inconsistent state).
+
+Creating your own connection gives you more control. You can treat external state updates as lower priority, allowing React to pause re-renders to handle other interactions.
+
+Most libraries stick with `useSyncExternalStore` for simplicity and consistency.
+
+## React 19 and the Future
+
+React 19 brings updates that will affect library implementations:
+
+- **Suspense and Promises**: New primitives for handling asynchronous operations
+- **Form Primitives**: Hooks like `useOptimistic`, `useFormStatus`, and `useActionState` will be particularly useful for form libraries
+- **React Server Components**: These will change how libraries need to be structured to work with server/client boundaries
+
+## Conclusion
+
+While these architectural patterns can evolve and adapt to specific cases, understanding this high-level view helps explain how most React libraries function internally. The separation of core logic from React bindings allows libraries to provide stable, performant solutions that integrate seamlessly with React's component model.
+
+Next time you use a React library, you'll have a better understanding of what's happening under the hood!

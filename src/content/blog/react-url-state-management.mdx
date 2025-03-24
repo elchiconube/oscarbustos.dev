@@ -1,0 +1,244 @@
+---
+title: 'The URL is a Great Place to Store State in React'
+description: 'Discover how storing state in the URL can improve user experience with simple, shareable, and persistent state management'
+pubDate: 'Mar 17 2025'
+heroImage: ''
+slug: react-url-state-management
+---
+
+Sometimes, the best place to store state is right in the URL. It's simple, practical, and often overlooked. Let's explore why it's worth considering.
+
+## The Problem
+
+Here's what we want to achieve: Let's say we have a modal (dialog) component that allows the user to perform some important actions which are part of the core flow. We would like the modal to stay open even after the user reloads the page.
+
+If we were to just use `useState` for the modal open state, we would lose this information when the page reloads. Let's see how we can solve this problem.
+
+## Ways to Store State on the Client
+
+Let's look at the options we have to store state to achieve the desired behavior:
+
+### In the Application
+
+Data that belongs in the working memory of the application. Lasts as long as the application is running.
+
+```jsx
+const App = () => {
+    const [open, setOpen] = useState(false);
+    return <Modal open={open} onClose={() => setOpen(false)} />;
+};
+```
+
+### In the Browser
+
+Data that is stored in the browser. Examples include localStorage and sessionStorage.
+
+```jsx
+const App = () => {
+    const [open, setOpen] = useState(() => {
+        try {
+            return localStorage.getItem("modalOpen") === "true";
+        } catch (error) {
+            console.error("Failed to read from localStorage:", error);
+            return false; // Default fallback value
+        }
+    });
+
+    useEffect(() => {
+        try {
+            localStorage.setItem("modalOpen", open);
+        } catch (error) {
+            console.error("Failed to write to localStorage:", error);
+        }
+    }, [open]);
+
+    return <Modal open={open} onClose={() => setOpen(false)} />;
+};
+```
+
+### In the Server
+
+Data that is stored in the server and accessible via an API.
+
+```jsx
+const App = () => {
+    const [open, setOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+        const updateModalState = async () => {
+            try {
+                const response = await fetch("/api/modal", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ open: isOpen }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.modalState !== undefined) {
+                    setOpen(data.modalState);
+                }
+            } catch (error) {
+                console.error("Failed to update modal state:", error);
+            }
+        };
+
+        updateModalState();
+    }, [isOpen]);
+
+    return (
+        <Modal
+            open={open}
+            onClose={() => setIsOpen(false)}
+        />
+    );
+};
+```
+
+### In the URL
+
+This is the encoded data stored in the URL in the form of a string. Good examples are Query Parameters (`/users?userId=desc`) and Path Parameters (`/users/1324`).
+
+## Why Choose the URL
+
+As with everything, there are pros and cons to each approach.
+
+### Pros
+
+- **Shareable between users**: The URL is accessible to anyone who has the link to the page
+- **Fast**: Reading from the URL is generally faster than reading from localStorage or requesting data from the server
+- **Global**: The state is global and can be accessed by any component
+- **Navigation-friendly**: The state can leave a trail in the browser history, which can be useful for certain applications
+
+### Cons
+
+- **Hard to debug and maintain**: When state is stored in the URL, it can be challenging to trace issues back to the source
+- **Hard to scale**: Storing large amounts of state in the URL can lead to lengthy URLs
+- **Not type-safe out of the box**: URL parameters are typically strings, requiring additional parsing and validation
+
+## How to Store State in the URL
+
+Storing state in the URL involves using query parameters (`?key=value`) or hash fragments (`#section`). This allows state persistence across page reloads and enables users to share specific application states via URLs.
+
+### Using useSearchParams (React Router)
+
+```jsx
+import { useSearchParams } from "react-router-dom";
+
+function Example() {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const updateParam = () => {
+        setSearchParams({ filter: "active" });
+    };
+
+    return (
+        <div>
+            <button onClick={updateParam}>Set Filter</button>
+            <p>Current Filter: {searchParams.get("filter")}</p>
+        </div>
+    );
+}
+```
+
+This ensures state is reflected in the URL (`?filter=active`) and persists across reloads.
+
+### Using URLSearchParams (Vanilla JS)
+
+```jsx
+const params = new URLSearchParams(window.location.search);
+params.set("theme", "dark");
+window.history.replaceState({}, "", "?" + params.toString());
+```
+
+This manually updates the URL without causing a page reload.
+
+### Using a Type-Safe Library (nuqs)
+
+If your needs are a little more complex, then third-party utilities like nuqs are great options for managing URL state in React with type-safety.
+
+```jsx
+import { useQueryState } from "nuqs";
+
+function Example() {
+    const [filter, setFilter] = useQueryState("filter");
+    const updateParam = () => {
+        setFilter("active");
+    };
+
+    return (
+        <div>
+            <button onClick={updateParam}>Set Filter</button>
+            <p>Current Filter: {filter}</p>
+        </div>
+    );
+}
+```
+
+## Real-World Example: Modal State in URL
+
+Let's implement our initial modal example using URL state:
+
+```jsx
+import { useSearchParams } from "react-router-dom";
+
+const App = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const isModalOpen = searchParams.get("modal") === "true";
+    
+    const openModal = () => {
+        setSearchParams({ modal: "true" });
+    };
+    
+    const closeModal = () => {
+        setSearchParams({});
+    };
+
+    return (
+        <div>
+            <button onClick={openModal}>Open Modal</button>
+            
+            {isModalOpen && (
+                <Modal 
+                    onClose={closeModal}
+                    title="Important Actions"
+                >
+                    <p>This modal will stay open even if you refresh the page!</p>
+                    <button onClick={closeModal}>Close</button>
+                </Modal>
+            )}
+        </div>
+    );
+};
+```
+
+## When to Use URL State
+
+Use Query Parameters (or Path Parameters) When:
+
+- State should persist across page reloads (e.g., filters, pagination, modal visibility)
+- Users should be able to share the state via URL (e.g., search queries, UI settings)
+- The state affects navigation (e.g., active tabs, sorting options)
+- You want deep linking support (e.g., restoring UI state when returning to a page)
+
+Use `useState` When:
+
+- The state is temporary and UI-specific (e.g., form input before submission)
+- Storing state in the URL is unnecessary for sharing or navigation
+- State changes frequently and shouldn't affect navigation history
+
+Use Local Storage (or Session Storage) When:
+
+- State should persist across sessions but not be visible in the URL
+- Data should not be lost on refresh but is not meant for sharing
+
+## Conclusion
+
+The URL is an often-overlooked but powerful place to store state in React applications. It offers persistence across page reloads, shareability between users, and integration with browser navigation—all without requiring complex state management libraries.
+
+Next time you're deciding where to store state in your React application, consider whether the URL might be the perfect solution for your needs.
