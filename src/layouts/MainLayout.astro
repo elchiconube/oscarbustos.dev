@@ -43,29 +43,28 @@ const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image
         return 'light';
       })();
 
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-      }
-
-      document.body.style.backgroundColor =
-        theme === 'dark' ? '#1a1a1a' : '#ffffff';
+      // Apply both class and data-attribute
+      document.documentElement.classList.remove('light', 'dark');
+      document.documentElement.classList.add(theme);
+      document.documentElement.setAttribute('data-theme', theme);
+      // Let CSS handle the background color through variables
     </script>
     <!-- Previene el flash durante las transiciones -->
     <script is:inline>
       document.addEventListener('astro:before-preparation', (ev) => {
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark') {
-          ev.newDocument.documentElement.classList.add('dark');
-          ev.newDocument.documentElement.style.backgroundColor = '#1a1a1a';
-        }
+        const theme = localStorage.getItem('theme') || 'light';
+        // Apply both class and data-attribute to new document
+        ev.newDocument.documentElement.classList.remove('light', 'dark');
+        ev.newDocument.documentElement.classList.add(theme);
+        ev.newDocument.documentElement.setAttribute('data-theme', theme);
       });
 
       document.addEventListener('astro:after-swap', () => {
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-          document.documentElement.style.backgroundColor = '#1a1a1a';
-        }
+        const theme = localStorage.getItem('theme') || 'light';
+        // Apply both class and data-attribute after swap
+        document.documentElement.classList.remove('light', 'dark');
+        document.documentElement.classList.add(theme);
+        document.documentElement.setAttribute('data-theme', theme);
       });
     </script>
   </body>
