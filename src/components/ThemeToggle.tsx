@@ -2,8 +2,8 @@
 
 import { Sun, Moon } from "@phosphor-icons/react";
 import { useEffect, useState } from 'react';
-
-type Theme = 'light' | 'dark';
+import { getPreferredTheme, applyTheme } from '../utils/theme';
+import type { Theme } from '../utils/theme';
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>('light');
@@ -11,25 +11,12 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     setMounted(true);
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(isDark ? 'dark' : 'light');
-    }
+    // Get initial theme using our utility function
+    const initialTheme = getPreferredTheme();
+    setTheme(initialTheme);
   }, []);
 
-  useEffect(() => {
-    if (!mounted) return;
-
-    const root = document.documentElement;
-    root.classList.remove('light', 'dark');
-    root.classList.add(theme);
-    root.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme, mounted]);
-
+  // Listen for system preference changes
   useEffect(() => {
     if (!mounted) return;
 
@@ -37,7 +24,9 @@ export default function ThemeToggle() {
     
     const handleChange = (e: MediaQueryListEvent) => {
       if (!localStorage.getItem('theme')) {
-        setTheme(e.matches ? 'dark' : 'light');
+        const newTheme = e.matches ? 'dark' : 'light';
+        setTheme(newTheme);
+        applyTheme(newTheme);
       }
     };
 
@@ -46,7 +35,9 @@ export default function ThemeToggle() {
   }, [mounted]);
 
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    applyTheme(newTheme);
   };
 
   
