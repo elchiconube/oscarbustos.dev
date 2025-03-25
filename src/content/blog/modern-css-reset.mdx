@@ -1,0 +1,202 @@
+
+---
+title: 'A Modern CSS Reset for Your Website'
+description: 'A clean, practical CSS reset to provide better defaults and improve your development experience'
+pubDate: 'Apr 07 2025'
+heroImage: ''
+slug: modern-css-reset
+---
+
+When starting a new project, one of the first things I like to do is establish a solid CSS foundation. A good CSS reset helps sand down the rough edges of the language and provides better default behaviors.
+
+I've put together a modern CSS reset that addresses common pain points while remaining lightweight and unopinionated about design. Let's explore each rule and why it's valuable.
+
+## The Complete Reset
+
+```css
+/* 
+  Modern CSS Reset
+  A practical baseline for better web development
+*/
+
+/* 1. More intuitive box-sizing model */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* 2. Remove default margin */
+* {
+  margin: 0;
+}
+
+/* 3. Enable keyword animations */
+html {
+  interpolate-size: allow-keywords;
+}
+
+body {
+  /* 4. Add accessible line-height */
+  line-height: 1.5;
+  /* 5. Improve text rendering */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 6. Improve media defaults */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* 7. Inherit fonts for form controls */
+input, button, textarea, select {
+  font: inherit;
+}
+
+/* 8. Avoid text overflows */
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* 9. Improve line wrapping */
+p {
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+/* 10. Create a root stacking context */
+#root, #__next {
+  isolation: isolate;
+}
+```
+
+## Let's Break Down Each Rule
+
+### 1. Better Box-Sizing Model
+
+```css
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+```
+
+By default, CSS uses the `content-box` model where width and height apply only to the content area, excluding padding and borders. This leads to unexpected behavior when you set an element to `width: 100%` and add padding or borders—suddenly it overflows!
+
+The `border-box` model makes width and height include padding and borders, which is far more intuitive. This rule applies it to all elements for consistency.
+
+### 2. Remove Default Margin
+
+```css
+* {
+  margin: 0;
+}
+```
+
+Browsers apply default margins to elements like headings and paragraphs. While these defaults make sense for basic documents, they can be unpredictable in modern web layouts. Removing all margins gives you a clean slate and allows you to add spacing with intention.
+
+### 3. Enable Keyword Animations
+
+```css
+html {
+  interpolate-size: allow-keywords;
+}
+```
+
+This modern property allows animating between absolute values (like `0px`) and derived ones (like `auto`). This makes it possible to animate height transitions without JavaScript—perfect for accordions and collapsible sections.
+
+### 4. Accessible Line Height
+
+```css
+body {
+  line-height: 1.5;
+}
+```
+
+The default line height in browsers (around 1.2) is too tight for optimal readability. The WCAG accessibility guidelines recommend a line height of at least 1.5 for body text, which improves readability, especially for people with dyslexia.
+
+### 5. Better Text Rendering
+
+```css
+body {
+  -webkit-font-smoothing: antialiased;
+}
+```
+
+This rule improves text rendering on macOS by disabling subpixel antialiasing. While subpixel antialiasing was beneficial on older displays, modern high-DPI screens don't benefit from it, and it can make text appear blurry or inconsistent.
+
+### 6. Improved Media Defaults
+
+```css
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+```
+
+Images and other media are inline elements by default, which can create unexpected spacing issues. Making them block-level is usually what we want for layout elements.
+
+The `max-width: 100%` ensures media won't overflow their containers—a common issue since media elements don't automatically adjust to fit their parent's width.
+
+### 7. Consistent Form Elements
+
+```css
+input, button, textarea, select {
+  font: inherit;
+}
+```
+
+Form elements don't inherit typographical styles by default. This creates inconsistency where your inputs and buttons use different fonts and sizes from the rest of your content. This rule makes form elements inherit their parent's typography for a more unified design.
+
+### 8. Prevent Text Overflow
+
+```css
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+```
+
+Long words or URLs can cause layout problems by overflowing their containers. This property allows words to be broken when they would otherwise overflow, preventing horizontal scrollbars or layout shifts.
+
+### 9. Balanced Text Wrapping
+
+```css
+p {
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+```
+
+These modern properties improve how text wraps. The `pretty` value ensures paragraphs don't end with single words or emojis on their own line, while `balance` distributes text more evenly across lines in headings, creating more visually pleasing results.
+
+### 10. Root Stacking Context
+
+```css
+#root, #__next {
+  isolation: isolate;
+}
+```
+
+This creates a new stacking context at the root of your application. It's especially useful for JavaScript frameworks like React, as it helps contain z-index values and prevents stacking context issues with components like modals and dropdowns.
+
+## Implementation Notes
+
+You can simply copy this reset and place it at the beginning of your main CSS file or include it as a separate file that loads before other styles.
+
+For frameworks like React or Next.js, you'll want to include it in your global styles. Adjust the `#root, #__next` selector to match your application's root element if needed.
+
+Remember that this reset provides a solid foundation, but you should feel free to modify it based on your specific needs. As you learn new tricks or encounter specific issues, let your reset evolve with your experience.
+
+## Browser Support
+
+Most of these properties have excellent browser support. The exceptions are `interpolate-size` and `text-wrap`, which are newer additions to CSS. These features are progressive enhancements—browsers that don't support them will simply ignore them without breaking your layout.
+
+For critical features, always check current browser support and consider fallbacks if necessary.
+
+## Conclusion
+
+A good CSS reset shouldn't strip away all browser defaults or add opinionated design choices. Instead, it should provide better defaults and predictable behavior while fixing common problems.
+
+This reset accomplishes that goal while remaining lightweight and adaptable to any design direction you choose. Use it as a starting point and adjust as needed for your specific project requirements.
