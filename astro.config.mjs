@@ -8,15 +8,21 @@ import react from '@astrojs/react';
 import compressor from 'astro-compressor';
 
 
+import cloudflare from '@astrojs/cloudflare';
+
+
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
+
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover'
   },
+
   trailingSlash: 'always',
   site: 'https://oscarbustos.dev',
+
   integrations: [
     mdx(),
     sitemap(),
@@ -25,6 +31,7 @@ export default defineConfig({
       fileType: ['html', 'css', 'js', 'svg', 'xml']
     })
   ],
+
   vite: {
     build: {
       cssMinify: true,
@@ -44,10 +51,13 @@ export default defineConfig({
       noExternal: ['@fontsource-variable/*']
     }
   },
+
   image: {
     service: {
       entrypoint: 'astro/assets/services/sharp'
     },
     domains: ['oscarbustos.dev']
-  }
+  },
+
+  adapter: cloudflare()
 });
