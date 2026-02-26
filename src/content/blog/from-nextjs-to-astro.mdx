@@ -1,0 +1,96 @@
+---
+title: 'Why I walked away from Next.js and migrated to Astro'
+description: 'Next.js has become a beast that is hard to tame. Here is why I decided to migrate generaterobotstxt.com from Next.js to Astro — and why I have no regrets.'
+pubDate: 'Feb 26 2026'
+heroImage: ''
+slug: from-nextjs-to-astro
+---
+
+There was a time when Next.js was the obvious answer for almost any React-based web project. It was simple, predictable, and solved real problems: SSR, SSG, file-based routing. We all adopted it — and for good reason.
+
+But that was a while ago. Today, Next.js is a different animal.
+
+## Next.js: from framework to labyrinth
+
+When Vercel introduced the **App Router** in Next.js 13, something shifted. What was once an easy choice became a minefield of new concepts you need to learn, remember, and maintain.
+
+To develop with Next.js today, you need a clear mental model of:
+
+- When a component should be `"use client"` vs `"use server"`
+- What a Server Component is and what limitations it carries
+- When to use `fetch` with `cache: 'no-store'` vs `revalidate`
+- The difference between `generateStaticParams`, `generateMetadata` and `generateViewport`
+- Why your component renders twice in development
+- Why your route's `layout.tsx` doesn't receive `searchParams`
+
+And that's before we get to the **cryptic errors** that surface when you accidentally mix server and client code. The infamous:
+
+```
+Error: Event handlers cannot be passed to Client Component props.
+```
+
+…which can originate three levels deep in your component tree and takes 20 minutes to track down.
+
+### The real problem: accidental complexity
+
+The App Router's mental model is powerful — I'll give it that. But that power comes at a cost: **accidental complexity**. Complexity that doesn't come from your business problem, but from the framework itself.
+
+For a personal blog, a landing page, or a simple tool, you don't need 80% of that power. And yet you still have to understand it to avoid breaking things.
+
+On top of that, Next.js has become increasingly coupled to Vercel's infrastructure. Features like **Edge Functions**, **streaming React Server Components**, and **Partial Prerendering** are designed to shine inside Vercel's ecosystem. Deploy elsewhere, and not everything works the same way.
+
+## Astro: back to what matters
+
+When I started looking at Astro, what struck me first was how **easy it was to understand**.
+
+Astro has a clear mental model: everything is static HTML by default, and you only ship JavaScript when you actually need it. That's what they call the **Islands Architecture**, and it's brilliant in its simplicity.
+
+No need to decide if a component is server or client. No complex cache strategies to reason about. No `use client`, no `use server`. You write your template, optionally drop in a React, Vue, or Svelte component for interactive parts, and Astro handles the rest.
+
+The result: **much smaller JavaScript bundles** and faster-loading pages — something I care deeply about when it comes to performance.
+
+## Migrating generaterobotstxt.com
+
+This is what led me to make a decision: migrate **[generaterobotstxt.com](https://generaterobotstxt.com)** from Next.js to Astro.
+
+`generaterobotstxt.com` is a tool for generating `robots.txt` files visually. It's essentially a small interactive form with a live preview. No SSR needed, no authentication, no database. A static tool with a bit of interactivity.
+
+And yet, it was running on Next.js. Why? Honestly, because that was my default framework at the time. But looking at it with fresh eyes, it was overkill — using a sledgehammer to crack a nut.
+
+### What improved with Astro
+
+**1. Cleaner code**
+
+The project became significantly cleaner. `.astro` files have a clear structure: frontmatter at the top for logic, HTML template below. No confusion about what runs on the server and what runs on the client.
+
+**2. Faster build times**
+
+Build time dropped noticeably. Astro doesn't need to process RSC compilation or a server runtime. It's more direct and to the point.
+
+**3. Lighter output**
+
+The amount of JavaScript shipped to the client dropped dramatically. For a tool like `generaterobotstxt.com`, where interactivity is minimal, this translates directly into better Lighthouse scores and a better user experience.
+
+**4. Deploy anywhere**
+
+Astro generates static files by default. I can deploy it to Netlify, Cloudflare Pages, GitHub Pages, or any CDN without being tied to a specific provider. Portability matters.
+
+**5. Maintainability**
+
+This might be the most important point for a side project you don't touch every week. When I come back to the code after a few weeks, Astro's mental model is simple enough that I don't need to re-read documentation to avoid making mistakes. With Next.js App Router, I'd always have to catch up before feeling confident again.
+
+## Does this mean Next.js is bad?
+
+No. Next.js is still a powerful tool and there are absolutely cases where it makes perfect sense: complex authenticated apps, real-time dashboards, e-commerce with server-side personalization, large team projects where Vercel's optimizations bring real value.
+
+The problem is that we as a community have used it for everything — including projects where it was excessive. And Vercel, driven by its commercial incentives, has pushed the framework toward growing complexity that doesn't always benefit the developer.
+
+## My recommendation
+
+If you're starting a new project that is primarily static content — a blog, a documentation site, a simple tool, a portfolio — **give Astro a shot**. You'll be surprised how productive you can be without all the ceremony of a heavier framework.
+
+If you already have a project on Next.js Pages Router that works well: don't migrate for the sake of migrating. The Pages Router is still good and predictable.
+
+But if you're on the App Router and feel like you spend more time fighting the framework than building features, it might be worth asking yourself whether you actually need everything Next.js brings to the table.
+
+I asked myself that question. The answer was no.
