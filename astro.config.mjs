@@ -47,7 +47,7 @@ export default defineConfig({
     sitemap(),
     react(),
     compressor({
-      fileType: ['html', 'css', 'js', 'svg', 'xml']
+      fileExtensions: ['.html', '.css', '.js', '.svg', '.xml']
     })
   ],
 

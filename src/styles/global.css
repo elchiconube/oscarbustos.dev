@@ -69,7 +69,8 @@ main::before{
     position: absolute;
     inset: 0px;
     z-index: -100;
-    background-image: url(/header-gradient.svg), url(/footer-gradient.svg);
+    background-image: url(../assets/header-gradient.svg),
+      url(../assets/footer-gradient.svg);
     background-repeat: no-repeat;
     background-position: center top, center bottom;
     background-size: 1400px;
