@@ -1,0 +1,107 @@
+---
+import Container from '../../components/Container.astro';
+import Heading from '../../components/Heading.astro';
+import Features from '../../components/Features.astro';
+import MainLayout from '../../layouts/MainLayout.astro';
+import Button from '../../components/Button.astro';
+---
+
+<MainLayout>
+  <Container>
+    <Heading title='Sprint Meme Awards' description='2026' />
+    <section>
+      <header>
+        <figure class='icon'>
+          <img src='/sprint-meme-awards.webp' alt='Sprint Meme Awards logo' />
+        </figure>
+      </header>
+
+      <p>
+        Sprint Meme Awards is a web platform built with Next.js 16 (App Router)
+        and TypeScript to gamify engineering sprints through meme competitions
+        with real-time voting and team participation loops.
+      </p>
+      <p>
+        The platform is designed around two access models: a public shared
+        space controlled through email-based access, and the ability to create
+        private team spaces for more isolated sprint environments and internal
+        participation flows.
+      </p>
+      <p>
+        The system architecture is organized by product domains (auth, memes,
+        reactions, sprint, and admin), with server-side APIs, strict contract
+        validation, and a security layer that combines authentication,
+        rate-limiting, and CSP hardening.
+      </p>
+      <p>
+        Supabase is used as the backend backbone: PostgreSQL for relational
+        data modeling, Auth for session and access control flows, and Storage
+        for meme asset lifecycle management. Deployment is handled on Vercel,
+        including Edge Runtime support for dynamic Open Graph image generation.
+      </p>
+      <p>
+        The frontend stack uses React 19, next-intl for ES/EN localization,
+        Zustand for lightweight global state, Zod for API/input schemas,
+        Tailwind CSS v4 for UI composition, and emoji-mart for reactions.
+        Engineering quality is enforced with Vitest + Testing Library, ESLint,
+        and bundle analysis to keep runtime and delivery performance under
+        control.
+      </p>
+
+      <Features
+        features={[
+          'Next.js 16 App Router + strict TypeScript with domain-based modules',
+          'Supabase (PostgreSQL, Auth, Storage) as the primary backend platform',
+          'Public email-controlled access plus support for private team spaces',
+          'Security-first APIs: Zod contracts, auth boundaries, CSP, and rate limiting',
+          'React 19 UI stack with next-intl, Zustand, Tailwind CSS v4, and emoji-mart',
+          'Quality and performance workflow with Vitest, Testing Library, ESLint, and bundle analyzer',
+        ]}
+      />
+
+      <aside>
+        <ul>
+          <li>
+            <Button
+              href='https://www.sprintmeme.com/en/sprint/1'
+              target='_blank'
+              rel='noopener'
+              text='Website'
+            />
+          </li>
+        </ul>
+      </aside>
+    </section>
+  </Container>
+
+  <style>
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+      gap: 24px;
+    }
+
+    .icon {
+      margin: 0 auto;
+      box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      width: 100px;
+
+      img {
+        width: 100%;
+        display: block;
+        border-radius: 12px;
+        height: auto;
+      }
+    }
+
+    aside {
+      margin-top: 38px;
+
+      ul {
+        display: flex;
+        gap: 12px;
+      }
+    }
+  </style>
+</MainLayout>

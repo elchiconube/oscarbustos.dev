@@ -1,0 +1,111 @@
+---
+import Container from '../../components/Container.astro';
+import Heading from '../../components/Heading.astro';
+import Features from '../../components/Features.astro';
+import MainLayout from '../../layouts/MainLayout.astro';
+import Button from '../../components/Button.astro';
+---
+
+<MainLayout>
+  <Container>
+    <Heading title='FitSnacks' description='2026' />
+    <section>
+      <header>
+        <figure class='icon'>
+          <img src='/fitsnacks.webp' alt='FitSnacks logo' />
+        </figure>
+      </header>
+
+      <p>
+        FitSnacks is a native mobile application engineered with React Native
+        and Expo, with a strong focus on runtime performance, privacy-aware
+        data handling, and resilient offline behavior.
+      </p>
+      <p>
+        The core architecture is built on strict TypeScript and a modular
+        domain-oriented structure (components, services, store, and models) to
+        keep boundaries explicit and refactors safe as features scale. Global
+        client state is handled with Zustand, while persistence is powered by
+        react-native-mmkv for low-latency reads/writes on device.
+      </p>
+      <p>
+        The UI layer combines React Navigation (stack + tabs), FlashList for
+        high-throughput list rendering, Reanimated for smooth interactions, and
+        Expo modules for haptics and notifications. Health capabilities are
+        integrated through HealthKit and Health Connect using react-native-health,
+        react-native-health-connect, and expo-health-connect, with additional
+        iOS widget support via @_rkstar/react-native-widget-center and
+        @bacons/apple-targets.
+      </p>
+      <p>
+        Engineering quality is enforced with Jest and Testing Library across
+        units and critical services, and native reproducibility is managed with
+        Expo prebuild plus expo-build-properties. Delivery is automated through
+        EAS Build and EAS Submit, while Expo Updates enables OTA releases for
+        fast iteration without requiring a full store release for every change.
+      </p>
+
+      <Features
+        features={[
+          'Strict TypeScript + modular domain architecture for scalable maintenance',
+          'Zustand global state with MMKV persistence for fast on-device data access',
+          'Performance-focused UI stack: FlashList, Reanimated, and Expo native modules',
+          'Deep health integrations: HealthKit/Health Connect and iOS widgets',
+          'Robust delivery pipeline: Expo prebuild, EAS Build/Submit, and OTA updates',
+        ]}
+      />
+
+      <aside>
+        <ul>
+          <li>
+            <Button
+              href='https://fitsnacks.app/'
+              target='_blank'
+              rel='noopener'
+              text='Website'
+            />
+          </li>
+          <li>
+            <Button
+              href='https://apps.apple.com/es/app/fitsnacks/id6756886062'
+              target='_blank'
+              rel='noopener'
+              text='Download on iOS App Store'
+            />
+          </li>
+        </ul>
+      </aside>
+    </section>
+  </Container>
+
+  <style>
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+      gap: 24px;
+    }
+
+    .icon {
+      margin: 0 auto;
+      box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      width: 100px;
+
+      img {
+        width: 100%;
+        display: block;
+        border-radius: 12px;
+        height: auto;
+      }
+    }
+
+    aside {
+      margin-top: 38px;
+
+      ul {
+        display: flex;
+        gap: 12px;
+      }
+    }
+  </style>
+</MainLayout>

@@ -1,0 +1,90 @@
+---
+import Container from '../../components/Container.astro';
+import Heading from '../../components/Heading.astro';
+import Features from '../../components/Features.astro';
+import MainLayout from '../../layouts/MainLayout.astro';
+import Button from '../../components/Button.astro';
+---
+
+<MainLayout>
+  <Container>
+    <Heading title='Ciñera' description='2026' />
+    <section>
+      <p>
+        Ciñera is a live village monitoring system designed to stream a camera
+        feed from a remote rural location to a public-facing website with zero
+        ongoing infrastructure costs.
+      </p>
+      <p>
+        The hardware stack is built around a Reolink RLC-810A 4K PoE camera,
+        powered through a TP-Link TL-POE150S injector and connected to a
+        Raspberry Pi 4B running Raspberry Pi OS Lite (Debian 13 Trixie). The Pi
+        acts as the media edge node, pulling the RTSP stream from the camera
+        and repackaging it as HLS through MediaMTX v1.9.1.
+      </p>
+      <p>
+        Public exposure is solved through Cloudflare Tunnel instead of a VPS,
+        static IP, or port forwarding. A single `cloudflared` daemon running as
+        a systemd service on the Pi establishes an outbound-only tunnel to
+        Cloudflare's edge, allowing the HLS stream to be published on a custom
+        subdomain without opening inbound ports.
+      </p>
+      <p>
+        On the frontend, an Astro 6 site deployed on Cloudflare Pages consumes
+        the live stream through a lightweight player based on hls.js, with
+        native HLS fallback for Safari. The system is intentionally minimal and
+        operationally cheap, while still maintaining a reliable public delivery
+        path.
+      </p>
+      <p>
+        A few engineering lessons shaped the setup: DHCP leases caused a real
+        outage when the camera IP changed, so static assignments are now
+        mandatory for fixed devices. Debian Trixie uses NetworkManager instead
+        of the older dhcpcd defaults found in many tutorials, which changes the
+        networking workflow. MediaMTX with `Restart=always` under systemd also
+        proved sufficient for most crash recovery scenarios, though RTSP health
+        watchdog automation is the next operational improvement.
+      </p>
+      <p>
+        The next step is integrating an Ecowitt Wittboy GW2001 weather station
+        to surface temperature, humidity, wind, rain, and UV data through a
+        self-hosted endpoint on a Ugreen NAS and expose everything through the
+        same Astro frontend.
+      </p>
+
+      <Features
+        features={[
+          'Raspberry Pi 4B edge node pulling RTSP and repackaging it to HLS with MediaMTX',
+          'Cloudflare Tunnel for secure public delivery without static IPs or open ports',
+          'Astro 6 frontend on Cloudflare Pages with hls.js and Safari native HLS fallback',
+          'Low-cost infrastructure with systemd-managed services and operational recovery patterns',
+          'Planned weather-station expansion through a self-hosted NAS endpoint',
+        ]}
+      />
+
+      <aside>
+        <ul>
+          <li>
+            <Button
+              href='https://cinera.es/directo/'
+              target='_blank'
+              rel='noopener'
+              text='Website'
+            />
+          </li>
+        </ul>
+      </aside>
+    </section>
+  </Container>
+
+  <style>
+    aside {
+      margin-top: 38px;
+
+      ul {
+        display: flex;
+        gap: 12px;
+      }
+    }
+  </style>
+</MainLayout>
