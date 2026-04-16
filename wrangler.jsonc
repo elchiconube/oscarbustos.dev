@@ -9,7 +9,7 @@
 		"binding": "ASSETS",
 		"directory": "./dist/client",
 		"not_found_handling": "404-page",
-		"html_handling": "force-trailing-slash"
+		"html_handling": "auto-trailing-slash"
 	},
 	"observability": {
     "enabled": true

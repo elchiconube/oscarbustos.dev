@@ -31,66 +31,66 @@ const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image
     </main>
 
     <script is:inline>
-      // Import theme utilities
-      const getPreferredTheme = () => {
-        // Check localStorage first
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
-        }
-        
-        // Check system preference
-        if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          return 'dark';
-        }
-        
-        // Default to light
-        return 'light';
-      };
-
-      const applyTheme = (theme) => {
-        if (typeof document === 'undefined') return;
-        
-        const root = document.documentElement;
-        root.classList.remove('light', 'dark');
-        root.classList.add(theme);
-        root.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-      };
-
-      // Get and apply initial theme
-      const theme = getPreferredTheme();
-      applyTheme(theme);
-
-      // Listen for system preference changes (only if no theme is stored)
-      if (typeof window !== 'undefined') {
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        mediaQuery.addEventListener('change', (e) => {
-          if (!localStorage.getItem('theme')) {
-            applyTheme(e.matches ? 'dark' : 'light');
+      (function () {
+        const storageGet = (key) => {
+          try {
+            return typeof localStorage !== 'undefined' ? localStorage.getItem(key) : null;
+          } catch {
+            return null;
           }
-        });
-      }
-    </script>
-    <!-- Previene el flash durante las transiciones -->
-    <script is:inline>
-      document.addEventListener('astro:before-preparation', (ev) => {
-        // Use the same getPreferredTheme function for consistency
-        const theme = getPreferredTheme();
-        
-        // Apply theme to the new document
-        const root = ev.newDocument.documentElement;
-        root.classList.remove('light', 'dark');
-        root.classList.add(theme);
-        root.setAttribute('data-theme', theme);
-      });
+        };
+        const storageSet = (key, value) => {
+          try {
+            if (typeof localStorage !== 'undefined') localStorage.setItem(key, value);
+          } catch {
+            /* Safari modo privado u bloqueo de almacenamiento */
+          }
+        };
 
-      document.addEventListener('astro:after-swap', () => {
-        // Use the same getPreferredTheme function for consistency
-        const theme = getPreferredTheme();
-        
-        // Apply theme after the swap
-        applyTheme(theme);
-      });
+        const getPreferredTheme = () => {
+          const stored = storageGet('theme');
+          if (stored === 'light' || stored === 'dark') return stored;
+          if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+          }
+          return 'light';
+        };
+
+        const applyTheme = (theme) => {
+          if (typeof document === 'undefined') return;
+          const root = document.documentElement;
+          root.classList.remove('light', 'dark');
+          root.classList.add(theme);
+          root.setAttribute('data-theme', theme);
+          storageSet('theme', theme);
+        };
+
+        applyTheme(getPreferredTheme());
+
+        if (typeof window !== 'undefined') {
+          const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+          const onChange = (e) => {
+            if (!storageGet('theme')) applyTheme(e.matches ? 'dark' : 'light');
+          };
+          if (typeof mediaQuery.addEventListener === 'function') {
+            mediaQuery.addEventListener('change', onChange);
+          } else if (typeof mediaQuery.addListener === 'function') {
+            mediaQuery.addListener(onChange);
+          }
+        }
+
+        document.addEventListener('astro:before-preparation', (ev) => {
+          const theme = getPreferredTheme();
+          const root = ev.newDocument.documentElement;
+          root.classList.remove('light', 'dark');
+          root.classList.add(theme);
+          root.setAttribute('data-theme', theme);
+        });
+
+        document.addEventListener('astro:after-swap', () => {
+          applyTheme(getPreferredTheme());
+        });
+      })();
     </script>
   </body>
 </html>
