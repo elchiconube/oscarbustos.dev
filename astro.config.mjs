@@ -1,6 +1,6 @@
 // astro.config.mjs
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import path from 'path';
@@ -22,6 +22,25 @@ export default defineConfig({
 
   trailingSlash: 'always',
   site: 'https://oscarbustos.dev',
+
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: 'Nunito',
+      cssVariable: '--nunito-font',
+      weights: ['200 1000'],
+      styles: ['normal'],
+      fallbacks: ['sans-serif']
+    },
+    {
+      provider: fontProviders.google(),
+      name: 'Fraunces',
+      cssVariable: '--fraunces-font',
+      weights: ['100 900'],
+      styles: ['normal', 'italic'],
+      fallbacks: ['serif']
+    }
+  ],
 
   integrations: [
     mdx(),
@@ -45,10 +64,12 @@ export default defineConfig({
     resolve: {
       alias: {
         '@': path.resolve('./src')
-      }
+      },
+      // Una sola copia de React en SSR (evita useContext/useState null con @phosphor-icons/react)
+      dedupe: ['react', 'react-dom']
     },
     ssr: {
-      noExternal: ['@fontsource-variable/*']
+      noExternal: ['@phosphor-icons/react']
     }
   },
 
