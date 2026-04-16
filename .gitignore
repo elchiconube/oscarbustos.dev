@@ -1,6 +1,9 @@
 # build output
 dist/
 
+# Wrangler local state / deploy redirects (apunta a dist/; no versionar)
+.wrangler/
+
 # generated types
 .astro/
 
