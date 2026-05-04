@@ -10,7 +10,6 @@ import compressor from 'astro-compressor';
 
 import cloudflare from '@astrojs/cloudflare';
 
-
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
@@ -20,7 +19,8 @@ export default defineConfig({
     defaultStrategy: 'hover'
   },
 
-  trailingSlash: 'always',
+  /* 'always' hace que en dev rutas sin barra final (/workout) den 404; 'ignore' acepta ambas. */
+  trailingSlash: 'ignore',
   site: 'https://oscarbustos.dev',
 
   fonts: [

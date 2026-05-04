@@ -1,0 +1,990 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Heading from '@/components/Heading.astro';
+import Container from '@/components/Container.astro';
+---
+
+<MainLayout
+  title='Entrenamiento'
+  description='Plan fullbody 4 días: gimnasio (L–V) y circuito en casa (20–25 min).'
+>
+  <Heading
+    title='Entrenamiento'
+    description='Fullbody · 4 días en gimnasio · rutina en casa'
+  />
+  <Container>
+    <section id='training-plan' class='workout-page'>
+
+
+      <div class='tabs' role='tablist'>
+        <button class='tab tab--active' data-tab='gym' role='tab' aria-selected='true' type='button'>
+          Gimnasio
+        </button>
+        <button class='tab' data-tab='home' role='tab' aria-selected='false' type='button'>
+          Casa
+        </button>
+      </div>
+
+      <div id='panel-gym' class='panel panel--active'>
+        <div class='day-selector'>
+          <button
+            class='day-btn day-btn--active'
+            data-day='0'
+            data-cal-weekday='1'
+            style='--d-accent:#609FE4'
+            type='button'
+          >
+            LUN
+          </button>
+          <button class='day-btn' data-day='1' data-cal-weekday='2' style='--d-accent:#A167EF' type='button'>
+            MAR
+          </button>
+          <button class='day-btn' data-day='2' data-cal-weekday='4' style='--d-accent:#04D18E' type='button'>
+            JUE
+          </button>
+          <button class='day-btn' data-day='3' data-cal-weekday='5' style='--d-accent:#FF7C51' type='button'>
+            VIE
+          </button>
+        </div>
+
+        <div class='day-card day-card--active' data-day-panel='0' style='--d-accent:#609FE4'>
+          <div class='day-card__header'>
+            <div class='day-card__eyebrow'>FULLBODY A · LUNES</div>
+            <h2 class='day-card__title'>Cuádriceps + Empuje</h2>
+            <div class='day-card__chips'>
+              <span class='chip'>⏱ 55–60 min</span>
+              <span class='chip chip--accent'>Core integrado</span>
+            </div>
+          </div>
+
+          <div class='block block--basic'>
+            <div class='block__label'>Básicos</div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Sentadilla trasera</b><small>Protagonista del día</small>
+              </div>
+              <div class='ex__r'>
+                <s>4×6–8</s><small>RPE 7.5–8 · ⏸ 2–3 min</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Sentadilla búlgara</b><small>Pierna unilateral</small>
+              </div>
+              <div class='ex__r'>
+                <s>3×8–10/p</s><small>RPE 7.5 · ⏸ 90 s</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Press banca barra</b></div>
+              <div class='ex__r'>
+                <s>3×6–8</s><small>RPE 7 · ⏸ 2 min</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Jalón al pecho</b></div>
+              <div class='ex__r'>
+                <s>3×8–10</s><small>RPE 7.5 · ⏸ 90 s</small>
+              </div>
+            </div>
+          </div>
+
+          <div class='block block--core'>
+            <div class='block__label'>Core</div>
+            <div class='ex'>
+              <div class='ex__l'><b>Plancha frontal</b></div>
+              <div class='ex__r'>
+                <s>3×30–45 s</s><small>⏸ 45 s</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Dead bug</b><small>Control lumbar</small>
+              </div>
+              <div class='ex__r'>
+                <s>3×8/lado</s><small>⏸ 45 s</small>
+              </div>
+            </div>
+          </div>
+
+          <div class='block block--accessory'>
+            <div class='block__label'>Superserie A</div>
+            <div class='ex'>
+              <div class='ex__l'><b>Elevaciones laterales</b></div>
+              <div class='ex__r'><s>3×12–15</s></div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Fondos</b></div>
+              <div class='ex__r'>
+                <s>3×8–10</s><small>⏸ 60–75 s entre rondas</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class='day-card' data-day-panel='1' style='--d-accent:#A167EF'>
+          <div class='day-card__header'>
+            <div class='day-card__eyebrow'>FULLBODY B · MARTES</div>
+            <h2 class='day-card__title'>Posterior + Jalones</h2>
+            <div class='day-card__chips'>
+              <span class='chip'>⏱ 50–55 min</span>
+              <span class='chip chip--accent'>Core integrado</span>
+            </div>
+          </div>
+
+          <div class='block block--basic'>
+            <div class='block__label'>Básicos</div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Peso muerto rumano</b><small>Isquios + glúteo</small>
+              </div>
+              <div class='ex__r'>
+                <s>3×6–8</s><small>RPE 7.5–8 · ⏸ 2–3 min</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Hip thrust barra</b><small>Glúteo máximo</small>
+              </div>
+              <div class='ex__r'>
+                <s>3×8–10</s><small>RPE 8 · ⏸ 2 min</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Remo mancuerna</b></div>
+              <div class='ex__r'>
+                <s>3×8–10</s><small>⏸ 90 s</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Press militar barra</b></div>
+              <div class='ex__r'>
+                <s>3×8</s><small>RPE 7 · ⏸ 90 s</small>
+              </div>
+            </div>
+          </div>
+
+          <div class='block block--core'>
+            <div class='block__label'>Core</div>
+            <div class='ex'>
+              <div class='ex__l'><b>Plancha lateral</b></div>
+              <div class='ex__r'>
+                <s>3×25–35 s/lado</s><small>⏸ 45 s</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Bird dog</b><small>Estabilidad lumbar</small>
+              </div>
+              <div class='ex__r'>
+                <s>3×8/lado</s><small>⏸ 45 s</small>
+              </div>
+            </div>
+          </div>
+
+          <div class='block block--accessory'>
+            <div class='block__label'>Superserie B</div>
+            <div class='ex'>
+              <div class='ex__l'><b>Curl martillo</b></div>
+              <div class='ex__r'><s>2×10–12</s></div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Gemelos en máquina</b></div>
+              <div class='ex__r'>
+                <s>2×12–15</s><small>⏸ 60 s entre rondas</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class='day-card' data-day-panel='2' style='--d-accent:#04D18E'>
+          <div class='day-card__header'>
+            <div class='day-card__eyebrow'>FULLBODY C · JUEVES</div>
+            <h2 class='day-card__title'>Cuádriceps ligero + Core intenso</h2>
+            <div class='day-card__chips'>
+              <span class='chip'>⏱ 50–55 min</span>
+              <span class='chip chip--accent'>Core intenso</span>
+            </div>
+          </div>
+
+          <div class='block block--basic'>
+            <div class='block__label'>Básicos</div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Prensa de pierna</b><small>Volumen cuáds sin carga axial</small>
+              </div>
+              <div class='ex__r'>
+                <s>4×10–12</s><small>RPE 7.5 · ⏸ 90 s</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Extensión de pierna</b><small>Aislamiento cuádriceps</small>
+              </div>
+              <div class='ex__r'>
+                <s>3×12–15</s><small>RPE 7 · ⏸ 60 s</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Press inclinado mancuernas</b></div>
+              <div class='ex__r'>
+                <s>3×10</s><small>RPE 7 · ⏸ 90 s</small>
+              </div>
+            </div>
+          </div>
+
+          <div class='block block--core'>
+            <div class='block__label'>Core — circuito 2 rondas</div>
+            <div class='ex'>
+              <div class='ex__l'><b>Hollow body hold</b></div>
+              <div class='ex__r'><s>2×20–30 s</s></div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Ab wheel / crunch en polea</b></div>
+              <div class='ex__r'><s>2×10–12</s></div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Rotación con cable o banda</b><small>Anti-rotación</small>
+              </div>
+              <div class='ex__r'>
+                <s>2×10/lado</s><small>⏸ 60 s entre rondas</small>
+              </div>
+            </div>
+          </div>
+
+          <div class='block block--accessory'>
+            <div class='block__label'>Circuito C</div>
+            <div class='ex'>
+              <div class='ex__l'><b>Jalón al pecho (ligero)</b></div>
+              <div class='ex__r'><s>3×10</s></div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Curl bíceps barra</b></div>
+              <div class='ex__r'><s>2×10–12</s></div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Tríceps en polea</b></div>
+              <div class='ex__r'>
+                <s>2×12–15</s><small>⏸ 75 s entre rondas</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class='day-card' data-day-panel='3' style='--d-accent:#FF7C51'>
+          <div class='day-card__header'>
+            <div class='day-card__eyebrow'>FULLBODY D · VIERNES</div>
+            <h2 class='day-card__title'>Posterior completo + Hombro</h2>
+            <div class='day-card__chips'>
+              <span class='chip'>⏱ 50–55 min</span>
+              <span class='chip chip--accent'>Core integrado</span>
+            </div>
+          </div>
+
+          <div class='block block--basic'>
+            <div class='block__label'>Básicos</div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Hip thrust</b><small>Más volumen que martes</small>
+              </div>
+              <div class='ex__r'>
+                <s>4×8–10</s><small>RPE 8 · ⏸ 2 min</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Curl femoral tumbado</b></div>
+              <div class='ex__r'>
+                <s>3×10–12</s><small>RPE 7.5 · ⏸ 90 s</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Remo en cable sentado</b></div>
+              <div class='ex__r'>
+                <s>3×10–12</s><small>⏸ 90 s</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'><b>Press hombro mancuernas</b></div>
+              <div class='ex__r'>
+                <s>3×8–10</s><small>⏸ 90 s</small>
+              </div>
+            </div>
+          </div>
+
+          <div class='block block--core'>
+            <div class='block__label'>Core</div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Plancha con toque de hombro</b><small>Anti-rotación dinámica</small>
+              </div>
+              <div class='ex__r'>
+                <s>3×8/lado</s><small>⏸ 45 s</small>
+              </div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Elevación de piernas colgado</b><small>Flexores cadera + abs</small>
+              </div>
+              <div class='ex__r'>
+                <s>3×10–12</s><small>⏸ 60 s</small>
+              </div>
+            </div>
+          </div>
+
+          <div class='block block--accessory'>
+            <div class='block__label'>Superserie D</div>
+            <div class='ex'>
+              <div class='ex__l'><b>Elevaciones laterales</b></div>
+              <div class='ex__r'><s>2×12–15</s></div>
+            </div>
+            <div class='ex'>
+              <div class='ex__l'>
+                <b>Face pull / jalón polea alta</b><small>Salud manguito rotador</small>
+              </div>
+              <div class='ex__r'>
+                <s>2×15</s><small>⏸ 60 s entre rondas</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+       
+      </div>
+
+      <div id='panel-home' class='panel'>
+        <div class='home-header'>
+          <div class='home-header__eyebrow'>Rutina diaria · casa</div>
+          <h2 class='home-header__title'>Circuito de acumulación</h2>
+          <p class='home-header__desc'>
+            Piernas, core y cardio con opciones sin impacto (escaladores, burpees)
+          </p>
+          <div class='home-chips'>
+            <span class='chip chip--accent-bg'>3–4 rondas</span>
+            <span class='chip'>0–15 s entre ejercicios</span>
+            <span class='chip'>⏸ 60–90 s entre rondas</span>
+          </div>
+        </div>
+
+        <div class='home-list'>
+          <div class='hex'>
+            <span class='hex__n'>01</span>
+            <div class='hex__i'>
+              <b>Sentadilla con banda o corporal</b><small>Mantén</small>
+            </div>
+            <span class='hex__r'>15 reps</span>
+          </div>
+          <div class='hex'>
+            <span class='hex__n'>02</span>
+            <div class='hex__i'>
+              <b>Escaladores (mountain climbers)</b><small>Sin salto si hay molestia</small>
+            </div>
+            <span class='hex__r'>30 s</span>
+          </div>
+          <div class='hex'>
+            <span class='hex__n'>03</span>
+            <div class='hex__i'>
+              <b>Zancada estática (split squat)</b><small>Sin impacto</small>
+            </div>
+            <span class='hex__r'>10/pierna</span>
+          </div>
+          <div class='hex'>
+            <span class='hex__n'>04</span>
+            <div class='hex__i'>
+              <b>Burpee sin salto (o con salto)</b><small>Empieza sin salto</small>
+            </div>
+            <span class='hex__r'>8–10 reps</span>
+          </div>
+          <div class='hex'>
+            <span class='hex__n'>05</span>
+            <div class='hex__i'>
+              <b>Plancha frontal</b><small>Core</small>
+            </div>
+            <span class='hex__r'>30–40 s</span>
+          </div>
+          <div class='hex'>
+            <span class='hex__n'>06</span>
+            <div class='hex__i'>
+              <b>Bicicleta abdominal</b><small>Core + caderas</small>
+            </div>
+            <span class='hex__r'>20 reps/lado</span>
+          </div>
+          <div class='hex'>
+            <span class='hex__n'>07</span>
+            <div class='hex__i'>
+              <b>Hip thrust en suelo</b><small>Sin peso, pausa arriba</small>
+            </div>
+            <span class='hex__r'>15 reps</span>
+          </div>
+          <div class='hex'>
+            <span class='hex__n'>08</span>
+            <div class='hex__i'>
+              <b>Flexiones</b><small>Ajusta dificultad</small>
+            </div>
+            <span class='hex__r'>10–15 reps</span>
+          </div>
+        </div>
+
+        <div class='home-guide'>
+          <div class='home-guide__title'>Cómo usarla</div>
+          <div class='home-guide__row'>
+            <span>Días de gimnasio</span><span>2 rondas</span>
+          </div>
+          <div class='home-guide__row'>
+            <span>Días sin gimnasio</span><span>3–4 rondas completas</span>
+          </div>
+          <div class='home-guide__row last'>
+            <span>Sábado / domingo</span><span>1 ronda suave opcional</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </Container>
+</MainLayout>
+
+<style>
+  .workout-page {
+    margin: 0 auto 64px;
+    padding-bottom: 24px;
+    color: var(--text-color);
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .week-strip {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .week-day {
+    flex: 1;
+    min-width: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 6px;
+    border-radius: 2px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+  }
+
+  .week-day--today {
+    border-width: 2px;
+    border-color: var(--text-color);
+    padding: 9px 5px;
+  }
+
+  .week-day--today .wl {
+    color: var(--text-color);
+    font-weight: 800;
+  }
+
+  .week-day.gym {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border-color));
+    background: color-mix(in srgb, var(--accent) 10%, var(--card-bg));
+  }
+
+  .wl {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--light-gray);
+  }
+
+  .week-day.gym .wl {
+    color: var(--accent);
+  }
+
+  .wd {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border-color);
+  }
+
+  .week-day.gym .wd {
+    background: var(--accent);
+  }
+
+  .tabs {
+    display: flex;
+    gap: 10px;
+    padding: 20px 0 12px;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 2px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    font-family: var(--nunito-font);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    background: var(--card-bg);
+    color: var(--text-color);
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .tab:hover:not(.tab--active) {
+    background: var(--hover-bg);
+  }
+
+  .tab:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--text-color) 40%, transparent);
+    outline-offset: 2px;
+  }
+
+  .tab--active {
+    background: var(--text-color);
+    color: var(--background);
+    border-color: var(--text-color);
+  }
+
+  .panel {
+    display: none;
+    padding: 8px 0 0;
+  }
+
+  .panel--active {
+    display: block;
+  }
+
+  .day-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .day-btn {
+    flex: 1;
+    min-width: 56px;
+    padding: 10px 8px;
+    border-radius: 2px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--light-gray);
+    font-family: var(--nunito-font);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .day-btn--today {
+    border-bottom: 3px solid var(--text-color);
+    padding-bottom: 8px;
+  }
+
+  .day-btn--active {
+    border-color: var(--d-accent);
+    color: var(--d-accent);
+    background: color-mix(in srgb, var(--d-accent) 12%, var(--card-bg));
+  }
+
+  .day-btn:hover:not(.day-btn--active) {
+    background: var(--hover-bg);
+    color: var(--text-color);
+  }
+
+  .day-btn:focus-visible {
+    outline: 2px solid var(--d-accent);
+    outline-offset: 2px;
+  }
+
+  .day-card {
+    display: none;
+    animation: workoutFadeIn 0.25s ease;
+  }
+
+  .day-card--active {
+    display: block;
+  }
+
+  @keyframes workoutFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .day-card__header {
+    padding: 20px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+    background: color-mix(in srgb, var(--d-accent) 12%, var(--card-bg));
+    border: 1px solid color-mix(in srgb, var(--d-accent) 35%, var(--border-color));
+  }
+
+  .day-card__eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    color: var(--d-accent);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .day-card__title {
+    font-family: var(--fraunces-font);
+    font-size: 1.35rem;
+    font-weight: 500;
+    margin: 0 0 12px;
+    letter-spacing: var(--lspace-32);
+    color: var(--text-color);
+    line-height: 1.2;
+  }
+
+  .day-card__chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 2px;
+    background: var(--card-bg);
+    color: var(--light-gray);
+    border: 1px solid var(--border-color);
+    font-weight: 600;
+  }
+
+  .chip--accent {
+    background: color-mix(in srgb, var(--d-accent, #609fe4) 14%, var(--card-bg));
+    color: var(--d-accent, #609fe4);
+    border-color: color-mix(in srgb, var(--d-accent, #609fe4) 40%, var(--border-color));
+  }
+
+  .chip--accent-bg {
+    background: color-mix(in srgb, #fdbb07 18%, var(--card-bg));
+    color: var(--text-color);
+    border-color: color-mix(in srgb, #fdbb07 45%, var(--border-color));
+  }
+
+  .block {
+    border-radius: 2px;
+    padding: 18px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+  }
+
+  .block--core {
+    background: color-mix(in srgb, #04d18e 8%, var(--card-bg));
+    border-color: color-mix(in srgb, #04d18e 28%, var(--border-color));
+  }
+
+  .block--accessory {
+    background: var(--card-bg);
+  }
+
+  .block__label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    color: var(--d-accent, var(--text-color));
+  }
+
+  .block--core .block__label {
+    color: #04d18e;
+  }
+
+  .block--accessory .block__label {
+    color: var(--light-gray);
+  }
+
+  .ex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .ex:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .ex:first-of-type {
+    padding-top: 0;
+  }
+
+  .ex__l {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ex__l b {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  .ex__l small {
+    font-size: 13px;
+    color: var(--light-gray);
+    line-height: 1.35;
+  }
+
+  .ex__r {
+    text-align: right;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ex__r s {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--d-accent, var(--text-color));
+    text-decoration: none;
+  }
+
+  .ex__r small {
+    font-size: 12px;
+    color: var(--light-gray);
+  }
+
+  .home-header {
+    background: color-mix(in srgb, #609fe4 10%, var(--card-bg));
+    border: 1px solid color-mix(in srgb, #609fe4 28%, var(--border-color));
+    border-radius: 2px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .home-header__eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--light-gray);
+    margin-bottom: 8px;
+  }
+
+  .home-header__title {
+    font-family: var(--fraunces-font);
+    font-size: 1.35rem;
+    font-weight: 500;
+    margin: 0 0 8px;
+    letter-spacing: var(--lspace-32);
+    color: var(--text-color);
+    line-height: 1.2;
+  }
+
+  .home-header__desc {
+    font-size: 15px;
+    color: var(--light-gray);
+    margin: 0 0 14px;
+    line-height: 1.5;
+  }
+
+  .home-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .home-list {
+    background: var(--card-bg);
+    border-radius: 2px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .hex {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.15s ease;
+  }
+
+  .hex:last-child {
+    border-bottom: none;
+  }
+
+  .hex:hover {
+    background: var(--hover-bg);
+  }
+
+  .hex__n {
+    width: 32px;
+    height: 32px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, #4ab1f1 16%, var(--card-bg));
+    border: 1px solid color-mix(in srgb, #4ab1f1 35%, var(--border-color));
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-color);
+  }
+
+  .hex__i {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .hex__i b {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  .hex__i small {
+    font-size: 13px;
+    color: var(--light-gray);
+    line-height: 1.35;
+  }
+
+  .hex__r {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-color);
+    text-align: right;
+    min-width: 72px;
+    flex-shrink: 0;
+  }
+
+  .home-guide {
+    background: var(--card-bg);
+    border-radius: 2px;
+    padding: 18px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 24px;
+  }
+
+  .home-guide__title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-color);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  .home-guide__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--light-gray);
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .home-guide__row.last {
+    border-bottom: none;
+  }
+
+  .home-guide__row span:first-child {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 13px;
+  }
+
+  @media (max-width: 480px) {
+    .ex {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .ex__r {
+      text-align: left;
+      min-width: 0;
+    }
+
+    .home-guide__row {
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+</style>
+
+<script>
+  function markWorkoutToday() {
+    const root = document.getElementById('training-plan');
+    if (!(root instanceof HTMLElement)) return;
+
+    root.querySelectorAll('.week-day--today').forEach((el) => el.classList.remove('week-day--today'));
+    root.querySelectorAll('.week-day[aria-current="date"]').forEach((el) => el.removeAttribute('aria-current'));
+    root.querySelectorAll('.day-btn--today').forEach((el) => el.classList.remove('day-btn--today'));
+
+    const jsDay = new Date().getDay();
+    const todayCell = root.querySelector(`.week-day[data-weekday="${jsDay}"]`);
+    todayCell?.classList.add('week-day--today');
+    todayCell?.setAttribute('aria-current', 'date');
+
+    root.querySelector(`.day-btn[data-cal-weekday="${jsDay}"]`)?.classList.add('day-btn--today');
+  }
+
+  function bindTrainingPlan() {
+    const root = document.getElementById('training-plan');
+    if (!(root instanceof HTMLElement)) return;
+
+    if (root.dataset.workoutBound !== '1') {
+      root.dataset.workoutBound = '1';
+
+      root.querySelectorAll('.tab').forEach((node) => {
+        node.addEventListener('click', () => {
+          const t = node.getAttribute('data-tab');
+          root.querySelectorAll('.tab').forEach((b) => {
+            const active = b.getAttribute('data-tab') === t;
+            b.classList.toggle('tab--active', active);
+            b.setAttribute('aria-selected', active ? 'true' : 'false');
+          });
+          root.querySelectorAll('.panel').forEach((p) => {
+            p.classList.toggle('panel--active', p.id === `panel-${t}`);
+          });
+        });
+      });
+
+      root.querySelectorAll('.day-btn').forEach((node) => {
+        node.addEventListener('click', () => {
+          const idx = node.getAttribute('data-day');
+          root.querySelectorAll('.day-btn').forEach((b) =>
+            b.classList.toggle('day-btn--active', b.getAttribute('data-day') === idx)
+          );
+          root.querySelectorAll('.day-card').forEach((c) =>
+            c.classList.toggle('day-card--active', c.getAttribute('data-day-panel') === idx)
+          );
+        });
+      });
+    }
+
+    markWorkoutToday();
+  }
+
+  bindTrainingPlan();
+  document.addEventListener('astro:page-load', bindTrainingPlan);
+</script>
