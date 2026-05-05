@@ -6,12 +6,9 @@ import sitemap from '@astrojs/sitemap';
 import path from 'path';
 import react from '@astrojs/react';
 
-
-import cloudflare from '@astrojs/cloudflare';
-
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
+  output: 'static',
 
   prefetch: {
     prefetchAll: true,
@@ -74,7 +71,5 @@ export default defineConfig({
       entrypoint: 'astro/assets/services/sharp'
     },
     domains: ['oscarbustos.dev']
-  },
-
-  adapter: cloudflare()
+  }
 });
