@@ -5,14 +5,13 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import path from 'path';
 import react from '@astrojs/react';
-import compressor from 'astro-compressor';
 
 
 import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'static',
+  output: 'server',
 
   prefetch: {
     prefetchAll: true,
@@ -45,10 +44,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap(),
-    react(),
-    compressor({
-      fileType: ['html', 'css', 'js', 'svg', 'xml']
-    })
+    react()
   ],
 
   vite: {
