@@ -7,7 +7,7 @@ export const menuItems: MenuItem[] = [
     name: 'Content',
     hasDropdown: true,
     dropdownItems: [
-      { name: 'Book', description: 'Learn Frontend development', href: '/book/' },
+      { name: 'Books', description: 'Libros en español', href: '/books/' },
       { name: 'Blog', description: 'Sharing ideas', href: '/blog/' },
     ]
   },

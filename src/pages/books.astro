@@ -1,0 +1,57 @@
+---
+import MyBook from '@/components/MyBook.astro';
+import MainLayout from '@/layouts/MainLayout.astro';
+import JsonLd from '@/components/JsonLd.astro';
+
+const site = Astro.site?.href ?? 'https://oscarbustos.dev';
+---
+
+<MainLayout
+  title='Books | Oscar Bustos'
+  description='Guía no oficial de Claude Code y libro de desarrollo frontend en español. Maximiza tu productividad con Claude Code.'
+  image='/claude-code.webp'
+>
+  <JsonLd
+    type='Book'
+    data={{
+      name: 'Claude Code - Guía no oficial',
+      description:
+        'Cómo dirigir a un agente de código sin perder el control (ni la cabeza). Guía no oficial en español para maximizar el uso de Claude Code y aumentar tu productividad.',
+      author: {
+        '@type': 'Person',
+        name: 'Óscar Bustos',
+        url: site,
+      },
+      inLanguage: 'es',
+      url: 'https://leanpub.com/claudecode-guia-no-oficial',
+      image: new URL('/claude-code.webp', site).href,
+      offers: {
+        '@type': 'Offer',
+        url: 'https://leanpub.com/claudecode-guia-no-oficial',
+        availability: 'https://schema.org/InStock',
+      },
+    }}
+  />
+  <JsonLd
+    type='Book'
+    data={{
+      name: 'Aprende a crear páginas web desde 0',
+      description:
+        'Libro en español para aprender desde cero las tecnologías básicas del desarrollo web: HTML5, CSS3 y JavaScript, con casos prácticos y ejercicios.',
+      author: {
+        '@type': 'Person',
+        name: 'Óscar Bustos',
+        url: site,
+      },
+      inLanguage: 'es',
+      url: 'https://leanpub.com/desarrollo-frontend',
+      image: new URL('/cover.webp', site).href,
+      offers: {
+        '@type': 'Offer',
+        url: 'https://leanpub.com/desarrollo-frontend',
+        availability: 'https://schema.org/InStock',
+      },
+    }}
+  />
+  <MyBook />
+</MainLayout>

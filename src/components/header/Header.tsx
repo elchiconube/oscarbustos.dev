@@ -126,6 +126,7 @@ export default function Header() {
                   isActive={currentPath === item.href || 
                     item.dropdownItems?.some(dropItem => dropItem.href === currentPath)}
                   currentPath={currentPath}
+                  isMenuOpen={isMenuOpen}
                   onMouseEnter={() => {
                     setActiveItem(index);
                     updateIndicator(index);

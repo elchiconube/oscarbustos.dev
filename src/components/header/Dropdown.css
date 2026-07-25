@@ -78,7 +78,16 @@
     transition: max-height 0.3s ease-out;
   }
 
-  .nav-item:hover .dropdown {
+  /* Desactivar hover en móvil: el desplegable se abre por clic */
+  .nav-item:hover .dropdown,
+  .dropdown:hover {
+    max-height: 0;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .nav-item.open .dropdown {
     max-height: 200px;
   }
 
