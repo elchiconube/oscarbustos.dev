@@ -1,15 +1,11 @@
 {
-	"name": "portfolio",
-  "compatibility_date": "2025-12-30",
-  "compatibility_flags": [
-    "nodejs_compat",
-    "global_fetch_strictly_public"
-  ],
-	"assets": {
-		"binding": "ASSETS",
-		"directory": "./dist/client"
-	},
-	"observability": {
+  "name": "portfolio",
+  "compatibility_date": "2026-07-25",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "observability": {
     "enabled": true
   }
 }

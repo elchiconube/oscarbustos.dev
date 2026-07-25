@@ -15,7 +15,7 @@ export async function GET(context) {
       pubDate: post.data.pubDate,
       description: post.data.description,
       content: sanitizeHtml(parser.render(post.body)),
-      link: `/blog/${post.slug}/`,
+      link: `/blog/${post.id}/`,
       author: 'Oscar Bustos'
     })),
     customData: `<language>en-us</language>`,

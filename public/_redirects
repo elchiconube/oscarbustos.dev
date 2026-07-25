@@ -1,2 +1,0 @@
-/:slug/:path(*) :slug/:path 200
-/:slug /:slug 200

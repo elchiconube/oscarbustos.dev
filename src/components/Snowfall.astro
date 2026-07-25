@@ -16,6 +16,8 @@ const {
   id="snowfallCanvas"
   class="snowfall-canvas"
   data-testid="SnowfallCanvas"
+  hidden
+  aria-hidden="true"
 >
 </canvas>
 
@@ -34,6 +36,13 @@ const {
 </style>
 
 <script define:vars={{ numberOfSnowflakes, height }}>
+  const isChristmasSeason = () => {
+    const now = new Date();
+    const month = now.getMonth();
+    const day = now.getDate();
+    return month === 11 || (month === 0 && day <= 6);
+  };
+
   class Snowflake {
     constructor(canvasWidth) {
       this.reset(canvasWidth);
@@ -65,11 +74,16 @@ const {
   }
 
   const initSnowfall = () => {
+    if (!isChristmasSeason()) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     const canvas = document.getElementById('snowfallCanvas');
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+
+    canvas.hidden = false;
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -86,8 +100,8 @@ const {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      snowflakes.forEach(snowflake => {
+
+      snowflakes.forEach((snowflake) => {
         snowflake.update(canvas.width, canvas.height);
         snowflake.draw(ctx);
       });
@@ -98,6 +112,5 @@ const {
     animate();
   };
 
-  // Iniciamos la animación inmediatamente
   initSnowfall();
 </script>

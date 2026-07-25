@@ -1,0 +1,16 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import Container from '@/components/Container.astro';
+import Heading from '@/components/Heading.astro';
+import Button from '@/components/Button.astro';
+---
+
+<MainLayout title='404 | Oscar Bustos' description='Page not found'>
+  <Container>
+    <section class='section'>
+      <Heading title='404' description='Page not found' />
+      <p>The page you are looking for does not exist.</p>
+      <Button href='/' text='Back home' />
+    </section>
+  </Container>
+</MainLayout>

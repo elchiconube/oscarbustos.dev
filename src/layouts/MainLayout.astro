@@ -7,6 +7,7 @@ import Footer from '@/components/Footer.astro';
 import Header from '@/components/header/Header.tsx';
 import Video from '@/components/Video.astro';
 import CustomCursor from '@/components/CustomCursor.astro';
+import Snowfall from '@/components/Snowfall.astro';
 
 const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image } =
   Astro.props;
@@ -21,7 +22,7 @@ const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image
     <BaseHead title={title} description={description} image={image} />
   </head>
   <body>
-
+    <Snowfall />
     <CustomCursor />
     <main>
       <Header client:idle />

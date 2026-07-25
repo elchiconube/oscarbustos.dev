@@ -58,7 +58,7 @@ export default defineConfig({
       alias: {
         '@': path.resolve('./src')
       },
-      // Una sola copia de React en SSR (evita useContext/useState null con @phosphor-icons/react)
+      // Una sola copia de React (evita useContext/useState null con @phosphor-icons/react)
       dedupe: ['react', 'react-dom']
     },
     ssr: {
