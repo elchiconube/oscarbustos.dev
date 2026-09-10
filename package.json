@@ -21,7 +21,7 @@
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@phosphor-icons/react": "^2.1.7",
-    "astro": "^7.1.6",
+    "astro": "^7.2.8",
     "markdown-it": "^15.0.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
