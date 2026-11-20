@@ -1,5 +1,10 @@
-<div id='custom-cursor' aria-hidden='true'></div>
-<click-spark aria-hidden='true'></click-spark>
+<!--
+  transition:persist mantiene estos nodos entre navegaciones de ClientRouter.
+  Sin él, el <body> se sustituye, el script (que solo se ejecuta una vez) sigue
+  apuntando al nodo antiguo y el usuario se queda sin cursor visible.
+-->
+<div id='custom-cursor' aria-hidden='true' transition:persist='custom-cursor'></div>
+<click-spark aria-hidden='true' transition:persist='click-spark'></click-spark>
 
 <style>
   :root[data-theme='light'] {
@@ -55,10 +60,11 @@
 
 <script>
   class ClickSpark extends HTMLElement {
+    private svg: SVGSVGElement | null = null;
+
     constructor() {
       super();
       this.attachShadow({ mode: 'open' });
-      this.svg = null;
     }
 
     connectedCallback() {
@@ -73,7 +79,7 @@
       document.removeEventListener('click', this);
     }
 
-    handleEvent(e) {
+    handleEvent(e: Event) {
       if (!(e instanceof MouseEvent)) return;
       this.setSparkPosition(e);
       this.animateSpark();
@@ -86,7 +92,7 @@
       if (!first) return;
       const size = parseInt(first.getAttribute('y1') ?? '0', 10);
       const offset = size / 2 + 'px';
-      const keyframes = (i) => {
+      const keyframes = (i: number): Keyframe[] => {
         const deg = `calc(${i} * (360deg / ${sparks.length}))`;
         return [
           {
@@ -99,7 +105,7 @@
           },
         ];
       };
-      const options = {
+      const options: KeyframeAnimationOptions = {
         duration: 660,
         easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
         fill: 'forwards',
@@ -107,7 +113,7 @@
       sparks.forEach((spark, i) => spark.animate(keyframes(i), options));
     }
 
-    setSparkPosition(e) {
+    setSparkPosition(e: MouseEvent) {
       this.style.left = e.pageX - this.clientWidth / 2 + 'px';
       this.style.top = e.pageY - this.clientHeight / 2 + 'px';
     }
@@ -139,22 +145,38 @@
   function setupCustomCursor() {
     if (!window.matchMedia('(pointer: fine)').matches) return;
 
-    const cursor = document.querySelector('#custom-cursor');
-    if (!(cursor instanceof HTMLElement)) return;
+    let x = 0;
+    let y = 0;
+    let pressed = false;
 
-    const move = (e) => {
-      cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    // Se busca el nodo en cada evento por si alguna página no lo persiste.
+    const getCursor = () => document.getElementById('custom-cursor');
+
+    const render = () => {
+      const cursor = getCursor();
+      if (!cursor) return;
+      cursor.style.transform = `translate(${x}px, ${y}px)${pressed ? ' scale(0.8)' : ''}`;
       cursor.classList.add('is-ready');
     };
 
-    document.addEventListener('pointermove', move, { passive: true });
+    document.addEventListener(
+      'pointermove',
+      (e) => {
+        x = e.clientX;
+        y = e.clientY;
+        render();
+      },
+      { passive: true }
+    );
 
-    document.addEventListener('mousedown', () => {
-      cursor.style.transform += ' scale(0.8)';
+    document.addEventListener('pointerdown', () => {
+      pressed = true;
+      render();
     });
 
-    document.addEventListener('mouseup', () => {
-      cursor.style.transform = cursor.style.transform.replace(' scale(0.8)', '');
+    document.addEventListener('pointerup', () => {
+      pressed = false;
+      render();
     });
   }
 

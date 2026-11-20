@@ -20,6 +20,41 @@ const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image
     <Font cssVariable='--nunito-font' preload />
     <Font cssVariable='--fraunces-font' />
     <BaseHead title={title} description={description} image={image} />
+    <!--
+      En <head> para aplicar el tema antes del primer pintado (sin parpadeo).
+      Solo se persiste en localStorage cuando el usuario elige un tema con el toggle,
+      así se sigue respetando la preferencia del sistema mientras no haya elección.
+    -->
+    <script is:inline>
+      (() => {
+        const getPreferredTheme = () => {
+          try {
+            const stored = localStorage.getItem('theme');
+            if (stored === 'light' || stored === 'dark') return stored;
+          } catch {
+            /* localStorage no disponible */
+          }
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        };
+
+        const setTheme = (root, theme) => {
+          root.classList.remove('light', 'dark');
+          root.classList.add(theme);
+          root.setAttribute('data-theme', theme);
+        };
+
+        setTheme(document.documentElement, getPreferredTheme());
+
+        // ClientRouter: aplicar el tema al documento nuevo antes de mostrarlo.
+        document.addEventListener('astro:before-swap', (ev) => {
+          setTheme(ev.newDocument.documentElement, getPreferredTheme());
+        });
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+          setTheme(document.documentElement, getPreferredTheme());
+        });
+      })();
+    </script>
   </head>
   <body>
     <Snowfall />
@@ -30,68 +65,5 @@ const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image
       <Video />
       <Footer />
     </main>
-
-    <script is:inline>
-      // Import theme utilities
-      const getPreferredTheme = () => {
-        // Check localStorage first
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
-        }
-        
-        // Check system preference
-        if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          return 'dark';
-        }
-        
-        // Default to light
-        return 'light';
-      };
-
-      const applyTheme = (theme) => {
-        if (typeof document === 'undefined') return;
-        
-        const root = document.documentElement;
-        root.classList.remove('light', 'dark');
-        root.classList.add(theme);
-        root.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-      };
-
-      // Get and apply initial theme
-      const theme = getPreferredTheme();
-      applyTheme(theme);
-
-      // Listen for system preference changes (only if no theme is stored)
-      if (typeof window !== 'undefined') {
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        mediaQuery.addEventListener('change', (e) => {
-          if (!localStorage.getItem('theme')) {
-            applyTheme(e.matches ? 'dark' : 'light');
-          }
-        });
-      }
-    </script>
-    <!-- Previene el flash durante las transiciones -->
-    <script is:inline>
-      document.addEventListener('astro:before-preparation', (ev) => {
-        // Use the same getPreferredTheme function for consistency
-        const theme = getPreferredTheme();
-        
-        // Apply theme to the new document
-        const root = ev.newDocument.documentElement;
-        root.classList.remove('light', 'dark');
-        root.classList.add(theme);
-        root.setAttribute('data-theme', theme);
-      });
-
-      document.addEventListener('astro:after-swap', () => {
-        // Use the same getPreferredTheme function for consistency
-        const theme = getPreferredTheme();
-        
-        // Apply theme after the swap
-        applyTheme(theme);
-      });
-    </script>
   </body>
 </html>

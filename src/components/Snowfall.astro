@@ -18,6 +18,7 @@ const {
   data-testid="SnowfallCanvas"
   hidden
   aria-hidden="true"
+  transition:persist="snowfall"
 >
 </canvas>
 
@@ -29,7 +30,7 @@ const {
     top: 0;
     left: 0;
     width: 100vw;
-    height: var(--height)px;
+    height: calc(var(--height) * 1px);
     opacity: var(--opacity);
     z-index: 100;
   }
