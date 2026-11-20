@@ -1,5 +1,7 @@
 ---
 import Button from '@/components/Button.astro';
+
+const CLOUDINARY = 'https://res.cloudinary.com/elchiconube/video/upload';
 ---
 
 <article>
@@ -11,15 +13,20 @@ import Button from '@/components/Button.astro';
     </p>
     <Button href='mailto:oscarbustosgarrido@gmail.com' text='Contact me' />
   </div>
-  <video preload='auto' autoplay loop muted>
-    <source
-      src='https://res.cloudinary.com/elchiconube/video/upload/v1528758653/video_ckbyru.mp4'
-      type='video/mp4'
-    />
-    <source
-      src='https://res.cloudinary.com/elchiconube/video/upload/v1528762133/video_qsocjt.webm'
-      type='video/webm'
-    />
+  <!--
+    preload="none" + poster: el vídeo (antes 6,2 MB en cada página) solo se
+    descarga cuando se acerca al viewport, y nunca con prefers-reduced-motion.
+  -->
+  <video
+    class='footer-video'
+    muted
+    loop
+    playsinline
+    preload='none'
+    aria-hidden='true'
+    poster={`${CLOUDINARY}/so_0,w_1280,q_auto/v1528758653/video_ckbyru.jpg`}
+    data-src={`${CLOUDINARY}/w_1280,q_auto:low/v1528758653/video_ckbyru.mp4`}
+  >
   </video>
 </article>
 
@@ -32,7 +39,6 @@ import Button from '@/components/Button.astro';
     align-items: center;
     justify-content: center;
     max-width: 450px;
-    max-width: 0 auto;
   }
   video {
     width: 100%;
@@ -79,3 +85,40 @@ import Button from '@/components/Button.astro';
     height: 100%;
   }
 </style>
+
+<script>
+  function initFooterVideo() {
+    const video = document.querySelector<HTMLVideoElement>('video.footer-video');
+    if (!video?.dataset.src) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const load = () => {
+      if (!video.src) video.src = video.dataset.src ?? '';
+      video.play().catch(() => {
+        /* autoplay bloqueado: se queda el póster */
+      });
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      load();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            load();
+          } else if (video.src) {
+            video.pause();
+          }
+        }
+      },
+      { rootMargin: '200px 0px' }
+    );
+    observer.observe(video);
+    document.addEventListener('astro:before-swap', () => observer.disconnect(), { once: true });
+  }
+
+  document.addEventListener('astro:page-load', initFooterVideo);
+</script>

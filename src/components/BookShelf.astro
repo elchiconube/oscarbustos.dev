@@ -19,7 +19,7 @@ const { books = [] } = Astro.props;
           <div class='book-cover'>
             <div class='book-inside' />
             <div class='book-image'>
-              <img src={book.imageUrl} alt={book.title} />
+              <img src={book.imageUrl} alt={book.title} loading='lazy' decoding='async' />
               <div class='effect' />
               <div class='light-effect' />
             </div>
