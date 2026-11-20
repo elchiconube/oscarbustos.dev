@@ -164,16 +164,13 @@ const { image, alt, title, year, personal } = Astro.props;
 </style>
 
 <script>
-  const cardInstances = new Map();
+  const cardInstances = new Map<HTMLElement, () => void>();
 
   function initCard(card: HTMLElement) {
     // Si la card ya está inicializada, la limpiamos primero
-    if (cardInstances.has(card)) {
-      cardInstances.get(card)();
-      cardInstances.delete(card);
-    }
+    cardInstances.get(card)?.();
+    cardInstances.delete(card);
 
-    const wrapper = card.closest('.card-wrapper') as HTMLElement;
     let bounds: DOMRect;
 
     function rotateToMouse(e: MouseEvent) {

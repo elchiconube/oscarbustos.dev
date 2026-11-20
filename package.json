@@ -2,6 +2,7 @@
   "name": "portfolio",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@11.1.1",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -12,7 +13,8 @@
     "preview:cf": "astro build && wrangler dev",
     "deploy": "astro build && wrangler deploy",
     "astro": "astro",
-    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint .",
+    "lint": "eslint .",
+    "check": "astro check",
     "format": "prettier --write ."
   },
   "dependencies": {
@@ -29,17 +31,21 @@
     "sharp": "^0.35.4"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@eslint/js": "^10.0.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@typescript-eslint/eslint-plugin": "^8.70.0",
-    "@typescript-eslint/parser": "^8.70.0",
+    "@types/sanitize-html": "^2.16.2",
     "astro-eslint-parser": "^3.1.0",
     "eslint": "^10.11.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-astro": "^3.2.1",
+    "globals": "^17.14.0",
     "prettier": "^3.9.8",
     "prettier-plugin-astro": "^1.0.1",
     "terser": "^5.51.2",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.73.0",
     "wrangler": "^4.135.0"
   }
 }
