@@ -1,7 +1,7 @@
 ---
 interface Props {
   type: 'Person' | 'WebSite' | 'BlogPosting' | 'Book';
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 const { type, data } = Astro.props;

@@ -10,3 +10,7 @@ updates:
       all-dependencies:
         patterns:
           - "*"
+    ignore:
+      # typescript-eslint y @astrojs/check aún no soportan TypeScript 7
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]

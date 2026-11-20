@@ -5,16 +5,20 @@ Portfolio estático de Oscar Bustos, construido con [Astro](https://astro.build)
 ## Requisitos
 
 - Node.js `>=22.12.0` (ver `.nvmrc`)
+- pnpm (versión fijada en `packageManager` de `package.json`)
 
 ## Comandos
 
 | Comando | Descripción |
 | --- | --- |
-| `npm run dev` | Servidor de desarrollo |
-| `npm run build` | Build estático en `./dist` |
-| `npm run preview` | Preview local de Astro |
-| `npm run preview:cf` | Preview con Wrangler |
-| `npm run deploy` | Build + deploy a Cloudflare |
+| `pnpm install` | Instalar dependencias |
+| `pnpm dev` | Servidor de desarrollo |
+| `pnpm build` | Build estático en `./dist` |
+| `pnpm preview` | Preview local de Astro |
+| `pnpm preview:cf` | Preview con Wrangler |
+| `pnpm deploy` | Build + deploy a Cloudflare |
+| `pnpm lint` | ESLint |
+| `pnpm check` | Comprobación de tipos (`astro check`) |
 
 ## Deploy (Cloudflare)
 
