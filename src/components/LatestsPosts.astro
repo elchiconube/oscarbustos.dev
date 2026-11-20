@@ -18,9 +18,9 @@ const posts = (await getCollection('blog'))
       posts?.map((post) => (
         <li class='post-item'>
           <a href={`/blog/${post.id}/`}>
-            <time class='date'>
+            <span class='date'>
               <FormattedDate date={post.data.pubDate} />
-            </time>
+            </span>
             <h2 class='title'>
               {post.data.title} <ArrowUpRight size={16} />{' '}
             </h2>

@@ -9,8 +9,23 @@ import Video from '@/components/Video.astro';
 import CustomCursor from '@/components/CustomCursor.astro';
 import Snowfall from '@/components/Snowfall.astro';
 
-const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image } =
-  Astro.props;
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  modifiedTime?: string;
+}
+
+const {
+  title = 'Oscar Bustos',
+  description = 'Senior Frontend Developer',
+  image,
+  type,
+  publishedTime,
+  modifiedTime,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -19,7 +34,14 @@ const { title = 'Oscar Bustos', description = 'Senior Frontend Developer', image
     <ClientRouter fallback='swap' />
     <Font cssVariable='--nunito-font' preload />
     <Font cssVariable='--fraunces-font' />
-    <BaseHead title={title} description={description} image={image} />
+    <BaseHead
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+    />
     <!--
       En <head> para aplicar el tema antes del primer pintado (sin parpadeo).
       Solo se persiste en localStorage cuando el usuario elige un tema con el toggle,
