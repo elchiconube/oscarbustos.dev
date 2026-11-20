@@ -29,7 +29,18 @@ import Button from '@/components/Button.astro';
       </p>
 
       <figure class='screenshot'>
-        <img src='/mdi1.gif' alt='mDI screenshot' />
+        <video
+          src='/mdi1.mp4'
+          poster='/mdi1-poster.webp'
+          width='800'
+          height='396'
+          autoplay
+          loop
+          muted
+          playsinline
+          preload='metadata'
+          aria-label='mDI screenshot'
+        ></video>
       </figure>
 
       <p>
@@ -83,8 +94,10 @@ import Button from '@/components/Button.astro';
         text-align: center;
         margin: 24px 0;
 
-        img {
+        img,
+        video {
           max-width: 100%;
+          height: auto;
           display: inline-block;
         }
       }

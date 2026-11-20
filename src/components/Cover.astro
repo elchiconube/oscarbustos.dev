@@ -9,7 +9,7 @@ const { src = '/cover.webp', alt = 'Book cover' } = Astro.props;
 
 <div class='book-3d'>
   <div class='book-3d__inner'>
-    <img class='book-3d__cover' src={src} alt={alt} />
+    <img class='book-3d__cover' src={src} alt={alt} loading='lazy' decoding='async' />
   </div>
 </div>
 

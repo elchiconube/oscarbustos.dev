@@ -1,0 +1,201 @@
+---
+/*
+ * Cabecera renderizada en el servidor. Antes era una isla de React
+ * (client:idle) que obligaba a descargar React (~180 KB sin comprimir)
+ * en todas las páginas; ahora el estado activo se calcula en el build y
+ * la interacción la hace un script pequeño.
+ */
+import { Moon, Sun } from '@phosphor-icons/react';
+import { menuItems } from './menuItems';
+import type { MenuItem } from './types';
+
+import './Header.css';
+import './NavItem.css';
+import './NavIndicator.css';
+import './Dropdown.css';
+import './MobileMenuButton.css';
+
+const withTrailingSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`);
+const currentPath = withTrailingSlash(Astro.url.pathname);
+
+const isActive = (item: MenuItem) =>
+  item.href === currentPath || !!item.dropdownItems?.some((child) => child.href === currentPath);
+---
+
+<header class='header'>
+  <div class='header-container'>
+    <div class='header-content'>
+      <button
+        type='button'
+        class='mobile-menu-button'
+        aria-label='Toggle menu'
+        aria-expanded='false'
+        aria-controls='site-nav'
+      >
+        <span class='hamburger'></span>
+      </button>
+
+      <nav id='site-nav' class='nav' aria-label='Main'>
+        <div class='nav-items'>
+          <div class='nav-indicator' aria-hidden='true'></div>
+
+          {
+            menuItems.map((item) => (
+              <div class:list={['nav-item', { active: isActive(item) }]}>
+                {item.hasDropdown ? (
+                  <div class='nav-dropdown-container'>
+                    <button
+                      type='button'
+                      class='nav-button'
+                      aria-expanded='false'
+                      aria-haspopup='true'
+                    >
+                      {item.name}
+                      <svg class='nav-chevron' viewBox='0 0 20 20' aria-hidden='true'>
+                        <path d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' />
+                      </svg>
+                    </button>
+                    <div class='dropdown'>
+                      <div class='dropdown-content'>
+                        {item.dropdownItems?.map((child) => (
+                          <a
+                            href={child.href}
+                            class:list={['dropdown-item', { active: child.href === currentPath }]}
+                            aria-current={child.href === currentPath ? 'page' : undefined}
+                          >
+                            <span class='dropdown-item-title'>{child.name}</span>
+                            <span class='dropdown-item-description'>{child.description}</span>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <a
+                    href={item.href}
+                    class='nav-link'
+                    aria-current={item.href === currentPath ? 'page' : undefined}
+                  >
+                    {item.name}
+                  </a>
+                )}
+              </div>
+            ))
+          }
+        </div>
+      </nav>
+
+      <!-- Los dos iconos se pintan en el servidor; el CSS muestra el que toca según data-theme. -->
+      <button type='button' class='theme-toggle' aria-label='Toggle dark mode'>
+        <Moon size={20} weight='light' className='theme-icon theme-icon--moon' />
+        <Sun size={20} weight='light' className='theme-icon theme-icon--sun' />
+      </button>
+    </div>
+  </div>
+</header>
+
+<style is:global>
+  .theme-toggle {
+    cursor: pointer;
+  }
+
+  .theme-icon--sun,
+  :root[data-theme='dark'] .theme-icon--moon {
+    display: none;
+  }
+
+  :root[data-theme='dark'] .theme-icon--sun {
+    display: block;
+  }
+</style>
+
+<script>
+  const MOBILE_BREAKPOINT = 768;
+  const isMobile = () => window.innerWidth <= MOBILE_BREAKPOINT;
+
+  function moveIndicator(container: HTMLElement, item: Element | null) {
+    const indicator = container.querySelector<HTMLElement>('.nav-indicator');
+    if (!indicator) return;
+
+    if (!item) {
+      indicator.style.opacity = '0';
+      return;
+    }
+
+    const rect = item.getBoundingClientRect();
+    const parentRect = container.getBoundingClientRect();
+    indicator.style.width = `${rect.width}px`;
+    indicator.style.height = '40px';
+    indicator.style.transform = `translateX(${rect.left - parentRect.left}px)`;
+    indicator.style.opacity = '1';
+  }
+
+  function setMenuOpen(open: boolean) {
+    const button = document.querySelector<HTMLButtonElement>('.mobile-menu-button');
+    const nav = document.getElementById('site-nav');
+    button?.classList.toggle('open', open);
+    button?.setAttribute('aria-expanded', String(open));
+    nav?.classList.toggle('nav-open', open);
+
+    if (!open) {
+      document.querySelectorAll('.nav-item.open').forEach((item) => {
+        item.classList.remove('open');
+        item.querySelector('.nav-button')?.setAttribute('aria-expanded', 'false');
+      });
+    }
+  }
+
+  function toggleTheme() {
+    const root = document.documentElement;
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.classList.remove('light', 'dark');
+    root.classList.add(next);
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      /* localStorage no disponible */
+    }
+  }
+
+  // El header se vuelve a renderizar en cada navegación de ClientRouter,
+  // así que los listeners de sus elementos se enganchan en cada astro:page-load.
+  function initHeader() {
+    const container = document.querySelector<HTMLElement>('.nav-items');
+    if (!container) return;
+
+    const activeItem = () => container.querySelector('.nav-item.active');
+    moveIndicator(container, activeItem());
+
+    container.querySelectorAll('.nav-item').forEach((item) => {
+      item.addEventListener('mouseenter', () => moveIndicator(container, item));
+    });
+    container.addEventListener('mouseleave', () => moveIndicator(container, activeItem()));
+
+    document
+      .querySelector('.mobile-menu-button')
+      ?.addEventListener('click', () =>
+        setMenuOpen(!document.getElementById('site-nav')?.classList.contains('nav-open'))
+      );
+
+    container.querySelectorAll<HTMLButtonElement>('.nav-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!isMobile()) return;
+        const item = button.closest('.nav-item');
+        const open = !item?.classList.contains('open');
+        item?.classList.toggle('open', open);
+        button.setAttribute('aria-expanded', String(open));
+      });
+    });
+
+    document.querySelector('.theme-toggle')?.addEventListener('click', toggleTheme);
+  }
+
+  window.addEventListener('resize', () => {
+    const container = document.querySelector<HTMLElement>('.nav-items');
+    if (container) moveIndicator(container, container.querySelector('.nav-item.active'));
+    if (!isMobile()) setMenuOpen(false);
+  });
+
+  document.addEventListener('astro:page-load', initHeader);
+</script>

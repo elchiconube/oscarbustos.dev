@@ -30,7 +30,18 @@ import Button from '@/components/Button.astro';
       </p>
 
       <figure class='screenshot'>
-        <img src='/badger1.gif' alt='Badger screenshot' />
+        <video
+          src='/badger1.mp4'
+          poster='/badger1-poster.webp'
+          width='640'
+          height='320'
+          autoplay
+          loop
+          muted
+          playsinline
+          preload='metadata'
+          aria-label='Badger screenshot'
+        ></video>
       </figure>
 
       <p>
@@ -50,7 +61,8 @@ import Button from '@/components/Button.astro';
         <iframe
           width='600px'
           height='336px'
-          src='https://www.youtube.com/embed/FvuYtYbfLbs?si=ZGyUgFp2K1viXlcO'
+          src='https://www.youtube-nocookie.com/embed/FvuYtYbfLbs'
+          loading='lazy'
           title='YouTube video player'
           allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
           allowfullscreen></iframe>
@@ -95,8 +107,10 @@ import Button from '@/components/Button.astro';
         text-align: center;
         margin: 24px 0;
 
-        img {
+        img,
+        video {
           max-width: 100%;
+          height: auto;
           display: inline-block;
         }
       }
