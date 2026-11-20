@@ -6,15 +6,18 @@ import Cross from '@/components/Cross.astro';
 import { ClockCountdown, ArrowLeft } from '@phosphor-icons/react';
 import JsonLd from '@/components/JsonLd.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & {
+  readingTime: number;
+};
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, readingTime } = Astro.props;
+const siteUrl = Astro.site?.toString() ?? 'https://oscarbustos.dev/';
 ---
 
 <MainLayout 
   title={title} 
   description={description} 
-  image={heroImage}
+  image={heroImage || undefined}
   type="article"
   publishedTime={pubDate.toISOString()}
   modifiedTime={updatedDate?.toISOString()}
@@ -24,7 +27,8 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
     data={{
       headline: title,
       description: description,
-      image: new URL(heroImage, Astro.site),
+      ...(heroImage && { image: new URL(heroImage, siteUrl).toString() }),
+      mainEntityOfPage: new URL(Astro.url.pathname, siteUrl).toString(),
       datePublished: pubDate.toISOString(),
       dateModified: updatedDate ? updatedDate.toISOString() : pubDate.toISOString(),
       author: {
@@ -33,12 +37,10 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
         url: 'https://oscarbustos.dev'
       },
       publisher: {
-        '@type': 'Organization',
+        '@type': 'Person',
         name: 'Oscar Bustos',
-        logo: {
-          '@type': 'ImageObject',
-          url: 'https://oscarbustos.dev/logo.png'
-        }
+        url: 'https://oscarbustos.dev',
+        image: 'https://oscarbustos.dev/oscar-bustos.webp'
       }
     }}
   />
@@ -64,17 +66,15 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
           </address>
           <p itemprop="description">{description}</p>
           <div class='times'>
-            <p><ClockCountdown size={21} /> 6 min read</p>
-            <time itemprop="datePublished" datetime={pubDate.toISOString()}>
-              <FormattedDate date={pubDate} />
-              {
-                updatedDate && (
-                  <div class='last-updated-on'>
-                    Last updated on <FormattedDate date={updatedDate} />
-                  </div>
-                )
-              }
-            </time>
+            <p><ClockCountdown size={21} /> {readingTime} min read</p>
+            <FormattedDate date={pubDate} itemprop="datePublished" />
+            {
+              updatedDate && (
+                <p class='last-updated-on'>
+                  Last updated on <FormattedDate date={updatedDate} itemprop="dateModified" />
+                </p>
+              )
+            }
           </div>
         </header>
         <div class='content' itemprop="articleBody">
